@@ -1,5 +1,6 @@
 package trapcraft.client;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
@@ -14,8 +15,10 @@ import trapcraft.client.renders.ItemRenderHelperBearTrap;
 import trapcraft.client.renders.ItemRenderHelperFan;
 import trapcraft.client.renders.ItemRenderHelperGrassCovering;
 import trapcraft.client.renders.ItemRenderHelperMagneticChest;
+import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.common.CommonProxy;
+import trapcraft.common.entity.EntityDummy;
 import trapcraft.common.tileentitys.TileEntityMagneticChest;
 import trapcraft.common.tileentitys.TileEntityTC;
 
@@ -48,6 +51,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(Properties.RENDER_ID_GRASS_COVERING, new ItemRenderHelperGrassCovering());
 		RenderingRegistry.registerBlockHandler(Properties.RENDER_ID_BEAR_TRAP, new ItemRenderHelperBearTrap());
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, new RenderDummy(new ModelBiped(0.0F), 0.5F, Properties.RES_MOB_DUMMY));
 	}
 	
 	@Override

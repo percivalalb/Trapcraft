@@ -39,9 +39,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -79,7 +77,7 @@ public class TrapcraftMod {
     	 instance = this;
      }
      
-	 @PreInit
+     @EventHandler
 	 public void preLoad(FMLPreInitializationEvent var1) throws Exception {
 		 this.loadConfig(new Configuration(var1.getSuggestedConfigurationFile()));
 		 proxy.onModPre();
@@ -92,7 +90,7 @@ public class TrapcraftMod {
 	     }
 	 }
 
-	 @Init
+	 @EventHandler
 	 public void load(FMLInitializationEvent var1) {
 	     proxy.onModLoad();
 	     fan = new BlockFan(Properties.fanID).setHardness(0.8F).setUnlocalizedName("tc.Fan");
@@ -115,7 +113,7 @@ public class TrapcraftMod {
 		 igniter_Range = new ItemIgniterRange(Properties.igniter_RangeID).setUnlocalizedName("tc.igniter_Range");
 	 }
 	 
-	 @PostInit
+	 @EventHandler
 	 public void post(FMLPostInitializationEvent var1) {
 		 proxy.onModPost();
 		 addName(magneticChest, "Magnetic Chest");
