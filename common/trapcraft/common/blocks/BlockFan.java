@@ -1,32 +1,21 @@
 package trapcraft.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import trapcraft.TrapcraftMod;
-import trapcraft.api.Properties;
-import trapcraft.common.tileentitys.TileEntityFan;
-import trapcraft.common.tileentitys.TileEntityTC;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Facing;
 import net.minecraft.util.Icon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import trapcraft.api.Properties;
+import trapcraft.common.tileentitys.TileEntityFan;
 
 /**
  * @author ProPercivalalb
- * @author need4speed402
  * You may look at this file to gain knowledge of java                    
  * but must not copy any features or code directly.
  **/
@@ -91,7 +80,7 @@ public class BlockFan extends BlockContainer {
         }else{
             rotation = Direction.directionToFacing[Direction.rotateOpposite[Math.round(player.rotationYaw / 90) & 3]];
         }
-		
+        
         world.setBlockMetadataWithNotify(x, y, z, rotation, 2);
     }
 
