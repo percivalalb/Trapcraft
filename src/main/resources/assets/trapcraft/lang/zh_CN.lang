@@ -1,0 +1,11 @@
+tile.trapcraft.magneticchest.name=磁力箱
+tile.trapcraft.fan.name=风扇
+tile.trapcraft.grasscovering.name=草覆盖板
+tile.trapcraft.igniter.name=点火器
+tile.trapcraft.spikes.name=钉菱
+tile.trapcraft.beartrap.name=捕熊陷阱
+
+item.trapcraft.igniterrange.name=点火器范围升级模块
+
+container.magneticchest=磁力箱
+container.igniter=升级!
