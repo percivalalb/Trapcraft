@@ -131,17 +131,7 @@ public class TrapcraftMod {
 	     GameRegistry.addRecipe(new ItemStack(igniter_Range, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.redstone, 'L', Items.leather, 'A', Items.arrow, 'L', new ItemStack(Items.dye, 1, 4)});
 	     
 	 }
-	 
-	 public void addName(Object objectToName, String name) {
-		 LanguageRegistry.instance().addNameForObject(objectToName, "en_US", name);
-		 LanguageRegistry.instance().addNameForObject(objectToName, "en_GB", name);
-	 }
-	 
-	 public void addNameStr(String objectToName, String name) {
-		 LanguageRegistry.instance().addStringLocalization(objectToName, "en_US", name);
-		 LanguageRegistry.instance().addStringLocalization(objectToName, "en_GB", name);
-	 }
-	 
+
 	 public void registerCreature(Class var1, String var2, int var3) {
 		 EntityRegistry.registerModEntity(var1, var2, var3, instance, 128, 1, true);
 	 }

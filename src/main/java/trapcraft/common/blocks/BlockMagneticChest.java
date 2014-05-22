@@ -44,10 +44,9 @@ public class BlockMagneticChest extends BlockContainer {
     @Override
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
         if (par5Entity.isEntityAlive() && !par1World.isRemote) {
-            if (par5Entity instanceof EntityItem)
-            {
-                TileEntityMagneticChest TileEntityMagneticChest = (TileEntityMagneticChest)par1World.getTileEntity(par2, par3, par4);
-                TileEntityMagneticChest.addItem(TileEntityMagneticChest, (EntityItem)par5Entity);
+            if (par5Entity instanceof EntityItem) {
+                TileEntityMagneticChest tileEntityMagneticChest = (TileEntityMagneticChest)par1World.getTileEntity(par2, par3, par4);
+                tileEntityMagneticChest.insertStackFromEntity((EntityItem)par5Entity);
             }
         }
     }

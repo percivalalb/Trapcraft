@@ -225,103 +225,110 @@ public class TileEntityMagneticChest extends TileEntityTC implements IInventory 
     }
     
     public void pullItemsIn() {
-    	List nearEntitys = worldObj.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, (double)xCoord + 1.0D, (double)yCoord + 1.0D, (double)zCoord + 1.0D).expand(2D, 1.0D, 2D));
+    	List entity = this.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, (double)xCoord + 1.0D, (double)yCoord + 1.0D, (double)zCoord + 1.0D).expand(2D, 1.0D, 2D));
 
-        if (!nearEntitys.isEmpty())
-        {
-            for (int i = 0; i < nearEntitys.size(); i++)
-            {
-            	Entity target = (Entity)nearEntitys.get(i);
-                if (!(target instanceof EntityItem)) {
-                    return;
-                }
+        if (!entity.isEmpty()) {
+            for (int i = 0; i < entity.size(); i++) {
+            	Entity target = (Entity)entity.get(i);
+                if (!(target instanceof EntityItem))
+                    continue;
 
-                EntityItem entityitem = (EntityItem)nearEntitys.get(i);
-                double d1 = (double)xCoord + 0.5D;
-                double d4 = (double)yCoord + 0.5D;
-                double d6 = (double)zCoord + 0.5D;
-                double d7 = d1 <= entityitem.posX ? -(entityitem.posX - d1) : d1 - entityitem.posX;
-                double d8 = d4 <= entityitem.posY ? -(entityitem.posY - d4) : d4 - entityitem.posY;
-                double d9 = d6 <= entityitem.posZ ? -(entityitem.posZ - d6) : d6 - entityitem.posZ;
-                double d10 = 0.050000000000000003D;
-                double d11 = entityitem.posX - d1;
-                double d12 = entityitem.posZ - d6;
+                EntityItem entityItem = (EntityItem)entity.get(i);
+                double centreX = (double)xCoord + 0.5D;
+                double centreY = (double)yCoord + 0.5D;
+                double centreZ = (double)zCoord + 0.5D;
+                double d7 = centreX <= entityItem.posX ? -(entityItem.posX - centreX) : centreX - entityItem.posX;
+                double d8 = centreY <= entityItem.posY ? -(entityItem.posY - centreY) : centreY - entityItem.posY;
+                double d9 = centreZ <= entityItem.posZ ? -(entityItem.posZ - centreZ) : centreZ - entityItem.posZ;
+                double speedMultiper = 0.050000000000000003D;
+                double d11 = entityItem.posX - centreX;
+                double d12 = entityItem.posZ - centreZ;
                 double d13 = MathHelper.sqrt_double(d7 * d7 + d9 * d9);
                 double d14 = Math.asin(d7 / d13);
-                double d15 = (double)MathHelper.sin((float)d14) * d10;
-                double d16 = (double)MathHelper.cos((float)d14) * d10;
+                double d15 = (double)MathHelper.sin((float)d14) * speedMultiper;
+                double d16 = (double)MathHelper.cos((float)d14) * speedMultiper;
                 d16 = d9 <= 0.0D ? -d16 : d16;
 
-                if ((double)MathHelper.abs((float)(entityitem.motionX + entityitem.motionY + entityitem.motionZ)) >= 0.10000000000000001D)
-                {
+                if ((double)MathHelper.abs((float)(entityItem.motionX + entityItem.motionY + entityItem.motionZ)) >= 0.10000000000000001D)
                     continue;
-                }
 
-                if (d7 != 0.0D && (double)MathHelper.abs((float)entityitem.motionZ) < 0.10000000000000001D)
-                {
-                    entityitem.motionX = d15;
-                }
+                if (d7 != 0.0D && (double)MathHelper.abs((float)entityItem.motionZ) < 0.10000000000000001D)
+                    entityItem.motionX = d15;
 
-                if (d9 != 0.0D && (double)MathHelper.abs((float)entityitem.motionZ) < 0.10000000000000001D)
-                {
-                    entityitem.motionZ = d16;
-                }
+                if (d9 != 0.0D && (double)MathHelper.abs((float)entityItem.motionZ) < 0.10000000000000001D)
+                    entityItem.motionZ = d16;
             }
         }
     }
     
     
-    public static boolean addItem(IInventory par0IInventory, EntityItem par1EntityItem) {
-        boolean flag = false;
+    public boolean insertStackFromEntity(EntityItem entityItem) {
+	    boolean succesful = false;
 
-        if (par1EntityItem == null) {
-            return false;
-        }
-        else
-        {
-            ItemStack itemstack = par1EntityItem.getEntityItem().copy();
-            ItemStack itemstack1 = tryToAdd(par0IInventory, itemstack, -1);
+	    if (entityItem == null || entityItem.isDead)
+	        return false;
+	    else {
+	        ItemStack itemstack = entityItem.getEntityItem().copy();
+	        ItemStack itemstack1 = this.insertStack(itemstack);
 
-            if (itemstack1 != null && itemstack1.stackSize != 0) {
-                par1EntityItem.setEntityItemStack(itemstack1);
-            }
-            else {
-                flag = true;
-                par1EntityItem.setDead();
-            }
+	        if (itemstack1 != null && itemstack1.stackSize != 0)
+	        	entityItem.setEntityItemStack(itemstack1);
+	        else {
+	        	succesful = true;
+	        	entityItem.setDead();
+	        }
 
-            return flag;
-        }
+	        return succesful;
+	    }
+	}
+	
+    public ItemStack insertStack(ItemStack stack) {
+    	int j = this.getSizeInventory();
+
+        for (int k = 0; k < j && stack != null && stack.stackSize > 0; ++k)
+        	stack = tryInsertStackToSlot(stack, k);
+
+        if (stack != null && stack.stackSize == 0)
+            stack = null;
+
+        return stack;
     }
     
-    public static ItemStack tryToAdd(IInventory par1IInventory, ItemStack par2ItemStack, int par3) {
-        int j = 0;
-        int k = par1IInventory.getSizeInventory();
+    public ItemStack tryInsertStackToSlot(ItemStack stack, int slot) {
+        ItemStack slotStack = this.getStackInSlot(slot);
 
-        for (int l = j; l < k && par2ItemStack != null && par2ItemStack.stackSize > 0; ++l) {
-            ItemStack itemstack1 = par1IInventory.getStackInSlot(l);
+        if (this.isItemValidForSlot(slot, stack)) {
+            boolean changed = false;
 
-            if (itemstack1 == null) {
-                par1IInventory.setInventorySlotContents(l, par2ItemStack);
-                par2ItemStack = null;
+            if (slotStack == null) {
+                int max = Math.min(stack.getMaxStackSize(), this.getInventoryStackLimit());
+                if (max >= stack.stackSize) {
+                	this.setInventorySlotContents(slot, stack);
+                    stack = null;
+                }
+                else
+                	this.setInventorySlotContents(slot, stack.splitStack(max));
+                changed = true;
             }
-            else if (areStacksEqual(itemstack1, par2ItemStack)) {
-                int i1 = par2ItemStack.getMaxStackSize() - itemstack1.stackSize;
-                int j1 = Math.min(par2ItemStack.stackSize, i1);
-                par2ItemStack.stackSize -= j1;
-                itemstack1.stackSize += j1;
+            else if (this.areItemStacksEqualItem(slotStack, stack)) {
+                int max = Math.min(stack.getMaxStackSize(), this.getInventoryStackLimit());
+                if (max > slotStack.stackSize) {
+                    int l = Math.min(stack.stackSize, max - slotStack.stackSize);
+                    stack.stackSize -= l;
+                    slotStack.stackSize += l;
+                    changed = l > 0;
+                }
             }
+
+            if (changed)
+                this.markDirty();
         }
 
-        if (par2ItemStack != null && par2ItemStack.stackSize == 0) {
-            par2ItemStack = null;
-        }
-
-        return par2ItemStack;
+        return stack;
     }
     
-    private static boolean areStacksEqual(ItemStack par1ItemStack, ItemStack par2ItemStack) {
-        return par1ItemStack != par2ItemStack ? false : (par1ItemStack.getItemDamage() != par2ItemStack.getItemDamage() ? false : (par1ItemStack.stackSize > par1ItemStack.getMaxStackSize() ? false : ItemStack.areItemStackTagsEqual(par1ItemStack, par2ItemStack)));
+    private boolean areItemStacksEqualItem(ItemStack p_145894_0_, ItemStack p_145894_1_) {
+        return p_145894_0_.getItem() != p_145894_1_.getItem() ? false : (p_145894_0_.getItemDamage() != p_145894_1_.getItemDamage() ? false : (p_145894_0_.stackSize > p_145894_0_.getMaxStackSize() ? false : ItemStack.areItemStackTagsEqual(p_145894_0_, p_145894_1_)));
     }
 
     @Override

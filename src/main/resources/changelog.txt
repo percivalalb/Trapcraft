@@ -5,6 +5,10 @@ Update List Key
 (*) A bug fix
 (/) Other
 
+v2.2.1a
+* Fixed items not stacking when going into the magnetic chest
+* Fixed items sometimes not getting pulled towards the magnetic chest
+
 v2.2.0a
 Updated to MC 1.7.2 - Note back up your worlds before updating, proberbly it will not be compatible with worlds that prevoius used this mod
 # The dummy now doesn't move at all when being hit

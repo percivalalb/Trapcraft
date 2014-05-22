@@ -22,7 +22,7 @@ public class Properties {
 	/** The readable name used by forge **/
 	public static final String MOD_NAME = "Trapcraft";
 	/** Version string for the mod **/
-	public static final String MOD_VERSION = "v2.2.0a";
+	public static final String MOD_VERSION = "v2.2.1a";
 	
 	public static final String SP_CLIENT = "trapcraft.client.ClientProxy";
 	public static final String SP_SERVER = "trapcraft.common.CommonProxy";
