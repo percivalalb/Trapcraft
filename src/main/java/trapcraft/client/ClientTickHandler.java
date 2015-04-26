@@ -24,7 +24,7 @@ public class ClientTickHandler {
 		GuiScreen guiscreen = Minecraft.getMinecraft().currentScreen;
 		if (guiscreen == null) {
           	if(!checkedVersion && Minecraft.getMinecraft().thePlayer != null) {
-          		VersionHelper.checkVersion(UpdateType.COLOURED);
+          		//VersionHelper.checkVersion(UpdateType.COLOURED);
           		checkedVersion = true;
           	}
 		}

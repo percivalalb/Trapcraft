@@ -5,18 +5,23 @@ Update List Key
 (*) A bug fix
 (/) Other
 
+v2.3.0a
++ Updated to MC 1.7.10
+
+- Removed version checker for now because dropbox has too much traffic.
+
 v2.2.1a
 * Fixed items not stacking when going into the magnetic chest
 * Fixed items sometimes not getting pulled towards the magnetic chest
 
 v2.2.0a
-Updated to MC 1.7.2 - Note back up your worlds before updating, proberbly it will not be compatible with worlds that prevoius used this mod
++ Updated to MC 1.7.2 - Note back up your worlds before updating, proberbly it will not be compatible with worlds that prevoius used this mod
 # The dummy now doesn't move at all when being hit
 
 * When creating a dummy in creative, it no longer uses the head item up.
 
 v2.1.0a
-Updated to MC 1.6.2
++ Updated to MC 1.6.2
 # Made the Igniter gui be more intelligent about where shift clicked items go
 
 * Fixed a bug where you could lose items in the Igniter gui by shift clicking

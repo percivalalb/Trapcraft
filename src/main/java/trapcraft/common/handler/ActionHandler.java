@@ -1,9 +1,11 @@
 package trapcraft.common.handler;
 
+import java.util.UUID;
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import com.mojang.authlib.GameProfile;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import trapcraft.api.Properties;
 import trapcraft.common.entity.EntityDummy;
 import net.minecraft.block.Block;
@@ -13,12 +15,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.Facing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
@@ -56,11 +59,19 @@ public class ActionHandler {
 				                }
 				                TileEntity tileentity = world.getTileEntity(x, y, z);
 				                if (tileentity != null && tileentity instanceof TileEntitySkull) {
-				                    String s = "";
-				                    if (item.hasTagCompound() && item.getTagCompound().hasKey("SkullOwner")) {
-				                        s = item.getTagCompound().getString("SkullOwner");
-				                    }
-				                    ((TileEntitySkull)tileentity).func_145905_a(item.getItemDamage(), s);
+
+				                    GameProfile gameprofile = null;
+
+			                        if (item.hasTagCompound()) {
+			                            NBTTagCompound nbttagcompound = item.getTagCompound();
+
+			                            if (nbttagcompound.hasKey("SkullOwner", 10))
+			                                gameprofile = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("SkullOwner"));
+			                            else if (nbttagcompound.hasKey("SkullOwner", 8) && nbttagcompound.getString("SkullOwner").length() > 0)
+			                                gameprofile = new GameProfile((UUID)null, nbttagcompound.getString("SkullOwner"));
+			                        }
+
+			                        ((TileEntitySkull)tileentity).func_152106_a(gameprofile);
 				                    ((TileEntitySkull)tileentity).func_145903_a(i1);
 				                }
 				                

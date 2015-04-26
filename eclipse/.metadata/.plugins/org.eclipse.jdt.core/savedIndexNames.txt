@@ -1,0 +1,5 @@
+INDEX VERSION 1.127+C:\Users\Alex\Documents\GitHub\Trapcraft\eclipse\.metadata\.plugins\org.eclipse.jdt.core
+1498219845.index
+4257325822.index
+286606776.index
+1697886153.index

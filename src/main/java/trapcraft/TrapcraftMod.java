@@ -83,7 +83,7 @@ public class TrapcraftMod {
      @EventHandler
 	 public void preLoad(FMLPreInitializationEvent event) throws Exception {
 		 this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
-		 VersionHelper.checkVersion(UpdateType.BLANK);
+		 //VersionHelper.checkVersion(UpdateType.BLANK);
 		 
 		 proxy.onModPre();
 	     fan = new BlockFan().setHardness(0.8F).setBlockName("trapcraft.fan");
