@@ -16,11 +16,9 @@ import trapcraft.api.Properties;
 import trapcraft.tileentity.TileEntityBearTrap;
 
 public class BlockBearTrap extends BlockContainer {
-
-	private IIcon iconItem;
 	
 	public BlockBearTrap() {
-		super(Material.iron);
+		super(Material.IRON);
 		this.setStepSound(SoundType.METAL);
 		this.setCreativeTab(CreativeTabs.tabRedstone);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.15F, 1.0F);
@@ -103,21 +101,5 @@ public class BlockBearTrap extends BlockContainer {
     @Override
     public boolean canBlockStay(World world, int i, int j, int k) {
         return world.getBlock(i, j - 1, k).getMaterial().isSolid() && world.getBlock(i, j - 1, k) != this;
-    }
-    
-    @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister) {
-        this.blockIcon = par1IconRegister.registerIcon(Properties.TEX_PACKAGE + "bearTrap");
-        this.iconItem = par1IconRegister.registerIcon(Properties.TEX_PACKAGE + "bearTrapItem");
-    }
-    
-    @Override
-    public IIcon getIcon(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
-        return this.blockIcon;
-    }
-    
-    @Override
-    public IIcon getIcon(int par1, int par2) {
-        return iconItem;
     }
 }

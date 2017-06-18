@@ -103,14 +103,14 @@ public class TrapcraftMod {
 	 @EventHandler
 	 public void post(FMLPostInitializationEvent var1) {
 		 proxy.onModPost();
-		 GameRegistry.addShapelessRecipe(new ItemStack(Items.skull, 1, 3), new Object[] {new ItemStack(Items.dye, 1, 4), new ItemStack(Blocks.wool, 1, 12)});
-	     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(magneticChest, 1), false, new Object[] {"XXX", "XZX", "XYX", 'Y', Items.redstone, 'X', OreDictionaryHelper.PLANKS, 'Z', Items.iron_ingot}));
-	     GameRegistry.addRecipe(new ItemStack(fan, 1), new Object[] {"XXX", "XYX", "XXX", 'Y', Items.iron_ingot, 'X', Blocks.cobblestone});
-	     GameRegistry.addRecipe(new ItemStack(grassCovering, 3), new Object[] {"XXX", "YYY", 'X', new ItemStack(Blocks.tallgrass, 1, 1), 'Y', Items.stick});
-	     GameRegistry.addRecipe(new ItemStack(bearTrap, 1), new Object[] {"XYX", "XXX", 'X', Items.iron_ingot, 'Y', Blocks.stone_pressure_plate});
-	     GameRegistry.addRecipe(new ItemStack(igniter, 1), new Object[] {"NNN", "CRC", "CCC", 'N', Blocks.netherrack, 'R', Items.redstone, 'C', Blocks.cobblestone});
-	     GameRegistry.addRecipe(new ItemStack(spikes, 1), new Object[] {" I ", " I ", "III", 'I', Items.iron_ingot});
-	     GameRegistry.addRecipe(new ItemStack(igniter_Range, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.redstone, 'L', Items.leather, 'A', Items.arrow, 'L', new ItemStack(Items.dye, 1, 4)});
+		 GameRegistry.addShapelessRecipe(new ItemStack(Items.SKULL, 1, 3), new Object[] {new ItemStack(Items.DYE, 1, 4), new ItemStack(Blocks.WOOL, 1, 12)});
+	     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(magneticChest, 1), false, new Object[] {"XXX", "XZX", "XYX", 'Y', Items.REDSTONE, 'X', OreDictionaryHelper.PLANKS, 'Z', Items.IRON_INGOT}));
+	     GameRegistry.addRecipe(new ItemStack(fan, 1), new Object[] {"XXX", "XYX", "XXX", 'Y', Items.IRON_INGOT, 'X', Blocks.COBBLESTONE});
+	     GameRegistry.addRecipe(new ItemStack(grassCovering, 3), new Object[] {"XXX", "YYY", 'X', new ItemStack(Blocks.TALLGRASS, 1, 1), 'Y', Items.STICK});
+	     GameRegistry.addRecipe(new ItemStack(bearTrap, 1), new Object[] {"XYX", "XXX", 'X', Items.IRON_INGOT, 'Y', Blocks.STONE_PRESSURE_PLATE});
+	     GameRegistry.addRecipe(new ItemStack(igniter, 1), new Object[] {"NNN", "CRC", "CCC", 'N', Blocks.NETHERRACK, 'R', Items.REDSTONE, 'C', Blocks.COBBLESTONE});
+	     GameRegistry.addRecipe(new ItemStack(spikes, 1), new Object[] {" I ", " I ", "III", 'I', Items.IRON_INGOT});
+	     GameRegistry.addRecipe(new ItemStack(igniter_Range, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.REDSTONE, 'L', Items.LEATHER, 'A', Items.ARROW, 'L', new ItemStack(Items.DYE, 1, 4)});
 	     
 	 }
 
