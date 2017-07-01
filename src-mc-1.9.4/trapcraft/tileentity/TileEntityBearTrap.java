@@ -27,7 +27,7 @@ public class TileEntityBearTrap extends TileEntity {
     
     public void updateEntity() {
         if (entityliving != null) {
-            if (entityliving.getDistance((double)xCoord + 0.5D, (double)yCoord + 0.20000000000000001D, (double)zCoord + 0.5D) > 2D) {
+            if (entityliving.getDistance((double)posX + 0.5D, (double)posY + 0.20000000000000001D, (double)posZ + 0.5D) > 2D) {
                 entityliving = null;
                 return;
             }

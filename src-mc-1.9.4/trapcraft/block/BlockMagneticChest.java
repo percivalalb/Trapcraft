@@ -53,9 +53,10 @@ public class BlockMagneticChest extends BlockContainer {
     
     
     public BlockMagneticChest() {
-        super(Material.wood);
-        this.setCreativeTab(CreativeTabs.tabRedstone);
-        this.setStepSound(SoundType.WOOD);
+        super(Material.WOOD);
+        this.setHardness(2.5F);
+        this.setCreativeTab(CreativeTabs.REDSTONE);
+        this.setSoundType(SoundType.WOOD);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
@@ -124,7 +125,7 @@ public class BlockMagneticChest extends BlockContainer {
     }
     
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         if(entity.isEntityAlive() && !world.isRemote) {
             if (entity instanceof EntityItem) {
                 TileEntityMagneticChest tileEntityMagneticChest = (TileEntityMagneticChest)world.getTileEntity(pos);
@@ -176,7 +177,7 @@ public class BlockMagneticChest extends BlockContainer {
 
             if(ilockablecontainer != null) {
                 playerIn.displayGUIChest(ilockablecontainer);
-                playerIn.addStat(StatList.chestOpened);
+                playerIn.addStat(StatList.CHEST_OPENED);
             }
 
             return true;

@@ -1,14 +1,25 @@
 package trapcraft.block;
 
-import com.sun.xml.internal.ws.handler.HandlerProcessor.Direction;
-
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import trapcraft.api.Properties;
 import trapcraft.tileentity.TileEntityFan;
@@ -18,80 +29,66 @@ import trapcraft.tileentity.TileEntityFan;
  **/
 public class BlockFan extends BlockContainer {
 	
-	public IIcon iconSide;
+    public static final PropertyDirection FACING = BlockDirectional.FACING;
 	
     public BlockFan() {
-        super(Material.rock);
-        this.setCreativeTab(CreativeTabs.tabRedstone);
+        super(Material.ROCK);
+        this.setHardness(0.8F);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.WEST));
+        this.setCreativeTab(CreativeTabs.REDSTONE);
     }
     
-    /**
-     * Returns the TileEntity used by this block.
-     */
     @Override
-    public TileEntity createNewTileEntity(World var1, int meta) {
+    public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityFan();
     }
+    
+    @Override
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer));
+    }
 
-    public static int getOrientation(int par1) {
-        return par1 & 7;
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer)), 2);
     }
     
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    @Override
-    public IIcon getIcon(int par1, int par2)
-    {
-        int var1 = getOrientation(par2);
-
-        if (var1 > 5)
-        {
-            return this.blockIcon;
-        }
-
-        if (par1 == var1)
-        {
-            return this.blockIcon;
-        }
-        else
-        {
-        	return par1 == BlockIgniter.faceToSide[var1] ? iconSide : iconSide;
-           // return i == Facing.faceToSide[k] ? mod_Trap.fanSide : mod_Trap.fanSide;
-        }
-    }
-    
-    /**
-     * Called when the block is placed in the world.
-     */
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
-        int rotation = 0;
-        
-        if (Math.abs(player.rotationPitch) > 90D / 2D){
-            if (player.rotationPitch > 0){
-                rotation = 1;
-            }else if (player.rotationPitch < 0){
-                rotation = 0;
-            }
-        }else{
-            rotation = Direction.directionToFacing[Direction.rotateOpposite[Math.round(player.rotationYaw / 90) & 3]];
-        }
-        
-        world.setBlockMetadataWithNotify(x, y, z, rotation, 2);
-    }
-
-    /**
-     * Sets the block's bounds for rendering it as an item
-     */
-    @Override
-    public void setBlockBoundsForItemRender() {
-        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+    public static EnumFacing getFacing(int meta) {
+        return EnumFacing.getFront(meta & 7);
     }
     
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-    {
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(FACING, getFacing(meta));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return ((EnumFacing)state.getValue(FACING)).getIndex();
+    }
+
+    @Override
+    public IBlockState withRotation(IBlockState state, Rotation rot) {
+        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+    }
+
+    @Override
+    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[] {FACING});
+    }
+    
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
  
            /* TileEntityFan var10 = (TileEntityFan)par1World.getBlockTileEntity(par2, par3, par4);
 
@@ -122,16 +119,5 @@ public class BlockFan extends BlockContainer {
             }*/
 
             return false;
-    }
-    
-    @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister) {
-        this.blockIcon = par1IconRegister.registerIcon(Properties.TEX_PACKAGE + "fanTop");
-        this.iconSide = par1IconRegister.registerIcon(Properties.TEX_PACKAGE + "fanSide");
-    }
-    
-    @Override
-    public int getRenderType() {
-        return Properties.RENDER_ID_FAN;
     }
 }

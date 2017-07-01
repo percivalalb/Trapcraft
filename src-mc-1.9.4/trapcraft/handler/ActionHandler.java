@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import trapcraft.entity.EntityDummy;
@@ -28,30 +28,28 @@ import trapcraft.entity.EntityDummy;
 public class ActionHandler {
 
 	@SubscribeEvent
-	public void action(PlayerInteractEvent event) {
+	public void action(RightClickItem event) {
 		EntityPlayer player = event.getEntityPlayer();
 		World world = player.worldObj;
 		BlockPos pos = event.getPos();
 		
-		Action action = event.getAction();
 		EnumFacing face = event.getFace();
-		FMLLog.info("OUtput");
-		FMLLog.info("Rightclick");
-		if(!world.isRemote && action == Action.RIGHT_CLICK_BLOCK) {
-			FMLLog.info("Rightclick");
+
+		if(!world.isRemote) {
+			
 			ItemStack item = player.getHeldItemMainhand();
-			if(item != null && item.getItem() == Items.skull && item.getItemDamage() == 3) {
+			if(item != null && item.getItem() == Items.SKULL && item.getItemDamage() == 3) {
 				FMLLog.info("OUtput");
 				if(face != null) {
 					BlockPos tPos = pos.up(face.getFrontOffsetY());
 		
 		
-					if(world.getBlockState(tPos).getBlock() == Blocks.air) {
-						if(world.getBlockState(tPos.down()).getBlock() == Blocks.planks && world.getBlockState(tPos.down(2)).getBlock() == Blocks.planks) {
-							if(!player.canPlayerEdit(tPos, face, item) || !Blocks.skull.canPlaceBlockAt(world, tPos))
+					if(world.isAirBlock(tPos)) {
+						if(world.getBlockState(tPos.down()).getBlock() == Blocks.PLANKS && world.getBlockState(tPos.down(2)).getBlock() == Blocks.PLANKS) {
+							if(!player.canPlayerEdit(tPos, face, item) || !Blocks.SKULL.canPlaceBlockAt(world, tPos))
 				                return;
 				            else {
-				                world.setBlockState(tPos, Blocks.skull.getDefaultState().withProperty(Blocks.skull.FACING, player.getHorizontalFacing()).withProperty(Blocks.skull.NODROP, Boolean.valueOf(false)));
+				                world.setBlockState(tPos, Blocks.SKULL.getDefaultState().withProperty(Blocks.SKULL.FACING, player.getHorizontalFacing()).withProperty(Blocks.SKULL.NODROP, Boolean.valueOf(false)));
 				                int i1 = 0;
 				                if (face == EnumFacing.UP) {
 				                    i1 = MathHelper.floor_double((double)(player.rotationYaw * 16.0F / 360.0F) + 0.5D) & 15;

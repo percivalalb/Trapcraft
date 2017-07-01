@@ -8,7 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import trapcraft.ModBlocks;
 import trapcraft.TrapcraftMod;
 import trapcraft.block.BlockIgniter;
 
@@ -90,7 +92,7 @@ public class TileEntityIgniter extends TileEntity implements IInventory {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound) {
         super.writeToNBT(par1NBTTagCompound);
         NBTTagList nbttaglist = new NBTTagList();
 
@@ -104,6 +106,8 @@ public class TileEntityIgniter extends TileEntity implements IInventory {
         }
 
         par1NBTTagCompound.setTag("Items", nbttaglist);
+        
+        return par1NBTTagCompound;
     }
     
     @Override
@@ -125,9 +129,9 @@ public class TileEntityIgniter extends TileEntity implements IInventory {
     public void markDirty() {
         if (this.worldObj != null) {
         	if(this.worldObj.isRemote) {return;}
-            int x = this.xCoord;
-        	int y = this.yCoord;
-        	int z = this.zCoord;
+            int x = this.pos.getX();
+        	int y = this.pos.getY();
+        	int z = this.pos.getZ();
         	
         	if(z != 0) {
         		if(z < 0) {
@@ -156,11 +160,13 @@ public class TileEntityIgniter extends TileEntity implements IInventory {
         		}	
         	}
         	
-        	if(Block.isEqualTo(this.worldObj.getBlock(x, y, z), Blocks.fire)) {
-        		this.worldObj.setBlockToAir(x, y, z);
-        		this.worldObj.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+        	BlockPos newPos = new BlockPos(x, y, z);
+        	
+        	if(Block.isEqualTo(this.worldObj.getBlockState(newPos).getBlock(), Blocks.FIRE)) {
+        		this.worldObj.setBlockToAir(newPos);
+        		//TODO this.worldObj.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
         	}
-            ((BlockIgniter)TrapcraftMod.igniter).updateIgniterState(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            ((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.worldObj, newPos);
         }
     }
     
@@ -168,7 +174,7 @@ public class TileEntityIgniter extends TileEntity implements IInventory {
     	int upgrades = 0;
     	for(ItemStack stack : contents) {
     		if(stack != null) {
-    			if(stack.getItem() == TrapcraftMod.igniter_Range) {
+    			if(stack.getItem() == TrapcraftMod.IGNITER_RANGE) {
     				upgrades += stack.stackSize;
     			}
     		}
@@ -181,7 +187,7 @@ public class TileEntityIgniter extends TileEntity implements IInventory {
     
     public void updateEntity() {
     	if(!this.worldObj.isRemote) {
-    		((BlockIgniter)TrapcraftMod.igniter).updateIgniterState(this.worldObj, this.pos);
+    		((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.worldObj, this.pos);
     	}
     }
 

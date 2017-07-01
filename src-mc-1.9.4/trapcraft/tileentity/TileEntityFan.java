@@ -2,17 +2,23 @@ package trapcraft.tileentity;
 
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import trapcraft.block.BlockFan;
 
-public class TileEntityFan extends TileEntity
+public class TileEntityFan extends TileEntity implements ITickable
 {
     public double direction;
     public boolean mode;
@@ -29,23 +35,14 @@ public class TileEntityFan extends TileEntity
         mode = true;
     }
 
-    /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-     * ticks and creates a new spawn inside its implementation.
-     */
-    public void updateEntity()
-    {
-        super.updateEntity();
+    @Override
+    public void update() {
 
-        if (!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
-        {
+        if(this.worldObj.isBlockIndirectlyGettingPowered(this.pos) == 0)
             return;
-        }
         
         if(this.worldObj.rand.nextInt(2) == 0)
-        {
-        	this.spawnParticle(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-        }
+        	this.spawnParticles(this.worldObj, this.pos);
         
         List list = worldObj.getEntitiesWithinAABBExcludingEntity(null, getDirection());
 
@@ -126,28 +123,28 @@ public class TileEntityFan extends TileEntity
         if (i == 0 || i == 1)
         {
             int k = MathHelper.floor_double(entity.posY);
-            int j1 = k - yCoord;
+            int j1 = k - this.pos.getY();
             j = j1 <= 0 ? -j1 : j1;
         }
 
         if (i == 2 || i == 3)
         {
             int l = MathHelper.floor_double(entity.posZ);
-            int k1 = l - zCoord;
+            int k1 = l - this.pos.getZ();
             j = k1 <= 0 ? -k1 : k1;
         }
 
         if (i == 4 || i == 5)
         {
             int i1 = MathHelper.floor_double(entity.posX);
-            int l1 = i1 - xCoord;
+            int l1 = i1 - this.pos.getX();
             j = l1 <= 0 ? -l1 : l1;
         }
 
         World world = this.worldObj;
-        int i2 = xCoord;
-        int j2 = yCoord;
-        int k2 = zCoord;
+        int i2 = this.pos.getX();
+        int j2 = this.pos.getY();
+        int k2 = this.pos.getZ();
         boolean flag = true;
 
         for (int l2 = 0; l2 < j; l2++)
@@ -182,7 +179,7 @@ public class TileEntityFan extends TileEntity
                 i2++;
             }
 
-            if (world.isBlockNormalCubeDefault(i2, j2, k2, false))
+            if (world.isBlockFullCube(new BlockPos(i2, j2, k2)))
             {
                 flag = false;
             }
@@ -199,128 +196,64 @@ public class TileEntityFan extends TileEntity
         return String.valueOf(f);
     }
 
-    public AxisAlignedBB getDirection()
-    {
-        int i = getBlockMetadata();
-        int j = this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-        double d = 5D + extraRange;
+    public AxisAlignedBB getDirection() {
+    	EnumFacing facing = this.worldObj.getBlockState(this.pos).getValue(BlockFan.FACING);
+        
+        BlockPos endPos = this.pos.offset(facing, MathHelper.floor_double(5 + this.extraRange));
 
-        if (i == 0)
-        {
-            return AxisAlignedBB.getBoundingBox(xCoord, (double)yCoord - d, zCoord, (double)xCoord + 1.0D, (double)yCoord + 1.0D, (double)zCoord + 1.0D);
-        }
-
-        if (i == 1)
-        {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, (double)xCoord + 1.0D, (double)yCoord + 1.0D + d, (double)zCoord + 1.0D);
-        }
-
-        if (i == 2)
-        {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, (double)zCoord - d, (double)xCoord + 1.0D, (double)yCoord + 1.0D, (double)zCoord + 1.0D);
-        }
-
-        if (i == 3)
-        {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, (double)xCoord + 1.0D, (double)yCoord + 1.0D, (double)zCoord + 1.0D + d);
-        }
-
-        if (i == 4)
-        {
-            return AxisAlignedBB.getBoundingBox((double)xCoord - d, yCoord, zCoord, (double)xCoord + 1.0D, (double)yCoord + 1.0D, (double)zCoord + 1.0D);
-        }
-
-        if (i == 5)
-        {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, (double)xCoord + 1.0D + d, (double)yCoord + 1.0D, (double)zCoord + 1.0D);
-        }
-        else
-        {
-            return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, (double)xCoord + 1.0D, (double)yCoord + 1.0D, (double)zCoord + 1.0D);
-        }
+        return new AxisAlignedBB(this.pos, endPos.add(1, 1, 1));
     }
 
-    public void spawnParticle(World par1World, int par2, int par3, int par4)
-    {
-    	double var7 = (double)((float)par2 + this.worldObj.rand.nextFloat());
-        double var9 = (double)((float)par3 + this.worldObj.rand.nextFloat());
-        double var11 = (double)((float)par4 + this.worldObj.rand.nextFloat());
-        double var13 = 0.0D;
-        double var15 = 0.0D;
-        double var17 = 0.0D;
-        int var19 = this.worldObj.rand.nextInt(2) * 2 - 1;
-        var13 = ((double)this.worldObj.rand.nextFloat() - 0.5D) * 0.5D; // velX
-        var15 = ((double)this.worldObj.rand.nextFloat() - 0.5D) * 0.5D; // velY
-        var17 = ((double)this.worldObj.rand.nextFloat() - 0.5D) * 0.5D; // velZ
+    public static void spawnParticles(World world, BlockPos pos) {
+    	double var7 = (double)((float)pos.getX() + world.rand.nextFloat());
+        double var9 = (double)((float)pos.getY() + world.rand.nextFloat());
+        double var11 = (double)((float)pos.getZ() + world.rand.nextFloat());
+        double velX = 0.0D;
+        double velY = 0.0D;
+        double velZ = 0.0D;
 
-        int metadata = this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+        EnumFacing facing = world.getBlockState(pos).getValue(BlockFan.FACING);
         
-        if (metadata == 0)
-        {
-            var13 = 0.0D;
-            var17 = 0.0D;
-            var15 = -(double)(this.worldObj.rand.nextFloat() * 0.6F);
+        switch(facing) {
+        case DOWN:
+        	velY = -(double)(world.rand.nextFloat() * 0.6F);
+        	break;
+        case UP:
+        	velY = (double)(world.rand.nextFloat() * 0.6F);
+        	break;
+        case NORTH:
+        	velZ = -(double)(world.rand.nextFloat() * 0.6F);
+        	break;
+        case SOUTH:
+        	velZ = (double)(world.rand.nextFloat() * 0.6F);
+        	break;
+        case WEST:
+        	velX = -(double)(world.rand.nextFloat() * 0.6F);
+        	break;
+        case EAST:
+        	velX = (double)(world.rand.nextFloat() * 0.6F);
+        	break;
         }
         
-        if (metadata == 1)
-        {
-            var13 = 0.0D;
-            var17 = 0.0D;
-            var15 = (double)(this.worldObj.rand.nextFloat() * 0.6F);
-        }
-        
-        if (metadata == 2)
-        {
-            var13 = 0.0D;
-            var17 = -(double)(this.worldObj.rand.nextFloat() * 0.6F);
-            var15 = 0.0D;
-        }
-        
-        if (metadata == 4)
-        {
-            var13 = -(double)(this.worldObj.rand.nextFloat() * 0.6F);
-            var17 = 0.0D;
-            var15 = 0.0D;
-        }
-        
-        if (metadata == 3)
-        {
-            var13 = 0.0D;
-            var17 = (double)(this.worldObj.rand.nextFloat() * 0.6F);
-            var15 = 0.0D;
-        }
-        
-        if (metadata == 5)
-        {
-            var13 = (double)(this.worldObj.rand.nextFloat() * 0.6F);
-            var17 = 0.0D;
-            var15 = 0.0D;
-        }
-
-        par1World.spawnParticle("smoke", var7, var9, var11, var13, var15, var17);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, var7, var9, var11, velX, velY, velZ);
     }
     
-    /**
-     * Reads a tile entity from NBT.
-     */
-    public void readFromNBT(NBTTagCompound nbttagcompound)
-    {
-    	super.readFromNBT(nbttagcompound);
-    	speed = nbttagcompound.getFloat("speed");
-    	extraRange = nbttagcompound.getDouble("extraRange");
-        direction = nbttagcompound.getDouble("direction");
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+    	super.readFromNBT(compound);
+    	this.speed = compound.getFloat("speed");
+    	this.extraRange = compound.getDouble("extraRange");
+    	this.direction = compound.getDouble("direction");
     }
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    public void writeToNBT(NBTTagCompound nbttagcompound)
-    {
-    	super.writeToNBT(nbttagcompound);
-    	nbttagcompound.setFloat("speed", speed);
-    	nbttagcompound.setDouble("extraRange", extraRange);
-    	
-        nbttagcompound.setDouble("direction", direction);
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    	super.writeToNBT(compound);
+    	compound.setFloat("speed", this.speed);
+    	compound.setDouble("extraRange", this.extraRange);
+    	compound.setDouble("direction", this.direction);
+        
+        return compound;
     }
  
 }

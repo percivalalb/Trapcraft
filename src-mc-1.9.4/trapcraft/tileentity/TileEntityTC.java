@@ -56,7 +56,7 @@ public class TileEntityTC extends TileEntity {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
 
         nbtTagCompound.setString(Properties.NBT_STATE, state);
@@ -66,10 +66,11 @@ public class TileEntityTC extends TileEntity {
         }
         nbtTagCompound.setString(Properties.NBT_CUSTOM_NAME, customName);
 
+        return nbtTagCompound;
     }
-
-    @Override
-    public Packet getDescriptionPacket() {
-    	return PacketDispatcher.getPacket(new MagneticChestTileMessage(this.pos, this.owner, this.customName, this.state));
-    }
+    //TODO
+    //@Override
+    //public Packet getDescriptionPacket() {
+    //	return PacketDispatcher.getPacket(new MagneticChestTileMessage(this.pos, this.owner, this.customName, this.state));
+    //}
 }

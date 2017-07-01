@@ -20,13 +20,13 @@ public class ContainerIgniter extends Container {
             this.addSlotToContainer(new Slot(par1TileEntityIgniter, i, 196, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack != null && stack.getItem() == TrapcraftMod.igniter_Range;
+            	    return stack != null && stack.getItem() == TrapcraftMod.IGNITER_RANGE;
             	}
             });
             this.addSlotToContainer(new Slot(par1TileEntityIgniter, i + 3, 214, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack != null && stack.getItem() == TrapcraftMod.igniter_Range;
+            	    return stack != null && stack.getItem() == TrapcraftMod.IGNITER_RANGE;
             	}
             });
         }
@@ -56,7 +56,7 @@ public class ContainerIgniter extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (par2 > 5 && itemstack1.getItem() == TrapcraftMod.igniter_Range)
+            if (par2 > 5 && itemstack1.getItem() == TrapcraftMod.IGNITER_RANGE)
             {
                 if (!this.mergeItemStack(itemstack1, 0, 6, false))
                 {

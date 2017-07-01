@@ -25,12 +25,9 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import trapcraft.ModBlocks;
 import trapcraft.TrapcraftMod;
 import trapcraft.api.Properties;
-import trapcraft.client.renders.ItemRenderHelperBearTrap;
-import trapcraft.client.renders.ItemRenderHelperFan;
-import trapcraft.client.renders.ItemRenderHelperGrassCovering;
-import trapcraft.client.renders.ItemRenderHelperMagneticChest;
 import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.entity.EntityDummy;
@@ -57,9 +54,11 @@ public class ClientProxy extends CommonProxy {
     
 	@Override
     public void onModPost(){
+		ModBlocks.setItemModels();
+		
 		//ModelHelper.registerItem(TrapcraftMod.magneticChest);
 		//ModelLoader.setCustomModelResourceLocation(StartupCommon.itemSimple, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(TrapcraftMod.magneticChest), 0, TileEntityMagneticChest.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.MAGNETIC_CHEST), 0, TileEntityMagneticChest.class);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagneticChest.class, new TileEntityMagneticChestRenderer());
 		//MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TrapcraftMod.magneticChest), new ItemRenderHelperMagneticChest());
 		//RenderingRegistry.registerBlockHandler(Properties.RENDER_ID_FAN, new ItemRenderHelperFan());
@@ -69,8 +68,6 @@ public class ClientProxy extends CommonProxy {
 		Map<Class<? extends Entity>, Render<? extends Entity>> entityRenderMap = Maps.<Class<? extends Entity >, Render<? extends Entity>>newHashMap();
 		entityRenderMap.put(EntityCaveSpider.class, new RenderDummy(Minecraft.getMinecraft().getRenderManager(), new ModelBiped(0.0F), 0.5F, Properties.RES_MOB_DUMMY));
 		RenderingRegistry.loadEntityRenderers(entityRenderMap);
-		
-		ModelHelper.registerBlock(TrapcraftMod.magneticChest, "trapcraft:magnetic_chest");
 	}
 	
 	@Override

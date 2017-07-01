@@ -5,6 +5,8 @@ Update List Key
 (*) A bug fix
 (/) Other
 
+When bear trap is triggered it will output a redstone signal through a comparator
+
 v2.3.0a
 + Updated to MC 1.7.10
 

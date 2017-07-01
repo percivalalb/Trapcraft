@@ -1,4 +1,4 @@
-package trapcraft.client.renders;
+package trapcraft.client.model;
 
 /**
  * @author ProPercivalalb

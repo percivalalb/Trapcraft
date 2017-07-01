@@ -104,7 +104,7 @@ public class EntityDummy extends EntityLiving {
     public void onDeath(DamageSource damagesource) {
         super.onDeath(damagesource);
         if(!this.worldObj.isRemote)
-        	this.entityDropItem(new ItemStack(Items.skull, 1, 3), 0.0F);
+        	this.entityDropItem(new ItemStack(Items.SKULL, 1, 3), 0.0F);
     }
 
     @Override

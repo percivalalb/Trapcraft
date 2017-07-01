@@ -5,7 +5,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -49,14 +51,7 @@ public class TrapcraftMod {
      @Instance(Properties.MOD_ID)
      public static TrapcraftMod instance;
      
-     public static Block fan;
-     public static Block magneticChest;
-     public static Block grassCovering;
-     public static Block igniter;
-     public static Block spikes;
-     public static Block bearTrap;
-     
-     public static Item igniter_Range;
+     public static Item IGNITER_RANGE;
      
      public TrapcraftMod() {
     	 instance = this;
@@ -64,30 +59,16 @@ public class TrapcraftMod {
      
      @EventHandler
 	 public void preLoad(FMLPreInitializationEvent event) throws Exception {
-		 this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
-		 
+    	 this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
+    	 
+    	 ModBlocks.onRegisterBlock();
+    	 ModBlocks.onRegisterItem();
 
-	    // fan = new BlockFan().setHardness(0.8F).setUnlocalizedName("trapcraft.fan");
-	     magneticChest = new BlockMagneticChest().setHardness(2.5F).setUnlocalizedName("trapcraft.magnetic_chest");
-	    // grassCovering = new BlockGrassCovering().setHardness(0.2F).setUnlocalizedName("trapcraft.grass_covering");
-	     //igniter = new BlockIgniter().setHardness(3.5F).setUnlocalizedName("trapcraft.igniter");
-	     //spikes = new BlockSpikes().setHardness(2.0F).setUnlocalizedName("trapcraft.spikes");
-	     //bearTrap = new BlockBearTrap().setHardness(2.0F).setUnlocalizedName("trapcraft.bear_trap");
-	     GameRegistry.registerBlock(magneticChest, "magneticchest");
-	     GameRegistry.registerTileEntity(TileEntityMagneticChest.class, "trapcraft:magneticchest");
-	     //GameRegistry.registerBlock(fan, "tc.fan");
-		 //GameRegistry.registerTileEntity(TileEntityFan.class, "trapcraft.fan");
-		 //GameRegistry.registerBlock(grassCovering, "grass_covering");
-		 //GameRegistry.registerBlock(igniter, "igniter");
-		 //GameRegistry.registerTileEntity(TileEntityIgniter.class, "trapcraft.igniter");
-		 //GameRegistry.registerBlock(spikes, "spikes");
-		 //GameRegistry.registerBlock(bearTrap, "bearTrap");
-		 //GameRegistry.registerTileEntity(TileEntityBearTrap.class, "trapcraft.beartrap");
 		 this.registerCreature(EntityDummy.class, "dummy", 0);
 		 
 		 
-		 igniter_Range = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniterrange");
-		 GameRegistry.registerItem(igniter_Range, "trapcraft:igniterrange");
+		 IGNITER_RANGE = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniterrange");
+		 GameRegistry.register(IGNITER_RANGE, new ResourceLocation(Properties.MOD_ID, "igniter_range"));
 		 proxy.onModPre();
 	 }
 
@@ -104,13 +85,13 @@ public class TrapcraftMod {
 	 public void post(FMLPostInitializationEvent var1) {
 		 proxy.onModPost();
 		 GameRegistry.addShapelessRecipe(new ItemStack(Items.SKULL, 1, 3), new Object[] {new ItemStack(Items.DYE, 1, 4), new ItemStack(Blocks.WOOL, 1, 12)});
-	     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(magneticChest, 1), false, new Object[] {"XXX", "XZX", "XYX", 'Y', Items.REDSTONE, 'X', OreDictionaryHelper.PLANKS, 'Z', Items.IRON_INGOT}));
-	     GameRegistry.addRecipe(new ItemStack(fan, 1), new Object[] {"XXX", "XYX", "XXX", 'Y', Items.IRON_INGOT, 'X', Blocks.COBBLESTONE});
-	     GameRegistry.addRecipe(new ItemStack(grassCovering, 3), new Object[] {"XXX", "YYY", 'X', new ItemStack(Blocks.TALLGRASS, 1, 1), 'Y', Items.STICK});
-	     GameRegistry.addRecipe(new ItemStack(bearTrap, 1), new Object[] {"XYX", "XXX", 'X', Items.IRON_INGOT, 'Y', Blocks.STONE_PRESSURE_PLATE});
-	     GameRegistry.addRecipe(new ItemStack(igniter, 1), new Object[] {"NNN", "CRC", "CCC", 'N', Blocks.NETHERRACK, 'R', Items.REDSTONE, 'C', Blocks.COBBLESTONE});
-	     GameRegistry.addRecipe(new ItemStack(spikes, 1), new Object[] {" I ", " I ", "III", 'I', Items.IRON_INGOT});
-	     GameRegistry.addRecipe(new ItemStack(igniter_Range, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.REDSTONE, 'L', Items.LEATHER, 'A', Items.ARROW, 'L', new ItemStack(Items.DYE, 1, 4)});
+	     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.MAGNETIC_CHEST, 1), false, new Object[] {"XXX", "XZX", "XYX", 'Y', Items.REDSTONE, 'X', OreDictionaryHelper.PLANKS, 'Z', Items.IRON_INGOT}));
+	     GameRegistry.addRecipe(new ItemStack(ModBlocks.FAN, 1), new Object[] {"XXX", "XYX", "XXX", 'Y', Items.IRON_INGOT, 'X', Blocks.COBBLESTONE});
+	     GameRegistry.addRecipe(new ItemStack(ModBlocks.GRASS_COVERING, 3), new Object[] {"XXX", "YYY", 'X', new ItemStack(Blocks.TALLGRASS, 1, 1), 'Y', Items.STICK});
+	     GameRegistry.addRecipe(new ItemStack(ModBlocks.BEAR_TRAP, 1), new Object[] {"XYX", "XXX", 'X', Items.IRON_INGOT, 'Y', Blocks.STONE_PRESSURE_PLATE});
+	     GameRegistry.addRecipe(new ItemStack(ModBlocks.IGNITER, 1), new Object[] {"NNN", "CRC", "CCC", 'N', Blocks.NETHERRACK, 'R', Items.REDSTONE, 'C', Blocks.COBBLESTONE});
+	     GameRegistry.addRecipe(new ItemStack(ModBlocks.SPIKES, 1), new Object[] {" I ", " I ", "III", 'I', Items.IRON_INGOT});
+	     GameRegistry.addRecipe(new ItemStack(IGNITER_RANGE, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.REDSTONE, 'L', Items.LEATHER, 'A', Items.ARROW, 'L', new ItemStack(Items.DYE, 1, 4)});
 	     
 	 }
 

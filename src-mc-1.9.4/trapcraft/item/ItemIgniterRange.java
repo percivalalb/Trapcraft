@@ -18,7 +18,7 @@ public class ItemIgniterRange extends Item {
 	public ItemIgniterRange() {
 		super();
 		this.setMaxStackSize(8);
-		this.setCreativeTab(CreativeTabs.tabRedstone);
+		this.setCreativeTab(CreativeTabs.REDSTONE);
 	}
 
 	//@Override

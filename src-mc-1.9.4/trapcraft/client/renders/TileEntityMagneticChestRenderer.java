@@ -24,7 +24,9 @@ public class TileEntityMagneticChestRenderer extends TileEntitySpecialRenderer<T
 
     @Override
     public void renderTileEntityAt(TileEntityMagneticChest magneticChest, double x, double y, double z, float partialTicks, int destroyStage) {
-    	if(magneticChest == null) {
+    	if(true)
+    		return;
+    	if(magneticChest != null) {
     		//FMLClientHandler.instance().getClient().getTextureManager().bindTexture(Properties.RES_BLOCK_MAGNETIC_CHEST);
     		 int i = 0;
 

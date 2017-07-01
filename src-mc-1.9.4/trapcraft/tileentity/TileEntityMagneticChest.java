@@ -23,6 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.LockCode;
+import trapcraft.ModBlocks;
 import trapcraft.TrapcraftMod;
 import trapcraft.block.BlockMagneticChest;
 
@@ -125,7 +126,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
         this.pullItemsIn();
         
         if (++this.ticksSinceSync % 20 * 4 == 0)
-            this.worldObj.addBlockEvent(this.pos, TrapcraftMod.magneticChest, 1, this.numPlayersUsing);
+            this.worldObj.addBlockEvent(this.pos, ModBlocks.MAGNETIC_CHEST, 1, this.numPlayersUsing);
 
         this.prevLidAngle = this.lidAngle;
         int i = this.pos.getX();
@@ -136,7 +137,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
         if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F) {
             double d0 = (double)i + 0.5D;
             double d1 = (double)k + 0.5D;
-            this.worldObj.playSound((EntityPlayer)null, d0, (double)j + 0.5D, d1, SoundEvents.block_chest_open, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            this.worldObj.playSound((EntityPlayer)null, d0, (double)j + 0.5D, d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
@@ -155,7 +156,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
             if (this.lidAngle < f1 && f2 >= f1) {
                 double d3 = (double)i + 0.5D;
                 double d2 = (double)k + 0.5D;
-                this.worldObj.playSound((EntityPlayer)null, d3, (double)j + 0.5D, d2, SoundEvents.block_chest_close, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                this.worldObj.playSound((EntityPlayer)null, d3, (double)j + 0.5D, d2, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.lidAngle < 0.0F)
@@ -164,38 +165,39 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    public void readFromNBT(NBTTagCompound compound) {
 
-        super.readFromNBT(nbtTagCompound);
+        super.readFromNBT(compound);
 
         // Read in the ItemStacks in the inventory from NBT
-        NBTTagList tagList = nbtTagCompound.getTagList("Items", 10);
-        inventory = new ItemStack[this.getSizeInventory()];
-        for (int i = 0; i < tagList.tagCount(); ++i) {
+        NBTTagList tagList = compound.getTagList("Items", 10);
+        this.inventory = new ItemStack[this.getSizeInventory()];
+        for(int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = (NBTTagCompound) tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.length)
-                inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
+            if(slot >= 0 && slot < this.inventory.length)
+            	this.inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
         }
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 
-        super.writeToNBT(nbtTagCompound);
+        super.writeToNBT(compound);
 
         // Write the ItemStacks in the inventory to NBT
         NBTTagList tagList = new NBTTagList();
-        for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if (inventory[currentIndex] != null) {
+        for(int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
+            if(this.inventory[currentIndex] != null) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
                 tagCompound.setByte("Slot", (byte) currentIndex);
-                inventory[currentIndex].writeToNBT(tagCompound);
+                this.inventory[currentIndex].writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
             }
         }
-        nbtTagCompound.setTag("Items", tagList);
+        compound.setTag("Items", tagList);
 
+        return compound;
     }
     
     public void pullItemsIn() {

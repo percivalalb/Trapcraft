@@ -1,0 +1,19 @@
+{   "parent": "minecraft:block/block",
+    "textures": {
+        "particle": "blocks/dirt",
+        "base": "blocks/grass_top"
+    },
+    "elements": [
+        {   "from": [ 16, 15, 16 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "texture": "#base",   "cullface": "down",  "tintindex": 0 },
+                "up":    { "texture": "#base",   "cullface": "up",    "tintindex": 0 },
+                "north": { "texture": "#base",   "cullface": "north", "tintindex": 0 },
+                "south": { "texture": "#base",   "cullface": "south", "tintindex": 0 },
+                "west":  { "texture": "#base",   "cullface": "west",  "tintindex": 0 },
+                "east":  { "texture": "#base",   "cullface": "east",  "tintindex": 0 }
+            }
+        }
+    ]
+}
