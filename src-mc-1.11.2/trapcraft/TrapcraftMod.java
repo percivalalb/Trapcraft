@@ -85,7 +85,7 @@ public class TrapcraftMod {
 	 }
 
 	 public void registerCreature(Class var1, String var2, int var3) {
-		 EntityRegistry.registerModEntity(var1, var2, var3, INSTANCE, 128, 1, true);
+		 EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, var2), var1, var2, var3, INSTANCE, 128, 1, true);
 	 }
 	 
 	 public void loadConfig(Configuration var1) {

@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "facing=down,powered=false":  { "model": "trapcraft:fan_vertical", "x": 180 },
+        "facing=up,powered=false":    { "model": "trapcraft:fan_vertical" },
+        "facing=north,powered=false": { "model": "trapcraft:fan" },
+        "facing=south,powered=false": { "model": "trapcraft:fan", "y": 180 },
+        "facing=west,powered=false":  { "model": "trapcraft:fan", "y": 270 },
+        "facing=east,powered=false":  { "model": "trapcraft:fan", "y": 90 },
+        "facing=down,powered=true":  { "model": "trapcraft:fan_vertical", "x": 180 },
+        "facing=up,powered=true":    { "model": "trapcraft:fan_vertical" },
+        "facing=north,powered=true": { "model": "trapcraft:fan" },
+        "facing=south,powered=true": { "model": "trapcraft:fan", "y": 180 },
+        "facing=west,powered=true":  { "model": "trapcraft:fan", "y": 270 },
+        "facing=east,powered=true":  { "model": "trapcraft:fan", "y": 90 }
+    }
+}
