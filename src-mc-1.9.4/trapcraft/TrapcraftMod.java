@@ -46,16 +46,10 @@ import trapcraft.tileentity.TileEntityMagneticChest;
 public class TrapcraftMod {
 	
      @SidedProxy(clientSide = Properties.SP_CLIENT, serverSide = Properties.SP_SERVER)
-     public static CommonProxy proxy;
+     public static CommonProxy PROXY;
      
      @Instance(Properties.MOD_ID)
-     public static TrapcraftMod instance;
-     
-     public static Item IGNITER_RANGE;
-     
-     public TrapcraftMod() {
-    	 instance = this;
-     }
+     public static TrapcraftMod INSTANCE;
      
      @EventHandler
 	 public void preLoad(FMLPreInitializationEvent event) throws Exception {
@@ -64,26 +58,25 @@ public class TrapcraftMod {
     	 ModBlocks.onRegisterBlock();
     	 ModBlocks.onRegisterItem();
 
+    	 ModItems.onRegister();
+    	 
 		 this.registerCreature(EntityDummy.class, "dummy", 0);
-		 
-		 
-		 IGNITER_RANGE = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniterrange");
-		 GameRegistry.register(IGNITER_RANGE, new ResourceLocation(Properties.MOD_ID, "igniter_range"));
-		 proxy.onModPre();
+
+		 PROXY.onModPre();
 	 }
 
 	 @EventHandler
 	 public void load(FMLInitializationEvent var1) {
-	     proxy.onModLoad();
+	     PROXY.onModLoad();
 		 //Event Buses
 	     MinecraftForge.EVENT_BUS.register(new ActionHandler());
-	     NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
+	     NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, PROXY);
 		 PacketDispatcher.registerPackets();
 	 }
 	 
 	 @EventHandler
 	 public void post(FMLPostInitializationEvent var1) {
-		 proxy.onModPost();
+		 PROXY.onModPost();
 		 GameRegistry.addShapelessRecipe(new ItemStack(Items.SKULL, 1, 3), new Object[] {new ItemStack(Items.DYE, 1, 4), new ItemStack(Blocks.WOOL, 1, 12)});
 	     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.MAGNETIC_CHEST, 1), false, new Object[] {"XXX", "XZX", "XYX", 'Y', Items.REDSTONE, 'X', OreDictionaryHelper.PLANKS, 'Z', Items.IRON_INGOT}));
 	     GameRegistry.addRecipe(new ItemStack(ModBlocks.FAN, 1), new Object[] {"XXX", "XYX", "XXX", 'Y', Items.IRON_INGOT, 'X', Blocks.COBBLESTONE});
@@ -91,12 +84,12 @@ public class TrapcraftMod {
 	     GameRegistry.addRecipe(new ItemStack(ModBlocks.BEAR_TRAP, 1), new Object[] {"XYX", "XXX", 'X', Items.IRON_INGOT, 'Y', Blocks.STONE_PRESSURE_PLATE});
 	     GameRegistry.addRecipe(new ItemStack(ModBlocks.IGNITER, 1), new Object[] {"NNN", "CRC", "CCC", 'N', Blocks.NETHERRACK, 'R', Items.REDSTONE, 'C', Blocks.COBBLESTONE});
 	     GameRegistry.addRecipe(new ItemStack(ModBlocks.SPIKES, 1), new Object[] {" I ", " I ", "III", 'I', Items.IRON_INGOT});
-	     GameRegistry.addRecipe(new ItemStack(IGNITER_RANGE, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.REDSTONE, 'L', Items.LEATHER, 'A', Items.ARROW, 'L', new ItemStack(Items.DYE, 1, 4)});
+	     GameRegistry.addRecipe(new ItemStack(ModItems.IGNITER_RANGE, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.REDSTONE, 'L', Items.LEATHER, 'A', Items.ARROW, 'L', new ItemStack(Items.DYE, 1, 4)});
 	     
 	 }
 
 	 public void registerCreature(Class var1, String var2, int var3) {
-		 EntityRegistry.registerModEntity(var1, var2, var3, instance, 128, 1, true);
+		 EntityRegistry.registerModEntity(var1, var2, var3, INSTANCE, 128, 1, true);
 	 }
 	 
 	 public void loadConfig(Configuration var1) {

@@ -57,7 +57,7 @@ public class BlockMagneticChest extends BlockContainer {
         this.setHardness(2.5F);
         this.setCreativeTab(CreativeTabs.REDSTONE);
         this.setSoundType(SoundType.WOOD);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.WEST));
     }
 
     private boolean isBlocked(World worldIn, BlockPos pos) {
@@ -142,11 +142,6 @@ public class BlockMagneticChest extends BlockContainer {
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
-    }
-    
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override

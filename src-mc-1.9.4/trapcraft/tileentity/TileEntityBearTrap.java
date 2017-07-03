@@ -5,13 +5,14 @@ import java.util.Random;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ITickable;
 
 /**
  * @author ProPercivalalb
  * You may look at this file to gain knowledge of javascript
  * but must not copy any features or code directly.
  **/
-public class TileEntityBearTrap extends TileEntity {
+public class TileEntityBearTrap extends TileEntity implements ITickable {
     
 	public EntityLiving entityliving;
     public float prevHealth;
@@ -25,7 +26,8 @@ public class TileEntityBearTrap extends TileEntity {
         rand = new Random();
     }
     
-    public void updateEntity() {
+    @Override
+    public void update() {
         if (entityliving != null) {
             if (entityliving.getDistance((double)posX + 0.5D, (double)posY + 0.20000000000000001D, (double)posZ + 0.5D) > 2D) {
                 entityliving = null;

@@ -19,15 +19,19 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -51,6 +55,7 @@ public class BlockIgniter extends BlockContainer {
         super(Material.ROCK);
         this.setHardness(3.5F);
         this.setSoundType(SoundType.STONE);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.WEST));
         this.setCreativeTab(CreativeTabs.REDSTONE);
     }
 
@@ -64,7 +69,7 @@ public class BlockIgniter extends BlockContainer {
             TileEntityIgniter tileentityigniter = (TileEntityIgniter)worldIn.getTileEntity(pos);
 
             if (tileentityigniter != null) {
-            	playerIn.openGui(TrapcraftMod.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            	playerIn.openGui(TrapcraftMod.INSTANCE, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
             }
 
             return true;
@@ -123,57 +128,25 @@ public class BlockIgniter extends BlockContainer {
     
     
     public void updateIgniterState(World world, BlockPos pos) {
-       /**
-    	int metadata = par1World.getBlockMetadata(pos);
-        int direction = getOrientation(metadata);
-        TileEntityIgniter igniter = (TileEntityIgniter)par1World.getTileEntity(pos);
+       EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+      
+       TileEntityIgniter igniter = (TileEntityIgniter)world.getTileEntity(pos);
 
-        if (direction != 7) {
-            boolean flag = world.isBlockIndirectlyGettingPowered(pos)
-            int x = Facing.offsetsXForSide[direction];
-        	int y = Facing.offsetsYForSide[direction];
-        	int z = Facing.offsetsZForSide[direction];
-        	
-        	if(z != 0) {
-        		if(z < 0) {
-        			z -= igniter.getRangeUpgrades();
-        		}
-        		else if(z > 0) {
-        			z += igniter.getRangeUpgrades();
-        		}	
-        	}
-        	
-        	if(x != 0) {
-        		if(x < 0) {
-        			x -= igniter.getRangeUpgrades();
-        		}
-        		else if(x > 0) {
-        			x += igniter.getRangeUpgrades();
-        		}	
-        	}
-        	
-        	if(y != 0) {
-        		if(y < 0) {
-        			y -= igniter.getRangeUpgrades();
-        		}
-        		else if(y > 0) {
-        			y += igniter.getRangeUpgrades();
-        		}	
-        	}
-        	
-            if(flag) {
-            	if(par1World.getBlock(x + par2, y + par3, z + par4) == Blocks.air) {
-            		if(World.doesBlockHaveSolidTopSurface(par1World, x + par2, y + par3 - 1, z + par4)) {
-            			par1World.setBlock(x + par2, y + par3, z + par4, Blocks.fire);
-            		}
-            	}
-            		
-            }
-            else if(!flag && par1World.getBlock(x + par2, y + par3, z + par4) == Blocks.fire) {
-            	par1World.setBlockToAir(x + par2, y + par3, z + par4);
-            	par1World.playSoundEffect(x + par2 + 0.5D, y + par3 + 0.5D, z + par4 + 0.5D, "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
-            }
-        }**/
+       
+       
+       boolean flag = world.isBlockIndirectlyGettingPowered(pos) > 0;
+       BlockPos firePos = pos.offset(facing, igniter.getRangeUpgrades() + 1);
+
+       if(flag) {
+    	   if(world.isAirBlock(firePos)) {
+    		   world.setBlockState(firePos, Blocks.FIRE.getDefaultState());
+    	   }
+       }
+       else if(!flag && world.getBlockState(firePos).getBlock() == Blocks.FIRE) {
+    	   world.setBlockToAir(firePos);
+           world.playSound(firePos.getX() + 0.5D, firePos.getY() + 0.5D, firePos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
+       }
+        
     }
 
 	@Override
@@ -181,44 +154,13 @@ public class BlockIgniter extends BlockContainer {
 		return new TileEntityIgniter();
 	}
 	
-	/**
 	@Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        dropInventory(world, x, y, z);
-        super.breakBlock(world, x, y, z, block, meta);
-    }
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+		
+		if(tileentity instanceof TileEntityIgniter) 
+			InventoryHelper.dropInventoryItems(worldIn, pos, ((TileEntityIgniter)tileentity).inventory);
 
-    private void dropInventory(World world, int x, int y, int z) {
-
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
-
-        if (!(tileEntity instanceof IInventory))
-            return;
-
-        IInventory inventory = (IInventory)tileEntity;
-
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-
-            ItemStack itemStack = inventory.getStackInSlot(i);
-
-            if (itemStack != null && itemStack.stackSize > 0) {
-                float dX = rand.nextFloat() * 0.8F + 0.1F;
-                float dY = rand.nextFloat() * 0.8F + 0.1F;
-                float dZ = rand.nextFloat() * 0.8F + 0.1F;
-
-                EntityItem entityItem = new EntityItem(world, x + dX, y + dY, z + dZ, new ItemStack(itemStack.getItem(), itemStack.stackSize, itemStack.getItemDamage()));
-
-                if (itemStack.hasTagCompound()) {
-                    entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
-                }
-
-                float factor = 0.05F;
-                entityItem.motionX = rand.nextGaussian() * factor;
-                entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
-                entityItem.motionZ = rand.nextGaussian() * factor;
-                world.spawnEntityInWorld(entityItem);
-                itemStack.stackSize = 0;
-            }
-        }
-    }**/
+		super.breakBlock(worldIn, pos, state);
+	}
 }

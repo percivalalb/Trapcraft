@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import trapcraft.ModItems;
 import trapcraft.TrapcraftMod;
 import trapcraft.tileentity.TileEntityIgniter;
 
@@ -17,16 +18,16 @@ public class ContainerIgniter extends Container {
 		this.player = par2EntityPlayer;
 		int i;
 		for (i = 0; i < 3; ++i) {
-            this.addSlotToContainer(new Slot(par1TileEntityIgniter, i, 196, 26 + i * 18) {
+            this.addSlotToContainer(new Slot(par1TileEntityIgniter.inventory, i, 196, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack != null && stack.getItem() == TrapcraftMod.IGNITER_RANGE;
+            	    return stack != null && stack.getItem() == ModItems.IGNITER_RANGE;
             	}
             });
-            this.addSlotToContainer(new Slot(par1TileEntityIgniter, i + 3, 214, 26 + i * 18) {
+            this.addSlotToContainer(new Slot(par1TileEntityIgniter.inventory, i + 3, 214, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack != null && stack.getItem() == TrapcraftMod.IGNITER_RANGE;
+            	    return stack != null && stack.getItem() == ModItems.IGNITER_RANGE;
             	}
             });
         }
@@ -43,150 +44,33 @@ public class ContainerIgniter extends Container {
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return igniter.isUseableByPlayer(entityplayer);
+		return this.igniter.inventory.isUseableByPlayer(entityplayer);
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(par2);
+        Slot slot = (Slot)this.inventorySlots.get(index);
 
-        if (slot != null && slot.getHasStack())
-        {
+        if(slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (par2 > 5 && itemstack1.getItem() == TrapcraftMod.IGNITER_RANGE)
-            {
-                if (!this.mergeItemStack(itemstack1, 0, 6, false))
-                {
+            if(index < this.igniter.inventory.getSizeInventory()) {
+                if(!this.mergeItemStack(itemstack1, this.igniter.inventory.getSizeInventory(), this.inventorySlots.size(), true)) {
                     return null;
                 }
-
-                slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (par2 < 6) {
-                if (!this.mergeItemStack(itemstack1, 6, inventorySlots.size(), false)) {
-                    return null;
-                }
-              
-            }
-            else if(par2 > 6 && par2 < inventorySlots.size() - 9) {
-            	if (!this.mergeItemStack(itemstack1, inventorySlots.size() - 9, inventorySlots.size(), false)) {
-            		return null;
-            	}
-            }
-            else if (!this.mergeItemStack(itemstack1, 6, inventorySlots.size() - 9, false)) {
-        		return null;
-        	}
-
-            if (itemstack1.stackSize == 0)
-            {
-                slot.putStack((ItemStack)null);
-            }
-            else
-            {
-                slot.onSlotChanged();
-            }
-
-            if (itemstack1.stackSize == itemstack.stackSize)
-            {
+            else if(!this.mergeItemStack(itemstack1, 0, this.igniter.inventory.getSizeInventory(), false)) {
                 return null;
             }
 
-            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+            if(itemstack1.stackSize == 0)
+                slot.putStack((ItemStack)null);
+            else
+                slot.onSlotChanged();
         }
 
         return itemstack;
-    }
-	
-	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4)
-    {
-        boolean flag1 = false;
-        int k = par2;
-
-        if (par4)
-        {
-            k = par3 - 1;
-        }
-
-        Slot slot;
-        ItemStack itemstack1;
-
-        if (par1ItemStack.isStackable())
-        {
-            while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2))
-            {
-                slot = (Slot)this.inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-
-                if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1))
-                {
-                    int l = itemstack1.stackSize + par1ItemStack.stackSize;
-
-                    if (l <= par1ItemStack.getMaxStackSize())
-                    {
-                        par1ItemStack.stackSize = 0;
-                        itemstack1.stackSize = l;
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    }
-                    else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize())
-                    {
-                        par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
-                        itemstack1.stackSize = par1ItemStack.getMaxStackSize();
-                        slot.onSlotChanged();
-                        flag1 = true;
-                    }
-                }
-
-                if (par4)
-                {
-                    --k;
-                }
-                else
-                {
-                    ++k;
-                }
-            }
-        }
-
-        if (par1ItemStack.stackSize > 0)
-        {
-            if (par4)
-            {
-                k = par3 - 1;
-            }
-            else
-            {
-                k = par2;
-            }
-
-            while (!par4 && k < par3 || par4 && k >= par2)
-            {
-                slot = (Slot)this.inventorySlots.get(k);
-                itemstack1 = slot.getStack();
-
-                if (itemstack1 == null)
-                {
-                    slot.putStack(par1ItemStack.copy());
-                    slot.onSlotChanged();
-                    par1ItemStack.stackSize = 0;
-                    flag1 = true;
-                    break;
-                }
-
-                if (par4)
-                {
-                    --k;
-                }
-                else
-                {
-                    ++k;
-                }
-            }
-        }
-
-        return flag1;
     }
 }

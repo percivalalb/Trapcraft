@@ -20,7 +20,6 @@ import net.minecraft.world.World;
  **/
 public class EntityDummy extends EntityLiving {
    
-
     public EntityDummy(World world) {
         super(world);
     }
