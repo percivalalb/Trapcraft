@@ -46,7 +46,7 @@ public class TileEntityBearTrap extends TileEntity implements ITickable {
             }
 
             if (rand.nextInt(30) == 0) {
-                entityliving.attackEntityFrom(DamageSource.inWall, 1);
+                entityliving.attackEntityFrom(DamageSource.IN_WALL, 1);
             }
 
             prevHealth = entityliving.getHealth();

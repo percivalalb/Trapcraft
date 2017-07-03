@@ -27,7 +27,7 @@ public class TileEntityMagneticChestRenderer extends TileEntitySpecialRenderer<T
     	if(magneticChest != null) {
     		int i = 0;
 
-    		if(magneticChest.hasWorldObj())
+    		if(magneticChest.hasWorld())
     	    {
     			i = magneticChest.getBlockMetadata();
     	    }

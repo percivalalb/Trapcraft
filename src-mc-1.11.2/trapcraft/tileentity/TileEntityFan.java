@@ -35,15 +35,15 @@ public class TileEntityFan extends TileEntity implements ITickable
     @Override
     public void update() {
 
-        if(!this.worldObj.getBlockState(this.pos).getValue(BlockFan.POWERED))
+        if(!this.world.getBlockState(this.pos).getValue(BlockFan.POWERED))
             return;
         
-        EnumFacing facing = this.worldObj.getBlockState(this.pos).getValue(BlockFan.FACING);
+        EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFan.FACING);
         
-        if(this.worldObj.rand.nextInt(2) == 0)
-        	this.spawnParticles(this.worldObj, this.pos);
-        FMLLog.info("%s", this.worldObj);
-        List<Entity> list = this.worldObj.getEntitiesWithinAABB(Entity.class, this.getDirection());
+        if(this.world.rand.nextInt(2) == 0)
+        	this.spawnParticles(this.world, this.pos);
+        FMLLog.info("%s", this.world);
+        List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getDirection());
 
         if(!list.isEmpty())
         {
@@ -98,14 +98,14 @@ public class TileEntityFan extends TileEntity implements ITickable
     }
 
     public boolean isPathClear(Entity entity, EnumFacing facing) {
-    	int x = facing.getFrontOffsetX() * (MathHelper.floor_double(entity.posX) - this.pos.getX());
-    	int y = facing.getFrontOffsetY() * (MathHelper.floor_double(entity.posY) - this.pos.getY());
-    	int z = facing.getFrontOffsetZ() * (MathHelper.floor_double(entity.posZ) - this.pos.getZ());
+    	int x = facing.getFrontOffsetX() * (MathHelper.floor(entity.posX) - this.pos.getX());
+    	int y = facing.getFrontOffsetY() * (MathHelper.floor(entity.posY) - this.pos.getY());
+    	int z = facing.getFrontOffsetZ() * (MathHelper.floor(entity.posZ) - this.pos.getZ());
     	boolean flag = true;
     	
         for(int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
             
-            if(this.worldObj.isBlockFullCube(this.pos.offset(facing, l2))) {
+            if(this.world.isBlockFullCube(this.pos.offset(facing, l2))) {
                 flag = false;
             }
         }
@@ -122,9 +122,9 @@ public class TileEntityFan extends TileEntity implements ITickable
     }
 
     public AxisAlignedBB getDirection() {
-    	EnumFacing facing = this.worldObj.getBlockState(this.pos).getValue(BlockFan.FACING);
+    	EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFan.FACING);
         
-        BlockPos endPos = this.pos.offset(facing, MathHelper.floor_double(5 + this.extraRange));
+        BlockPos endPos = this.pos.offset(facing, MathHelper.floor(5 + this.extraRange));
         if(facing == EnumFacing.WEST)
         	endPos = endPos.add(0, 1, 1);
         else if(facing == EnumFacing.NORTH)
@@ -208,8 +208,8 @@ public class TileEntityFan extends TileEntity implements ITickable
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
 		this.readFromNBT(packet.getNbtCompound());
-		if(!this.worldObj.isRemote)
-			this.worldObj.notifyBlockUpdate(this.pos, this.worldObj.getBlockState(this.pos), this.worldObj.getBlockState(this.pos), 3);
+		if(!this.world.isRemote)
+			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
 		return;
 	}
  

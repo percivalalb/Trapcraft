@@ -42,7 +42,7 @@ public class MagneticChestTileMessage extends AbstractClientMessage {
 	
 	@Override
 	public void process(EntityPlayer player, Side side) {
-		TileEntity target = player.worldObj.getTileEntity(this.pos);
+		TileEntity target = player.world.getTileEntity(this.pos);
 		
 		if(!(target instanceof TileEntityTC))
 			return;

@@ -57,7 +57,7 @@ public class PacketDispatcher {
 	}
 
 	public static final void sendToAllAround(IMessage message, EntityPlayer player, double range) {
-		PacketDispatcher.sendToAllAround(message, player.worldObj.provider.getDimensionType().getId(), player.posX, player.posY, player.posZ, range);
+		PacketDispatcher.sendToAllAround(message, player.world.provider.getDimensionType().getId(), player.posX, player.posY, player.posZ, range);
 	}
 	
 	public static final void sendToAllAround(IMessage message, TileEntity tileEntity, double range) {

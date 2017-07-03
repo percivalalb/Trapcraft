@@ -21,13 +21,13 @@ public class ContainerIgniter extends Container {
             this.addSlotToContainer(new Slot(par1TileEntityIgniter.inventory, i, 196, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack != null && stack.getItem() == ModItems.IGNITER_RANGE;
+            	    return stack.getItem() == ModItems.IGNITER_RANGE;
             	}
             });
             this.addSlotToContainer(new Slot(par1TileEntityIgniter.inventory, i + 3, 214, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack != null && stack.getItem() == ModItems.IGNITER_RANGE;
+            	    return stack.getItem() == ModItems.IGNITER_RANGE;
             	}
             });
         }
@@ -44,12 +44,12 @@ public class ContainerIgniter extends Container {
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return this.igniter.inventory.isUseableByPlayer(entityplayer);
+		return this.igniter.inventory.isUsableByPlayer(entityplayer);
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot)this.inventorySlots.get(index);
 
         if(slot != null && slot.getHasStack()) {
@@ -58,15 +58,15 @@ public class ContainerIgniter extends Container {
 
             if(index < this.igniter.inventory.getSizeInventory()) {
                 if(!this.mergeItemStack(itemstack1, this.igniter.inventory.getSizeInventory(), this.inventorySlots.size(), true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else if(!this.mergeItemStack(itemstack1, 0, this.igniter.inventory.getSizeInventory(), false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
-            if(itemstack1.stackSize == 0)
-                slot.putStack((ItemStack)null);
+            if(itemstack1.isEmpty())
+                slot.putStack(ItemStack.EMPTY);
             else
                 slot.onSlotChanged();
         }

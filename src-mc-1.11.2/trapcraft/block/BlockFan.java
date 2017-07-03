@@ -99,12 +99,12 @@ public class BlockFan extends BlockContainer {
     }
     
     @Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
-		if(!world.isRemote) {
-			if(state.getValue(POWERED) && !world.isBlockPowered(pos))
-				world.scheduleUpdate(pos, this, 4);
-			else if(!state.getValue(POWERED) && world.isBlockPowered(pos))
-				world.setBlockState(pos, state.cycleProperty(POWERED), 3);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		if(!worldIn.isRemote) {
+			if(state.getValue(POWERED) && !worldIn.isBlockPowered(pos))
+				worldIn.scheduleUpdate(pos, this, 4);
+			else if(!state.getValue(POWERED) && worldIn.isBlockPowered(pos))
+				worldIn.setBlockState(pos, state.cycleProperty(POWERED), 3);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class BlockFan extends BlockContainer {
 	}
     
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
  
            /* TileEntityFan var10 = (TileEntityFan)par1World.getBlockTileEntity(par2, par3, par4);
 
@@ -147,6 +147,6 @@ public class BlockFan extends BlockContainer {
                 }
             }*/
 
-            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 }

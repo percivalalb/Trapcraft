@@ -25,7 +25,7 @@ public class GuiIgniter extends GuiContainer {
 	@Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2){
         String s = this.igniter.inventory.getDisplayName().getUnformattedText();
-        this.fontRendererObj.drawString(s, 90 + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
+        this.fontRenderer.drawString(s, 90 + this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
     }
     
     @Override

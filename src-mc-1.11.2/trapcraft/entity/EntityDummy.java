@@ -52,7 +52,7 @@ public class EntityDummy extends EntityLiving {
         this.randomYawVelocity = 0.0F;
         this.motionX = 0.0D;
         this.motionZ = 0.0D;
-        List<Entity> nearByEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(this.getPosition()).expand(16D, 16D, 16D));
+        List<Entity> nearByEntities = this.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(this.getPosition()).expand(16D, 16D, 16D));
 
         for(int i = 0; i < nearByEntities.size(); i++) {
         	Entity entity = nearByEntities.get(0);
@@ -114,7 +114,7 @@ public class EntityDummy extends EntityLiving {
     @Override
     public void onDeath(DamageSource damagesource) {
         super.onDeath(damagesource);
-        if(!this.worldObj.isRemote)
+        if(!this.world.isRemote)
         	this.entityDropItem(new ItemStack(Items.SKULL, 1, 3), 0.0F);
     }
 

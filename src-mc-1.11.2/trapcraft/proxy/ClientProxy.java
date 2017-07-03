@@ -66,12 +66,12 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return (ctx.side.isClient() ? Minecraft.getMinecraft().thePlayer : super.getPlayerEntity(ctx));
+		return (ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx));
 	}
 	
 	@Override
 	public EntityPlayer getPlayerEntity() {
-		return Minecraft.getMinecraft().thePlayer;
+		return Minecraft.getMinecraft().player;
 	}
 	
 	@Override
@@ -81,7 +81,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
     public void handleTileEntityPacket(BlockPos pos, EnumFacing facing, String owner, String customName, String state) {
-        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(pos);
+        TileEntity tileEntity = FMLClientHandler.instance().getClient().world.getTileEntity(pos);
 
         if (tileEntity != null) {
             if (tileEntity instanceof TileEntityTC) {

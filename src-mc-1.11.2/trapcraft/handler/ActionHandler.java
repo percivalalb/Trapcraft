@@ -55,7 +55,7 @@ public class ActionHandler {
 				                world.setBlockState(tPos, Blocks.SKULL.getDefaultState().withProperty(Blocks.SKULL.FACING, player.getHorizontalFacing()).withProperty(Blocks.SKULL.NODROP, Boolean.valueOf(false)));
 		
 				                if(!player.capabilities.isCreativeMode)
-				                	--item.stackSize;
+				                	item.shrink(1);
 				                
 				                world.setBlockToAir(tPos);
 				        		world.setBlockToAir(tPos.down());
@@ -69,7 +69,7 @@ public class ActionHandler {
 				        		EntityDummy entitydummy = new EntityDummy(world);
 				        		entitydummy.setVariant((byte)variant.getBlock().getMetaFromState(variant));
 				        		entitydummy.setLocationAndAngles((double)tPos.getX() + 0.5D, (double)tPos.getY() - 1.95D, (double)tPos.getZ() + 0.5D, rotation, 0.0F);
-				        		world.spawnEntityInWorld(entitydummy);
+				        		world.spawnEntity(entitydummy);
 				        	
 				                event.setCanceled(true);
 				            }

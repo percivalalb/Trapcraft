@@ -33,9 +33,9 @@ public class TileEntityIgniter extends TileEntity implements ITickable {
 		
 		@Override
 		public void markDirty() {
-			if(hasWorldObj()) {
-				if(worldObj.isRemote) {return;}
-				((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(worldObj, pos);
+			if(hasWorld()) {
+				if(world.isRemote) {return;}
+				((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(world, pos);
 			}
 		}
 	};
@@ -50,7 +50,7 @@ public class TileEntityIgniter extends TileEntity implements ITickable {
             byte b0 = nbttagcompound1.getByte("Slot");
 
             if (b0 >= 0 && b0 < this.inventory.getSizeInventory()) {
-                this.inventory.setInventorySlotContents(b0, ItemStack.loadItemStackFromNBT(nbttagcompound1));
+                this.inventory.setInventorySlotContents(b0, new ItemStack(nbttagcompound1));
             }
         }
     }
@@ -81,7 +81,7 @@ public class TileEntityIgniter extends TileEntity implements ITickable {
     		ItemStack stack = this.inventory.getStackInSlot(i);
     		if(stack != null) {
     			if(stack.getItem() == ModItems.IGNITER_RANGE) {
-    				upgrades += stack.stackSize;
+    				upgrades += stack.getCount();
     			}
     		}
     	}
@@ -91,8 +91,8 @@ public class TileEntityIgniter extends TileEntity implements ITickable {
     
     @Override
     public void update() {
-    	if(!this.worldObj.isRemote) {
-    		((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.worldObj, this.pos);
+    	if(!this.world.isRemote) {
+    		((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.world, this.pos);
     	}
     }
 }

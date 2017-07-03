@@ -39,9 +39,9 @@ public class BlockSpikes extends Block {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		return NULL_AABB;
-	}
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return NULL_AABB;
+    }
 	   
 	@Override
 	public boolean isFullCube(IBlockState state) {
@@ -84,7 +84,7 @@ public class BlockSpikes extends Block {
         }
 
         if (entity.fallDistance >= 5F) {
-            entity.attackEntityFrom(DamageSource.fall, 20);
+            entity.attackEntityFrom(DamageSource.FALL, 20);
             return;
         }
         else {
@@ -92,7 +92,7 @@ public class BlockSpikes extends Block {
             double motionY = entity.motionY;
             double motionZ = entity.motionZ;
             int damageTodo = (int)((motionX + motionY + motionZ) / 1.5D);
-            entity.attackEntityFrom(DamageSource.generic, 2 + damageTodo);
+            entity.attackEntityFrom(DamageSource.GENERIC, 2 + damageTodo);
             return;
         }
     }
