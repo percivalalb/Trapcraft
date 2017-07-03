@@ -23,7 +23,7 @@ public class TileEntityMagneticChestRenderer extends TileEntitySpecialRenderer<T
     private ModelChest modelChest = new ModelChest();
 
     @Override
-    public void renderTileEntityAt(TileEntityMagneticChest magneticChest, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileEntityMagneticChest magneticChest, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
     	if(magneticChest != null) {
     		int i = 0;
 

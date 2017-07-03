@@ -55,22 +55,22 @@ public class ModBlocks {
 		SPIKES.setHarvestLevel("pickaxe", 0);
 		IGNITER.setHarvestLevel("pickaxe", 0);
 		
-		GameRegistry.register(FAN);
-		GameRegistry.register(MAGNETIC_CHEST);
-		GameRegistry.register(GRASS_COVERING);
-		GameRegistry.register(BEAR_TRAP);
-		GameRegistry.register(SPIKES);
-		GameRegistry.register(IGNITER);
+		event.getRegistry().register(FAN);
+		event.getRegistry().register(MAGNETIC_CHEST);
+		event.getRegistry().register(GRASS_COVERING);
+		event.getRegistry().register(BEAR_TRAP);
+		event.getRegistry().register(SPIKES);
+		event.getRegistry().register(IGNITER);
 	}
 	
 	@SubscribeEvent
 	public static void onRegisterItem(RegistryEvent.Register<Item> event) {
-		GameRegistry.register(makeItemBlock(MAGNETIC_CHEST));
-		GameRegistry.register(makeItemBlock(GRASS_COVERING));
-		GameRegistry.register(makeItemBlock(FAN));
-		GameRegistry.register(makeItemBlock(BEAR_TRAP));
-		GameRegistry.register(makeItemBlock(SPIKES));
-		GameRegistry.register(makeItemBlock(IGNITER));
+		event.getRegistry().register(makeItemBlock(MAGNETIC_CHEST));
+		event.getRegistry().register(makeItemBlock(GRASS_COVERING));
+		event.getRegistry().register(makeItemBlock(FAN));
+		event.getRegistry().register(makeItemBlock(BEAR_TRAP));
+		event.getRegistry().register(makeItemBlock(SPIKES));
+		event.getRegistry().register(makeItemBlock(IGNITER));
 	}
 	
 	@SubscribeEvent

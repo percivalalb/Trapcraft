@@ -73,15 +73,6 @@ public class TrapcraftMod {
 	 @EventHandler
 	 public void post(FMLPostInitializationEvent var1) {
 		 PROXY.onModPost();
-		 GameRegistry.addShapelessRecipe(new ItemStack(Items.SKULL, 1, 3), new Object[] {new ItemStack(Items.DYE, 1, 4), new ItemStack(Blocks.WOOL, 1, 12)});
-	     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.MAGNETIC_CHEST, 1), false, new Object[] {"XXX", "XZX", "XYX", 'Y', Items.REDSTONE, 'X', OreDictionaryHelper.PLANKS, 'Z', Items.IRON_INGOT}));
-	     GameRegistry.addRecipe(new ItemStack(ModBlocks.FAN, 1), new Object[] {"XXX", "XYX", "XXX", 'Y', Items.IRON_INGOT, 'X', Blocks.COBBLESTONE});
-	     GameRegistry.addRecipe(new ItemStack(ModBlocks.GRASS_COVERING, 3), new Object[] {"XXX", "YYY", 'X', new ItemStack(Blocks.TALLGRASS, 1, 1), 'Y', Items.STICK});
-	     GameRegistry.addRecipe(new ItemStack(ModBlocks.BEAR_TRAP, 1), new Object[] {"XYX", "XXX", 'X', Items.IRON_INGOT, 'Y', Blocks.STONE_PRESSURE_PLATE});
-	     GameRegistry.addRecipe(new ItemStack(ModBlocks.IGNITER, 1), new Object[] {"NNN", "CRC", "CCC", 'N', Blocks.NETHERRACK, 'R', Items.REDSTONE, 'C', Blocks.COBBLESTONE});
-	     GameRegistry.addRecipe(new ItemStack(ModBlocks.SPIKES, 1), new Object[] {" I ", " I ", "III", 'I', Items.IRON_INGOT});
-	     GameRegistry.addRecipe(new ItemStack(ModItems.IGNITER_RANGE, 1), new Object[] {"ALA", "LRL", "ALA", 'R', Items.REDSTONE, 'L', Items.LEATHER, 'A', Items.ARROW, 'L', new ItemStack(Items.DYE, 1, 4)});
-	     
 	 }
 
 	 public void registerCreature(Class var1, String var2, int var3) {

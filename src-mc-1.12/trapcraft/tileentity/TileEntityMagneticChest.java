@@ -217,11 +217,11 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
 	    if (entityItem == null || entityItem.isDead)
 	        return false;
 	    else {
-	        ItemStack itemstack = entityItem.getEntityItem().copy();
+	        ItemStack itemstack = entityItem.getItem().copy();
 	        ItemStack itemstack1 = this.insertStack(itemstack);
 
 	        if (!itemstack1.isEmpty())
-	        	entityItem.setEntityItemStack(itemstack1);
+	        	entityItem.setItem(itemstack1);
 	        else {
 	        	succesful = true;
 	        	entityItem.setDead();

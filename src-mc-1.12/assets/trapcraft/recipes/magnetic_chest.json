@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#R#",
+    "#I#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "minecraft:planks",
+        "data": 0
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 1
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 2
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 3
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 4
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 5
+      }
+    ],
+    "R": {
+      "item": "minecraft:redstone",
+      "data": 0
+    },
+    "I": {
+      "item": "minecraft:iron_ingot",
+      "data": 0
+    }
+ 
+  },
+  "result": {
+    "item": "trapcraft:magnetic_chest"
+  }
+}

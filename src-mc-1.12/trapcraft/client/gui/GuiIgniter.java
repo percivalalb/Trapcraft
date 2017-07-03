@@ -23,6 +23,13 @@ public class GuiIgniter extends GuiContainer {
 	}
 
 	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+	
+	@Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2){
         String s = this.igniter.inventory.getDisplayName().getUnformattedText();
         this.fontRenderer.drawString(s, 90 + this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);

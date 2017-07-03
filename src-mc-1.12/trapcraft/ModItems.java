@@ -23,7 +23,7 @@ public class ModItems {
 	public static void onRegister(RegistryEvent.Register<Item> event) {
 		IGNITER_RANGE = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniter_range").setRegistryName(Reference.MOD_ID, "igniter_range");
 
-		GameRegistry.register(IGNITER_RANGE);
+		event.getRegistry().register(IGNITER_RANGE);
 	}
 	
 	@SubscribeEvent
