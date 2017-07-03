@@ -1,3 +1,5 @@
+Trapcraft - Changelog
+
 Update List Key
 (+) A new feature
 (-) A removed feature
@@ -5,17 +7,23 @@ Update List Key
 (*) A bug fix
 (/) Other
 
-When bear trap is triggered it will output a redstone signal through a comparator
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MC 1.9.4
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-v3.0.0a
-Trapcraft 3.0!
+v2.4.0a | 3rd July 2017
 + Added dummy's in all variants of planks - place two of the same plank vertical and a player head ontop to create the dummy
 + Magnetic chests now output a sign through a comparator based on how many items are in the chest
 + Beartrap will output a redstone signal of strength 15 when triggered
+# Uses forge update checker
+Initial release, parent version v2.3.0a
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Old Versions
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 v2.3.0a
 + Updated to MC 1.7.10
-
 - Removed version checker for now because dropbox has too much traffic.
 
 v2.2.1a
@@ -25,24 +33,20 @@ v2.2.1a
 v2.2.0a
 + Updated to MC 1.7.2 - Note back up your worlds before updating, proberbly it will not be compatible with worlds that prevoius used this mod
 # The dummy now doesn't move at all when being hit
-
 * When creating a dummy in creative, it no longer uses the head item up.
 
 v2.1.0a
 + Updated to MC 1.6.2
 # Made the Igniter gui be more intelligent about where shift clicked items go
-
 * Fixed a bug where you could lose items in the Igniter gui by shift clicking
 
 v2.0.4a
 + Added a version checker. It will tell you when a new version is available and tell you the download link.
-
 * Fixed crashing when a mob stands on the bear trap (forgot to put some files in the last download of the mod)
 
 v2.0.3a
 # Removed logging details for every tick the igniter was in the world. (Will reduce lag)
 # Made it so you can right click on the bear trap when is is not active and it not count as a right click.
-
 * Fixed crashing opon opening the magnetic chest.
 
 v2.0.2a
@@ -51,7 +55,6 @@ Updated to MC 1.5.1
 + New Igniter gui.
 + Added a igniter range upgrade which can be put into the gui and will increase the distance the igniter places the fire away from it.
 + Added the bear trap. Traps mobs slowing them down and does damage to them.
-
 # Magnetic chests no longer make double chests, they can only be a single chest and can be placed next to each other.
 # Grass coverings inventory item is now 2d so you can see it better.
 # Magnetic chests now make the chest sound when opening and closing

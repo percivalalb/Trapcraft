@@ -40,9 +40,9 @@ public class RenderDummy extends RenderLiving<EntityDummy> {
 		case 0:
 			return Properties.RES_MOB_DUMMY_OAK;
 		case 1:
-			return Properties.RES_MOB_DUMMY_BIRCH;
-		case 2:
 			return Properties.RES_MOB_DUMMY_SPRUCE;
+		case 2:
+			return Properties.RES_MOB_DUMMY_BIRCH;
 		case 3:
 			return Properties.RES_MOB_DUMMY_JUNGLE;
 		case 4:

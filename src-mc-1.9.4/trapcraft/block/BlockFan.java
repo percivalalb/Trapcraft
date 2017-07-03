@@ -1,10 +1,14 @@
 package trapcraft.block;
 
+import java.util.Random;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -29,12 +33,13 @@ import trapcraft.tileentity.TileEntityFan;
  **/
 public class BlockFan extends BlockContainer {
 	
+	public static final PropertyBool POWERED = PropertyBool.create("powered");
     public static final PropertyDirection FACING = BlockDirectional.FACING;
 	
     public BlockFan() {
         super(Material.ROCK);
         this.setHardness(0.8F);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.WEST));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.WEST).withProperty(POWERED, false));
         this.setCreativeTab(CreativeTabs.REDSTONE);
     }
     
@@ -50,7 +55,7 @@ public class BlockFan extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer)), 2);
+        worldIn.setBlockState(pos, state.withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer)).withProperty(POWERED, worldIn.isBlockPowered(pos)), 2);
     }
     
     public static EnumFacing getFacing(int meta) {
@@ -63,14 +68,20 @@ public class BlockFan extends BlockContainer {
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, getFacing(meta));
-    }
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta)).withProperty(POWERED, Boolean.valueOf((meta & 8) > 0));
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing)state.getValue(FACING)).getIndex();
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		int meta = 0;
+		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+
+		if (((Boolean) state.getValue(POWERED)).booleanValue())
+			meta |= 8;
+
+		return meta;
+	}
 
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
@@ -84,8 +95,26 @@ public class BlockFan extends BlockContainer {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
+        return new BlockStateContainer(this, new IProperty[] {FACING, POWERED});
     }
+    
+    @Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+		if(!world.isRemote) {
+			if(state.getValue(POWERED) && !world.isBlockPowered(pos))
+				world.scheduleUpdate(pos, this, 4);
+			else if(!state.getValue(POWERED) && world.isBlockPowered(pos))
+				world.setBlockState(pos, state.cycleProperty(POWERED), 3);
+		}
+	}
+
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		if(!world.isRemote)
+			if(state.getValue(POWERED) && !world.isBlockPowered(pos))
+				world.setBlockState(pos, state.cycleProperty(POWERED), 3);
+
+	}
     
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -118,6 +147,6 @@ public class BlockFan extends BlockContainer {
                 }
             }*/
 
-            return false;
+            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 }
