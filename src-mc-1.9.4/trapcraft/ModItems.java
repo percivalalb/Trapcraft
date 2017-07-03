@@ -9,13 +9,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import trapcraft.api.Properties;
 import trapcraft.helper.ModelHelper;
 import trapcraft.item.ItemIgniterRange;
+import trapcraft.lib.Reference;
 
 public class ModItems {
 
 	public static Item IGNITER_RANGE;
 	
 	public static void onRegister() {
-		IGNITER_RANGE = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniter_range").setRegistryName(Properties.MOD_ID, "igniter_range");
+		IGNITER_RANGE = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniter_range").setRegistryName(Reference.MOD_ID, "igniter_range");
 
 		GameRegistry.register(IGNITER_RANGE);
 	}

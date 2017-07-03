@@ -19,11 +19,9 @@ import trapcraft.entity.EntityDummy;
 public class RenderDummy extends RenderLiving<EntityDummy> {
 	
 	private float scale = 1F;
-	private ResourceLocation resource;
 
     public RenderDummy(RenderManager renderManagerIn) {
         super(renderManagerIn, new ModelBiped(0.0F), 0.5F);
-        this.resource = Properties.RES_MOB_DUMMY;
     }
    
     @Override
@@ -38,6 +36,21 @@ public class RenderDummy extends RenderLiving<EntityDummy> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityDummy dummy) {
-		return this.resource;
+		switch(dummy.getVariant()) {
+		case 0:
+			return Properties.RES_MOB_DUMMY_OAK;
+		case 1:
+			return Properties.RES_MOB_DUMMY_BIRCH;
+		case 2:
+			return Properties.RES_MOB_DUMMY_SPRUCE;
+		case 3:
+			return Properties.RES_MOB_DUMMY_JUNGLE;
+		case 4:
+			return Properties.RES_MOB_DUMMY_ACACIA;
+		case 5:
+			return Properties.RES_MOB_DUMMY_DARK_OAK;
+		default:
+			return Properties.RES_MOB_DUMMY_OAK;	
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package trapcraft.network;
 
+import trapcraft.lib.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
@@ -22,7 +23,7 @@ public class PacketDispatcher {
 	
 	private static int packetId = 0;
 
-	private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(Properties.CHANNEL_NAME);
+	private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.CHANNEL_NAME);
 
 	public static final void registerPackets() {
 		registerMessage(MagneticChestTileMessage.class);

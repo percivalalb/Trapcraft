@@ -11,6 +11,9 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -19,9 +22,12 @@ import net.minecraft.world.World;
  * @author ProPercivalalb
  **/
 public class EntityDummy extends EntityLiving {
+	
+	private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(EntityDummy.class, DataSerializers.BYTE);
    
     public EntityDummy(World world) {
         super(world);
+        this.setNoAI(true);
     }
 
     @Override
@@ -32,6 +38,12 @@ public class EntityDummy extends EntityLiving {
 	    this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(VARIANT, Byte.valueOf((byte)0));
+    }
+    
     @Override
     protected void jump() {}
     
@@ -107,12 +119,23 @@ public class EntityDummy extends EntityLiving {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-        super.writeEntityToNBT(nbttagcompound);
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setByte("variant", this.getVariant());
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-        super.readEntityFromNBT(nbttagcompound);
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        this.setVariant(compound.getByte("variant"));
+    }
+    
+
+    public void setVariant(byte index) {
+    	this.dataManager.set(VARIANT, index);
+    }
+    
+    public byte getVariant() {
+    	return this.dataManager.get(VARIANT);
     }
 }

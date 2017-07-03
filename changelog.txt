@@ -9,6 +9,7 @@ When bear trap is triggered it will output a redstone signal through a comparato
 
 v3.0.0a
 Trapcraft 3.0!
++ Added dummy's in all variants of planks - place two of the same plank vertical and a player head ontop to create the dummy
 
 v2.3.0a
 + Updated to MC 1.7.10

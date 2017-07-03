@@ -16,6 +16,7 @@ import trapcraft.block.BlockIgniter;
 import trapcraft.block.BlockMagneticChest;
 import trapcraft.block.BlockSpikes;
 import trapcraft.helper.ModelHelper;
+import trapcraft.lib.Reference;
 import trapcraft.tileentity.TileEntityBearTrap;
 import trapcraft.tileentity.TileEntityFan;
 import trapcraft.tileentity.TileEntityIgniter;
@@ -31,17 +32,17 @@ public class ModBlocks {
     public static Block IGNITER;
 
 	public static void onRegisterBlock() {	
-		FAN = new BlockFan().setUnlocalizedName("trapcraft.fan").setRegistryName(Properties.MOD_ID, "fan");
-	  	MAGNETIC_CHEST = new BlockMagneticChest().setUnlocalizedName("trapcraft.magnetic_chest").setRegistryName(Properties.MOD_ID, "magnetic_chest");
-	  	GRASS_COVERING = new BlockGrassCovering().setUnlocalizedName("trapcraft.grass_covering").setRegistryName(Properties.MOD_ID, "grass_covering");
-	    BEAR_TRAP = new BlockBearTrap().setHardness(2.0F).setUnlocalizedName("trapcraft.bear_trap").setRegistryName(Properties.MOD_ID, "bear_trap");
-	    SPIKES = new BlockSpikes().setUnlocalizedName("trapcraft.spikes").setRegistryName(Properties.MOD_ID, "spikes");
-	    IGNITER = new BlockIgniter().setUnlocalizedName("trapcraft.igniter").setRegistryName(Properties.MOD_ID, "igniter");
+		FAN = new BlockFan().setUnlocalizedName("trapcraft.fan").setRegistryName(Reference.MOD_ID, "fan");
+	  	MAGNETIC_CHEST = new BlockMagneticChest().setUnlocalizedName("trapcraft.magnetic_chest").setRegistryName(Reference.MOD_ID, "magnetic_chest");
+	  	GRASS_COVERING = new BlockGrassCovering().setUnlocalizedName("trapcraft.grass_covering").setRegistryName(Reference.MOD_ID, "grass_covering");
+	    BEAR_TRAP = new BlockBearTrap().setHardness(2.0F).setUnlocalizedName("trapcraft.bear_trap").setRegistryName(Reference.MOD_ID, "bear_trap");
+	    SPIKES = new BlockSpikes().setUnlocalizedName("trapcraft.spikes").setRegistryName(Reference.MOD_ID, "spikes");
+	    IGNITER = new BlockIgniter().setUnlocalizedName("trapcraft.igniter").setRegistryName(Reference.MOD_ID, "igniter");
 	    
 	    GameRegistry.registerTileEntity(TileEntityMagneticChest.class, "trapcraft:magnetic_chest");
-	    GameRegistry.registerTileEntity(TileEntityFan.class, "trapcraft.fan");
+	    GameRegistry.registerTileEntity(TileEntityFan.class, "trapcraft:fan");
 		GameRegistry.registerTileEntity(TileEntityBearTrap.class, "trapcraft:bear_trap");
-	    GameRegistry.registerTileEntity(TileEntityIgniter.class, "trapcraft.igniter");
+	    GameRegistry.registerTileEntity(TileEntityIgniter.class, "trapcraft:igniter");
 		
 		MAGNETIC_CHEST.setHarvestLevel("axe", 0);
 		FAN.setHarvestLevel("pickaxe", 0);

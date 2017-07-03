@@ -1,7 +1,7 @@
 {
     "parent": "minecraft:block/block",
     "textures": {
-        "texture": "trapcraft:model/magnetic_chest",
+        "texture": "trapcraft:entity/chest/magnetic_chest",
 	"particle": "minecraft:blocks/planks_oak"
     },
     "elements": [
