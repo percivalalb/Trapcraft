@@ -197,8 +197,6 @@ public class BlockMagneticChest extends BlockContainer {
             }
             else
             {
-                
-
                 return ilockablecontainer;
             }
         }

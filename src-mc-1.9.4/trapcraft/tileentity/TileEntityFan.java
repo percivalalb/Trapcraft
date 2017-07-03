@@ -16,6 +16,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLLog;
 import trapcraft.block.BlockFan;
 
 public class TileEntityFan extends TileEntity implements ITickable
@@ -27,34 +28,30 @@ public class TileEntityFan extends TileEntity implements ITickable
 
     public TileEntityFan()
     {
-        if (direction != 1.0D && direction != -1D)
-        {
-            direction = 1.0D;
-        }
-
-        mode = true;
+        
     }
 
     @Override
     public void update() {
 
-        if(this.worldObj.isBlockIndirectlyGettingPowered(this.pos) == 0)
+        if(!(this.worldObj.isBlockPowered(this.pos) || this.worldObj.isBlockPowered(this.pos.up())))
             return;
+        
+        EnumFacing facing = this.worldObj.getBlockState(this.pos).getValue(BlockFan.FACING);
         
         if(this.worldObj.rand.nextInt(2) == 0)
         	this.spawnParticles(this.worldObj, this.pos);
         
-        List list = worldObj.getEntitiesWithinAABBExcludingEntity(null, getDirection());
+        List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(null, this.getDirection());
 
-        if (!list.isEmpty())
+        if(!list.isEmpty())
         {
             for (int i = 0; i < list.size(); i++)
             {
                 Entity entity = (Entity)list.get(i);
-                int j = getBlockMetadata();
+            	FMLLog.info("%s", entity.toString());
                 double d = 0.050000000000000003D;
                 double d1 = 0.29999999999999999D;
-                d *= direction;
                 d *= speed;
 
                 if (entity instanceof EntityItem)
@@ -63,52 +60,55 @@ public class TileEntityFan extends TileEntity implements ITickable
                     d *= 1.3D;
                 }
 
-                if (!(entity instanceof EntityItem) && !mode)
-                {
-                    d = 0.0D;
-                }
+                //Item mode only
+                //if (!(entity instanceof EntityItem))
+               // {
+                 //   d = 0.0D;
+                //}
 
                 if (entity instanceof EntityMinecart)
                 {
                     d *= 0.5D;
                 }
 
-                if ((entity instanceof EntityFallingBlock) && j == 1)
+                if ((entity instanceof EntityFallingBlock) && facing == EnumFacing.UP)
                 {
                     d = 0.0D;
                 }
 
-                if (!isPathClear(entity, j))
+                if (!this.isPathClear(entity, facing))
                 {
                     continue;
                 }
+                
+                
 
-                if (j == 0 && entity.motionY > -d1)
+                if(facing == EnumFacing.DOWN && entity.motionY > -d1)
                 {
                     entity.motionY += -d;
                 }
 
-                if (j == 1 && entity.motionY < d1 * 0.5D)
+                if (facing == EnumFacing.UP && entity.motionY < d1 * 0.5D)
                 {
                     entity.motionY += d;
                 }
 
-                if (j == 2 && entity.motionZ > -d1)
+                if (facing == EnumFacing.NORTH && entity.motionZ > -d1)
                 {
                     entity.motionZ += -d;
                 }
 
-                if (j == 3 && entity.motionZ < d1)
+                if (facing == EnumFacing.SOUTH && entity.motionZ < d1)
                 {
                     entity.motionZ += d;
                 }
 
-                if (j == 4 && entity.motionX > -d1)
+                if (facing == EnumFacing.WEST && entity.motionX > -d1)
                 {
                     entity.motionX += -d;
                 }
 
-                if (j == 5 && entity.motionX < d1)
+                if (facing == EnumFacing.EAST && entity.motionX < d1)
                 {
                     entity.motionX += d;
                 }
@@ -116,71 +116,15 @@ public class TileEntityFan extends TileEntity implements ITickable
         }
     }
 
-    public boolean isPathClear(Entity entity, int i)
-    {
-        int j = 0;
-
-        if (i == 0 || i == 1)
-        {
-            int k = MathHelper.floor_double(entity.posY);
-            int j1 = k - this.pos.getY();
-            j = j1 <= 0 ? -j1 : j1;
-        }
-
-        if (i == 2 || i == 3)
-        {
-            int l = MathHelper.floor_double(entity.posZ);
-            int k1 = l - this.pos.getZ();
-            j = k1 <= 0 ? -k1 : k1;
-        }
-
-        if (i == 4 || i == 5)
-        {
-            int i1 = MathHelper.floor_double(entity.posX);
-            int l1 = i1 - this.pos.getX();
-            j = l1 <= 0 ? -l1 : l1;
-        }
-
-        World world = this.worldObj;
-        int i2 = this.pos.getX();
-        int j2 = this.pos.getY();
-        int k2 = this.pos.getZ();
-        boolean flag = true;
-
-        for (int l2 = 0; l2 < j; l2++)
-        {
-            if (i == 0)
-            {
-                j2--;
-            }
-
-            if (i == 1)
-            {
-                j2++;
-            }
-
-            if (i == 2)
-            {
-                k2--;
-            }
-
-            if (i == 3)
-            {
-                k2++;
-            }
-
-            if (i == 4)
-            {
-                i2--;
-            }
-
-            if (i == 5)
-            {
-                i2++;
-            }
-
-            if (world.isBlockFullCube(new BlockPos(i2, j2, k2)))
-            {
+    public boolean isPathClear(Entity entity, EnumFacing facing) {
+    	int x = facing.getFrontOffsetX() * (MathHelper.floor_double(entity.posX) - this.pos.getX());
+    	int y = facing.getFrontOffsetY() * (MathHelper.floor_double(entity.posY) - this.pos.getY());
+    	int z = facing.getFrontOffsetZ() * (MathHelper.floor_double(entity.posZ) - this.pos.getZ());
+    	boolean flag = true;
+    	
+        for(int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
+            
+            if(this.worldObj.isBlockFullCube(this.pos.offset(facing, l2))) {
                 flag = false;
             }
         }
@@ -243,7 +187,6 @@ public class TileEntityFan extends TileEntity implements ITickable
     	super.readFromNBT(compound);
     	this.speed = compound.getFloat("speed");
     	this.extraRange = compound.getDouble("extraRange");
-    	this.direction = compound.getDouble("direction");
     }
 
     @Override
@@ -251,7 +194,6 @@ public class TileEntityFan extends TileEntity implements ITickable
     	super.writeToNBT(compound);
     	compound.setFloat("speed", this.speed);
     	compound.setDouble("extraRange", this.extraRange);
-    	compound.setDouble("direction", this.direction);
         
         return compound;
     }

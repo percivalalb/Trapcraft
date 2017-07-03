@@ -32,6 +32,7 @@ import trapcraft.block.BlockSpikes;
 import trapcraft.entity.EntityDummy;
 import trapcraft.handler.ActionHandler;
 import trapcraft.item.ItemIgniterRange;
+import trapcraft.lib.Reference;
 import trapcraft.network.PacketDispatcher;
 import trapcraft.proxy.CommonProxy;
 import trapcraft.tileentity.TileEntityBearTrap;
@@ -42,13 +43,13 @@ import trapcraft.tileentity.TileEntityMagneticChest;
 /**
  * @author ProPercivalalb
  **/
-@Mod(name = Properties.MOD_NAME, version = Properties.MOD_VERSION, modid = Properties.MOD_ID)
+@Mod(name = Reference.MOD_NAME, version = Reference.MOD_VERSION, modid = Reference.MOD_ID, updateJSON = Reference.UPDATE_URL)
 public class TrapcraftMod {
 	
-     @SidedProxy(clientSide = Properties.SP_CLIENT, serverSide = Properties.SP_SERVER)
+     @SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
      public static CommonProxy PROXY;
      
-     @Instance(Properties.MOD_ID)
+     @Instance(Reference.MOD_ID)
      public static TrapcraftMod INSTANCE;
      
      @EventHandler
