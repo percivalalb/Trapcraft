@@ -42,7 +42,6 @@ public class TileEntityFan extends TileEntity implements ITickable
         
         if(this.worldObj.rand.nextInt(2) == 0)
         	this.spawnParticles(this.worldObj, this.pos);
-        FMLLog.info("%s", this.worldObj);
         List<Entity> list = this.worldObj.getEntitiesWithinAABB(Entity.class, this.getDirection());
 
         if(!list.isEmpty())
