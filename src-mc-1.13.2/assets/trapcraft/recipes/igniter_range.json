@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ALA",
+    "DRD",
+    "ALA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:arrow",
+      "data": 0
+    },
+    "R": {
+      "item": "minecraft:redstone",
+      "data": 0
+    },
+    "L": {
+      "item": "minecraft:leather",
+      "data": 0
+    },
+    "D": {
+      "item": "minecraft:dye",
+      "data": 4
+    }
+  },
+  "result": {
+    "item": "trapcraft:igniter_range"
+  }
+}
