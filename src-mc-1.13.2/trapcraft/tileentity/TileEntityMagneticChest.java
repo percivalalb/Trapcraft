@@ -2,12 +2,13 @@ package trapcraft.tileentity;
 
 import java.util.List;
 
-import net.minecraft.block.BlockChest;
+import com.google.common.base.Predicates;
+
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
@@ -15,7 +16,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -23,8 +23,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.ILockableContainer;
-import net.minecraft.world.LockCode;
+import net.minecraft.util.text.TextComponentTranslation;
 import trapcraft.ModBlocks;
 import trapcraft.TrapcraftMod;
 import trapcraft.block.BlockMagneticChest;
@@ -41,7 +40,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     private int ticksSinceSync;
 
     private final int INVENTORY_SIZE = 27;
-    private String customName;
+    private ITextComponent customName;
 
     /**
      * The ItemStacks that hold the items currently being used in the Magnetic
@@ -50,7 +49,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     private NonNullList<ItemStack> inventory;
 
     public TileEntityMagneticChest() {
-        super();
+        super(ModBlocks.TILE_MAGNETIC_CHEST);
         this.inventory = NonNullList.<ItemStack>withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     }
 
@@ -113,7 +112,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     }
 
     @Override
-    public void update() {
+    public void tick() {
         this.pullItemsIn();
         
         if (++this.ticksSinceSync % 20 * 4 == 0)
@@ -156,56 +155,52 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void read(NBTTagCompound compound) {
 
-        super.readFromNBT(compound);
+        super.read(compound);
 
         // Read in the ItemStacks in the inventory from NBT
         ItemStackHelper.loadAllItems(compound, this.inventory);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound write(NBTTagCompound compound) {
 
-        super.writeToNBT(compound);
+        super.write(compound);
         ItemStackHelper.saveAllItems(compound, this.inventory);
 
         return compound;
     }
     
     public void pullItemsIn() {
-    	List entity = this.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(this.pos).expand(2D, 1.0D, 2D));
+    	List<EntityItem> entity = this.world.getEntities(EntityItem.class, item -> item.getDistanceSq(this.pos) < 36D);
 
-        if (!entity.isEmpty()) {
-            for (int i = 0; i < entity.size(); i++) {
-            	Entity target = (Entity)entity.get(i);
-                if (!(target instanceof EntityItem))
-                    continue;
-
+        if(!entity.isEmpty()) {
+            for(int i = 0; i < entity.size(); i++) {
+            	
                 EntityItem entityItem = (EntityItem)entity.get(i);
                 double centreX = (double)this.pos.getX() + 0.5D;
                 double centreY = (double)this.pos.getY() + 0.5D;
                 double centreZ = (double)this.pos.getZ() + 0.5D;
-                double d7 = centreX <= entityItem.posX ? -(entityItem.posX - centreX) : centreX - entityItem.posX;
-                double d8 = centreY <= entityItem.posY ? -(entityItem.posY - centreY) : centreY - entityItem.posY;
-                double d9 = centreZ <= entityItem.posZ ? -(entityItem.posZ - centreZ) : centreZ - entityItem.posZ;
-                double speedMultiper = 0.050000000000000003D;
+                double diffX = -entityItem.posX + centreX;
+                double diffY = -entityItem.posY + centreY;
+                double diffZ = -entityItem.posZ + centreZ;
+                double speedMultiper = 0.05D;
                 double d11 = entityItem.posX - centreX;
                 double d12 = entityItem.posZ - centreZ;
-                double d13 = MathHelper.sqrt(d7 * d7 + d9 * d9);
-                double d14 = Math.asin(d7 / d13);
-                double d15 = (double)MathHelper.sin((float)d14) * speedMultiper;
-                double d16 = (double)MathHelper.cos((float)d14) * speedMultiper;
-                d16 = d9 <= 0.0D ? -d16 : d16;
-
-                if ((double)MathHelper.abs((float)(entityItem.motionX + entityItem.motionY + entityItem.motionZ)) >= 0.10000000000000001D)
+                double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
+                double angle = Math.asin(diffX / horizDiffSq);
+                double d15 = Math.abs((double)MathHelper.sin((float)angle) * speedMultiper);
+                double d16 = Math.abs((double)MathHelper.cos((float)angle) * speedMultiper);
+             	d15 = diffX <= 0.0D ? -d15 : d15;
+                d16 = diffZ <= 0.0D ? -d16 : d16;
+                if((double)MathHelper.abs((float)(entityItem.motionX + entityItem.motionY + entityItem.motionZ)) >= 0.10000000000000001D)
                     continue;
 
-                if (d7 != 0.0D && (double)MathHelper.abs((float)entityItem.motionZ) < 0.10000000000000001D)
-                    entityItem.motionX = d15;
-
-                if (d9 != 0.0D && (double)MathHelper.abs((float)entityItem.motionZ) < 0.10000000000000001D)
-                    entityItem.motionZ = d16;
+                entityItem.motionX = d15;
+                if(diffY >= 0.6)
+                	  entityItem.motionY = speedMultiper * 2;
+                entityItem.motionZ = d16;
             }
         }
     }
@@ -214,7 +209,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     public boolean insertStackFromEntity(EntityItem entityItem) {
 	    boolean succesful = false;
 
-	    if (entityItem == null || entityItem.isDead)
+	    if (entityItem == null || !entityItem.isAlive())
 	        return false;
 	    else {
 	        ItemStack itemstack = entityItem.getItem().copy();
@@ -224,7 +219,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
 	        	entityItem.setItem(itemstack1);
 	        else {
 	        	succesful = true;
-	        	entityItem.setDead();
+	        	entityItem.remove();
 	        }
 
 	        return succesful;
@@ -256,7 +251,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
                     stack = ItemStack.EMPTY;
                 }
                 else
-                	this.setInventorySlotContents(slot, stack.splitStack(max));
+                	this.setInventorySlotContents(slot, stack.split(max));
                 changed = true;
             }
             else if (this.areItemStacksEqualItem(slotStack, stack)) {
@@ -277,7 +272,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     }
     
     private boolean areItemStacksEqualItem(ItemStack p_145894_0_, ItemStack p_145894_1_) {
-        return p_145894_0_.getItem() != p_145894_1_.getItem() ? false : (p_145894_0_.getItemDamage() != p_145894_1_.getItemDamage() ? false : (p_145894_0_.getCount() > p_145894_0_.getMaxStackSize() ? false : ItemStack.areItemStackTagsEqual(p_145894_0_, p_145894_1_)));
+        return p_145894_0_.getItem() != p_145894_1_.getItem() ? false :  (p_145894_0_.getCount() > p_145894_0_.getMaxStackSize() ? false : ItemStack.areItemStackTagsEqual(p_145894_0_, p_145894_1_));
     }
 
     
@@ -291,38 +286,50 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
         return this.world.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
     }
 	
-    public void setInvName(String customName) { this.customName = customName; }
+    public void setInvName(ITextComponent customName) { this.customName = customName; }
 
 	@Override
-	public String getName() {
-		return (this.hasCustomName() ? this.customName : "container.magnetic_chest");
+	public ITextComponent getName() {
+		return new TextComponentTranslation("container.magnetic_chest");
+	}
+	
+	@Override
+	public ITextComponent getCustomName() {
+		return this.customName;
 	}
 
 	@Override
 	public boolean hasCustomName() {
-		return customName != null && customName.length() > 0;
+		return customName != null;
 	}
 
 	@Override
 	public void openInventory(EntityPlayer player) {
-        if (!player.isSpectator()) {
-            if (this.numPlayersUsing < 0)
-                this.numPlayersUsing = 0;
+		if(!player.isSpectator()) {
+			if(this.numPlayersUsing < 0) {
+				this.numPlayersUsing = 0;
+			}
 
-            ++this.numPlayersUsing;
-            this.world.addBlockEvent(this.pos, this.getBlockType(), 1, this.numPlayersUsing);
-            this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), false);
-        }
-    }
-
+			++this.numPlayersUsing;
+			this.onOpenOrClose();
+		}
+	}
+	
 	@Override
-    public void closeInventory(EntityPlayer player) {
-        if (!player.isSpectator() && this.getBlockType() instanceof BlockMagneticChest) {
-            --this.numPlayersUsing;
-            this.world.addBlockEvent(this.pos, this.getBlockType(), 1, this.numPlayersUsing);
-            this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), false);
-        }
-    }
+	public void closeInventory(EntityPlayer player) {
+		if (!player.isSpectator()) {
+			--this.numPlayersUsing;
+			this.onOpenOrClose();
+		}
+	}
+	
+	protected void onOpenOrClose() {
+		Block block = this.getBlockState().getBlock();
+		if (block instanceof BlockMagneticChest) {
+			this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
+			this.world.notifyNeighborsOfStateChange(this.pos, block);
+		}
+	}
 
 	@Override
 	public int getField(int id) {

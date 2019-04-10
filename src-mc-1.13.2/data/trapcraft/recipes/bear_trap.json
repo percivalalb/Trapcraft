@@ -6,12 +6,10 @@
   ],
   "key": {
     "X": {
-      "item": "minecraft:iron_ingot",
-      "data": 0
+      "item": "minecraft:iron_ingot"
     },
     "Y": {
-      "item": "minecraft:stone_pressure_plate",
-      "data": 0
+      "item": "minecraft:stone_pressure_plate"
     }
  
   },

@@ -7,16 +7,13 @@
   ],
   "key": {
     "C": {
-      "item": "minecraft:cobblestone",
-      "data": 0
+      "item": "minecraft:cobblestone"
     },
     "N": {
-      "item": "minecraft:netherrack",
-      "data": 0
+      "item": "minecraft:netherrack"
     },
     "R": {
-      "item": "minecraft:redstone",
-      "data": 0
+      "item": "minecraft:redstone"
     }
   },
   "result": {

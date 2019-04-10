@@ -6,12 +6,10 @@
   ],
   "key": {
     "X": {
-      "item": "minecraft:tallgrass",
-      "data": 1
+      "item": "minecraft:grass"
     },
     "Y": {
-      "item": "minecraft:stick",
-      "data": 0
+      "item": "minecraft:stick"
     }
  
   },

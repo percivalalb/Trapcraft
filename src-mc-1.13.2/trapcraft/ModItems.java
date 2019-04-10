@@ -1,34 +1,27 @@
 package trapcraft;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import trapcraft.api.Properties;
-import trapcraft.client.model.ModelHelper;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 import trapcraft.item.ItemIgniterRange;
+import trapcraft.lib.ItemNames;
 import trapcraft.lib.Reference;
 
-@EventBusSubscriber
 public class ModItems {
 
+	@ObjectHolder(ItemNames.IGNITER_RANGE)
 	public static Item IGNITER_RANGE;
 	
-	@SubscribeEvent
-	public static void onRegister(RegistryEvent.Register<Item> event) {
-		IGNITER_RANGE = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniter_range").setRegistryName(Reference.MOD_ID, "igniter_range");
-
-		event.getRegistry().register(IGNITER_RANGE);
-	}
-	
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public static void setItemModels(ModelRegistryEvent event) {
-		ModelHelper.setModel(IGNITER_RANGE, 0, "trapcraft:igniter_range");
-	}
+	@Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class Registration {
+		
+	    @SubscribeEvent
+	    public static void onItemRegister(final RegistryEvent.Register<Item> event) {
+	    	IForgeRegistry<Item> itemRegistry = event.getRegistry();
+	    	itemRegistry.register(new ItemIgniterRange().setRegistryName(ItemNames.IGNITER_RANGE));
+	    }
+    }
 }

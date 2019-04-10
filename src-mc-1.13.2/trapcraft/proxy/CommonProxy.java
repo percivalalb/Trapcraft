@@ -1,61 +1,37 @@
 package trapcraft.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import trapcraft.client.gui.GuiIgniter;
-import trapcraft.inventory.ContainerIgniter;
-import trapcraft.tileentity.TileEntityIgniter;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import trapcraft.handler.ActionHandler;
+import trapcraft.network.PacketHandler;
 
-/**
- * @author ProPercivalalb
- **/
-public class CommonProxy implements IGuiHandler {
+public class CommonProxy {
+	
+	public CommonProxy() {
+        // Add listeners for common events
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postInit);
+    }
 
-	public void onModPre() {}
-    public void onModLoad() {}
-    public void onModPost() {}
+	protected void preInit(FMLCommonSetupEvent event) {
+        PacketHandler.register();
+        MinecraftForge.EVENT_BUS.register(new ActionHandler());
+    }
     
-    public void handleTileEntityPacket(BlockPos pos, EnumFacing facing, String owner, String customName, String state) {}
-
-	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		BlockPos pos = new BlockPos(x, y, z);
-		
-		TileEntity tileentity = world.getTileEntity(pos);
-		if(id == 1)
-			if(tileentity instanceof TileEntityIgniter)
-				return new ContainerIgniter((TileEntityIgniter)tileentity, player);
-	
+    protected void init(InterModEnqueueEvent event) {
+    	
+    }
+    
+    protected void postInit(InterModProcessEvent event) {
+       
+    }
+    
+    public EntityPlayer getPlayerEntity() {
 		return null;
-	}
-
-	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		BlockPos pos = new BlockPos(x, y, z);
-		
-		TileEntity tileentity = world.getTileEntity(pos);
-		if(id == 1)
-			if(tileentity instanceof TileEntityIgniter)
-				return new GuiIgniter((TileEntityIgniter)tileentity, player);
-	
-		return null;
-	}
-	
-	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return ctx.getServerHandler().player;
-	}
-	
-	public EntityPlayer getPlayerEntity() {
-		return null;
-	}
-	
-	public IThreadListener getThreadFromContext(MessageContext ctx) {
-		return ctx.getServerHandler().player.getServer();
 	}
 }

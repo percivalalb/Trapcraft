@@ -2,15 +2,17 @@ package trapcraft.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import trapcraft.api.Properties;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author ProPercivalalb
@@ -18,14 +20,12 @@ import trapcraft.api.Properties;
 public class ItemIgniterRange extends Item {
 
 	public ItemIgniterRange() {
-		super();
-		this.setMaxStackSize(8);
-		this.setCreativeTab(CreativeTabs.REDSTONE);
+		super(new Item.Properties().group(ItemGroup.REDSTONE).maxStackSize(8));
 	}
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-    	tooltip.add("+1 to Block range");
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    	tooltip.add(new TextComponentString("+1 to Block range"));
     }
 }

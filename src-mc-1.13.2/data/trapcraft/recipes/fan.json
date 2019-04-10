@@ -7,12 +7,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:cobblestone",
-      "data": 0
+      "item": "minecraft:cobblestone"
     },
     "I": {
-      "item": "minecraft:iron_ingot",
-      "data": 0
+      "item": "minecraft:iron_ingot"
     }
  
   },

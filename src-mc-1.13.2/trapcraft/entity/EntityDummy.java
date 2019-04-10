@@ -9,7 +9,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -17,6 +16,8 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import trapcraft.ModEntities;
+import trapcraft.TrapcraftMod;
 
 /**
  * @author ProPercivalalb
@@ -26,21 +27,21 @@ public class EntityDummy extends EntityLiving {
 	private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(EntityDummy.class, DataSerializers.BYTE);
    
     public EntityDummy(World world) {
-        super(world);
+        super(ModEntities.DUMMY, world);
         this.setNoAI(true);
     }
 
     @Override
-	protected void applyEntityAttributes() {
-	    super.applyEntityAttributes();
-	    this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-	    this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
-	    this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+	protected void registerAttributes() {
+	    super.registerAttributes();
+	    this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+	    this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
+	    this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Byte.valueOf((byte)0));
     }
     
@@ -48,7 +49,7 @@ public class EntityDummy extends EntityLiving {
     protected void jump() {}
     
     @Override
-    public void onLivingUpdate() {
+    public void livingTick() {
         this.randomYawVelocity = 0.0F;
         this.motionX = 0.0D;
         this.motionZ = 0.0D;
@@ -91,7 +92,7 @@ public class EntityDummy extends EntityLiving {
         	}
         }
 
-        super.onLivingUpdate();
+        super.livingTick();
     }
 
     public Entity getClosestEntity(World world, double d, double d1, double d2, double d3) {
@@ -115,18 +116,18 @@ public class EntityDummy extends EntityLiving {
     public void onDeath(DamageSource damagesource) {
         super.onDeath(damagesource);
         if(!this.world.isRemote)
-        	this.entityDropItem(new ItemStack(Items.SKULL, 1, 3), 0.0F);
+        	this.entityDropItem(Items.PLAYER_HEAD);
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
-        super.writeEntityToNBT(compound);
-        compound.setByte("variant", this.getVariant());
+    public void writeAdditional(NBTTagCompound compound) {
+        super.writeAdditional(compound);
+        compound.putByte("variant", this.getVariant());
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
-        super.readEntityFromNBT(compound);
+    public void readAdditional(NBTTagCompound compound) {
+        super.readAdditional(compound);
         this.setVariant(compound.getByte("variant"));
     }
     

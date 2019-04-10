@@ -2,11 +2,9 @@ package trapcraft.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import trapcraft.api.Properties;
-import trapcraft.network.PacketDispatcher;
-import trapcraft.network.packet.MagneticChestTileMessage;
 
 /**
  * @author ProPercivalalb
@@ -17,7 +15,8 @@ public class TileEntityTC extends TileEntity {
     private String customName;
     private String state;
 
-    public TileEntityTC() {
+    public TileEntityTC(TileEntityType<?> tileEntityTypeIn) {
+    	super(tileEntityTypeIn);
         owner = "";
         customName = "";
         state = "";
@@ -39,32 +38,32 @@ public class TileEntityTC extends TileEntity {
     public boolean isUseableByPlayer(EntityPlayer player) { return owner.equals(player.getName()); }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readFromNBT(nbtTagCompound);
+    public void read(NBTTagCompound nbtTagCompound) {
+        super.read(nbtTagCompound);
 
-        if (nbtTagCompound.hasKey(Properties.NBT_STATE)) {
+        if (nbtTagCompound.contains(Properties.NBT_STATE)) {
             state = nbtTagCompound.getString(Properties.NBT_STATE);
         }
         
-        if (nbtTagCompound.hasKey(Properties.NBT_OWNER_KEY)) {
+        if (nbtTagCompound.contains(Properties.NBT_OWNER_KEY)) {
             owner = nbtTagCompound.getString(Properties.NBT_OWNER_KEY);
         }
 
-        if (nbtTagCompound.hasKey(Properties.NBT_CUSTOM_NAME)) {
+        if (nbtTagCompound.contains(Properties.NBT_CUSTOM_NAME)) {
             customName = nbtTagCompound.getString(Properties.NBT_CUSTOM_NAME);
         }
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
+    public NBTTagCompound write(NBTTagCompound nbtTagCompound) {
+        super.write(nbtTagCompound);
 
-        nbtTagCompound.setString(Properties.NBT_STATE, state);
+        nbtTagCompound.putString(Properties.NBT_STATE, state);
         
         if (hasOwner()) {
-            nbtTagCompound.setString(Properties.NBT_OWNER_KEY, owner);
+            nbtTagCompound.putString(Properties.NBT_OWNER_KEY, owner);
         }
-        nbtTagCompound.setString(Properties.NBT_CUSTOM_NAME, customName);
+        nbtTagCompound.putString(Properties.NBT_CUSTOM_NAME, customName);
 
         return nbtTagCompound;
     }

@@ -3,7 +3,6 @@ package trapcraft.client.gui;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import trapcraft.api.Properties;
 import trapcraft.inventory.ContainerIgniter;
@@ -23,16 +22,16 @@ public class GuiIgniter extends GuiContainer {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 	
 	@Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2){
-        String s = this.igniter.inventory.getDisplayName().getUnformattedText();
-        this.fontRenderer.drawString(s, 90 + this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+        String s = this.igniter.inventory.getDisplayName().getUnformattedComponentText();
+        this.fontRenderer.drawString(s, 93 + this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 10, 4210752);
     }
     
     @Override

@@ -3,82 +3,80 @@ package trapcraft.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import trapcraft.api.Properties;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author ProPercivalalb
  **/
 public class BlockSpikes extends Block {
 	
-	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.3D, 1.0D);
+	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 5D, 16.0D);
 	
     public BlockSpikes() {
-        super(Material.IRON);
-        this.setHardness(2.0F);
-        this.setSoundType(SoundType.METAL);
-        this.setTickRandomly(true);
-        this.setCreativeTab(CreativeTabs.REDSTONE);
+    	super(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL).tickRandomly());
     }
 
     @Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
+	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+		return SHAPE;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return NULL_AABB;
-    }
+	public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+		return VoxelShapes.empty();
+	}
 	   
 	@Override
 	public boolean isFullCube(IBlockState state) {
 	    return false;
 	}
-
+	
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-	    return false;
+	public boolean isSolid(IBlockState state) {
+		return false;
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	@OnlyIn(Dist.CLIENT)
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-	    return super.canPlaceBlockAt(worldIn, pos) ? this.canBlockStay(worldIn, pos) : false;
+	@OnlyIn(Dist.CLIENT)
+	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
 	}
 
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		if(!this.canBlockStay((World)world, pos)) {
-			this.dropBlockAsItem((World)world, pos, world.getBlockState(pos), 0);
-			((World)world).setBlockToAir(pos);
+	 @Override
+		public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+			return facing == EnumFacing.DOWN && !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 		}
-	}
-
-    public boolean canBlockStay(World world, BlockPos pos) {
-		IBlockState blockstate = world.getBlockState(pos.down());
-		return blockstate.getBlock().isSideSolid(blockstate, world, pos.down(), EnumFacing.UP);
-	}
+		
+		@Override
+		public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+			IBlockState down = worldIn.getBlockState(pos.down());
+			return down.isTopSolid() || down.getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP) == BlockFaceShape.SOLID;
+		}
 
     @Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof EntityItem) {
             return;
         }

@@ -1,9 +1,9 @@
 {
     "textures": {
-        "bottom": "trapcraft:blocks/igniter_bottom",
-        "side": "trapcraft:blocks/igniter_side",
-        "platform": "trapcraft:blocks/igniter_top",
-        "particle": "trapcraft:blocks/igniter_side"
+        "bottom": "trapcraft:block/igniter_bottom",
+        "side": "trapcraft:block/igniter_side",
+        "platform": "trapcraft:block/igniter_top",
+        "particle": "trapcraft:block/igniter_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

@@ -2,24 +2,23 @@ package trapcraft.tileentity;
 
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
+import trapcraft.ModBlocks;
+import trapcraft.TrapcraftMod;
 import trapcraft.block.BlockFan;
 
 public class TileEntityFan extends TileEntity implements ITickable
@@ -27,21 +26,20 @@ public class TileEntityFan extends TileEntity implements ITickable
     public float speed = 1.0F;
     public double extraRange = 0.0D;
 
-    public TileEntityFan()
-    {
-        
-    }
+    public TileEntityFan() {
+  		super(ModBlocks.TILE_FAN);
+  	}
 
     @Override
-    public void update() {
+    public void tick() {
 
-        if(!this.world.getBlockState(this.pos).getValue(BlockFan.POWERED))
+        if(!this.world.getBlockState(this.pos).get(BlockFan.POWERED))
             return;
         
-        EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFan.FACING);
+        EnumFacing facing = this.world.getBlockState(this.pos).get(BlockFan.FACING);
         
         if(this.world.rand.nextInt(2) == 0)
-        	this.spawnParticles(this.world, this.pos);
+        	spawnParticles(this.world, this.pos);
         List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getDirection());
 
         if(!list.isEmpty())
@@ -97,9 +95,9 @@ public class TileEntityFan extends TileEntity implements ITickable
     }
 
     public boolean isPathClear(Entity entity, EnumFacing facing) {
-    	int x = facing.getFrontOffsetX() * (MathHelper.floor(entity.posX) - this.pos.getX());
-    	int y = facing.getFrontOffsetY() * (MathHelper.floor(entity.posY) - this.pos.getY());
-    	int z = facing.getFrontOffsetZ() * (MathHelper.floor(entity.posZ) - this.pos.getZ());
+    	int x = facing.getXOffset() * (MathHelper.floor(entity.posX) - this.pos.getX());
+    	int y = facing.getYOffset() * (MathHelper.floor(entity.posY) - this.pos.getY());
+    	int z = facing.getZOffset() * (MathHelper.floor(entity.posZ) - this.pos.getZ());
     	boolean flag = true;
     	
         for(int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
@@ -121,7 +119,7 @@ public class TileEntityFan extends TileEntity implements ITickable
     }
 
     public AxisAlignedBB getDirection() {
-    	EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFan.FACING);
+    	EnumFacing facing = this.world.getBlockState(this.pos).get(BlockFan.FACING);
         
         BlockPos endPos = this.pos.offset(facing, MathHelper.floor(5 + this.extraRange));
         if(facing == EnumFacing.WEST)
@@ -150,7 +148,7 @@ public class TileEntityFan extends TileEntity implements ITickable
         double velY = 0.0D;
         double velZ = 0.0D;
 
-        EnumFacing facing = world.getBlockState(pos).getValue(BlockFan.FACING);
+        EnumFacing facing = world.getBlockState(pos).get(BlockFan.FACING);
         
         switch(facing) {
         case DOWN:
@@ -173,21 +171,21 @@ public class TileEntityFan extends TileEntity implements ITickable
         	break;
         }
         
-        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, var7, var9, var11, velX, velY, velZ);
+        world.addParticle(Particles.SMOKE, var7, var9, var11, velX, velY, velZ);
     }
     
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-    	super.readFromNBT(compound);
+    public void read(NBTTagCompound compound) {
+    	super.read(compound);
     	this.speed = compound.getFloat("speed");
     	this.extraRange = compound.getDouble("extraRange");
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-    	super.writeToNBT(compound);
-    	compound.setFloat("speed", this.speed);
-    	compound.setDouble("extraRange", this.extraRange);
+    public NBTTagCompound write(NBTTagCompound compound) {
+    	super.write(compound);
+    	compound.putFloat("speed", this.speed);
+    	compound.putDouble("extraRange", this.extraRange);
         
         return compound;
     }
@@ -195,18 +193,18 @@ public class TileEntityFan extends TileEntity implements ITickable
     @Override
     public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = new NBTTagCompound();
-        return writeToNBT(tag);
+        return this.write(tag);
     }
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 0, this.writeToNBT(new NBTTagCompound()));
+		return new SPacketUpdateTileEntity(getPos(), 0, this.write(new NBTTagCompound()));
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		this.readFromNBT(packet.getNbtCompound());
+		this.read(packet.getNbtCompound());
 		if(!this.world.isRemote)
 			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
 		return;

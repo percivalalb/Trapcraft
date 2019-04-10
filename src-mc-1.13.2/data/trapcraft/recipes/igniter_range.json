@@ -7,20 +7,16 @@
   ],
   "key": {
     "A": {
-      "item": "minecraft:arrow",
-      "data": 0
+      "item": "minecraft:arrow"
     },
     "R": {
-      "item": "minecraft:redstone",
-      "data": 0
+      "item": "minecraft:redstone"
     },
     "L": {
-      "item": "minecraft:leather",
-      "data": 0
+      "item": "minecraft:leather"
     },
     "D": {
-      "item": "minecraft:dye",
-      "data": 4
+      "item": "minecraft:lapis_lazuli"
     }
   },
   "result": {

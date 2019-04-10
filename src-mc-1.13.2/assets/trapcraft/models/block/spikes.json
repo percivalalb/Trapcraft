@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:block/cross",
     "textures": {
-        "cross": "trapcraft:blocks/spikes"
+        "cross": "trapcraft:block/spikes"
     }
 }

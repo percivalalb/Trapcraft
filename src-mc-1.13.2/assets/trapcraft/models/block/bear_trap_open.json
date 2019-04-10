@@ -1,8 +1,8 @@
 {
     "parent": "minecraft:block/block",
     "textures": {
-        "particle": "trapcraft:blocks/bear_trap",
-        "base": "trapcraft:blocks/bear_trap"
+        "particle": "trapcraft:block/bear_trap",
+        "base": "trapcraft:block/bear_trap"
     },
     "elements": [
         {   "from": [ 13.6, 0, 0 ],

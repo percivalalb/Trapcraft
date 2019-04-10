@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "trapcraft:grass_covering" }
+        "": { "model": "trapcraft:block/grass_covering" }
     }
 }

@@ -2,13 +2,9 @@ package trapcraft.client.renders;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.entity.model.ModelBiped;
 import net.minecraft.util.ResourceLocation;
 import trapcraft.api.Properties;
 import trapcraft.entity.EntityDummy;

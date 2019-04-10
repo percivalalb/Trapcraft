@@ -1,94 +1,52 @@
 package trapcraft.proxy;
 
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderCaveSpider;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraft.world.ColorizerGrass;
-import net.minecraft.world.biome.BiomeColorHelper;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraft.world.GrassColors;
+import net.minecraft.world.biome.BiomeColors;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import trapcraft.ModBlocks;
-import trapcraft.ModItems;
-import trapcraft.TrapcraftMod;
-import trapcraft.api.Properties;
 import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.entity.EntityDummy;
+import trapcraft.handler.GuiHandler;
 import trapcraft.tileentity.TileEntityMagneticChest;
-import trapcraft.tileentity.TileEntityTC;
 
-/**
- * @author ProPercivalalb
- **/
+@OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
-    
-	@Override
-	public void onModPre() {
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagneticChest.class, new TileEntityMagneticChestRenderer());
-		
-		RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
+	
+    public ClientProxy() {
+    	super();
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
     }
-	
-	@Override
-    public void onModLoad() {
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> ColorizerGrass.getGrassColor(0.5D, 1.0D), ModBlocks.GRASS_COVERING);
-		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, world, pos, tintIndex) -> (world != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(world, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D)), ModBlocks.GRASS_COVERING);
-    }
-    
-	@Override
-    public void onModPost() {
-		
-	}
-	
-	@Override
-	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return (ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx));
-	}
-	
-	@Override
-	public EntityPlayer getPlayerEntity() {
-		return Minecraft.getMinecraft().player;
-	}
-	
-	@Override
-	public IThreadListener getThreadFromContext(MessageContext ctx) {
-		return (ctx.side.isClient() ? Minecraft.getMinecraft() : super.getThreadFromContext(ctx));
-	}
-	
-	@Override
-    public void handleTileEntityPacket(BlockPos pos, EnumFacing facing, String owner, String customName, String state) {
-        TileEntity tileEntity = FMLClientHandler.instance().getClient().world.getTileEntity(pos);
 
-        if (tileEntity != null) {
-            if (tileEntity instanceof TileEntityTC) {
-                ((TileEntityTC)tileEntity).setState(state);
-                ((TileEntityTC)tileEntity).setOwner(owner);
-                ((TileEntityTC)tileEntity).setInvName(customName);
-            }
-        }
+    private void clientSetup(FMLClientSetupEvent event) {
+        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
+        RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagneticChest.class, new TileEntityMagneticChestRenderer());
     }
+   
+    @Override
+    protected void postInit(InterModProcessEvent event) {
+    	super.postInit(event);
+    	
+    	Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> GrassColors.get(0.5D, 1.0D), ModBlocks.GRASS_COVERING);
+    	
+		Minecraft.getInstance().getBlockColors().register((state, blockAccess, pos, tintIndex) -> {
+	         return blockAccess != null && pos != null ? BiomeColors.getGrassColor(blockAccess, pos) : -1;
+	      }, ModBlocks.GRASS_COVERING);
+    }
+    
+    @Override
+	public EntityPlayer getPlayerEntity() {
+		return Minecraft.getInstance().player;
+	}
 }

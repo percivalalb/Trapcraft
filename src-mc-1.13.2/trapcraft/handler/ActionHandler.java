@@ -1,27 +1,18 @@
 package trapcraft.handler;
 
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.List;
 
-import com.mojang.authlib.GameProfile;
-
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import trapcraft.entity.EntityDummy;
 
 /**
@@ -36,47 +27,51 @@ public class ActionHandler {
 		BlockPos pos = event.getPos();
 		EnumFacing face = event.getFace();
 
-		if(!world.isRemote) {
+		
 			
 			ItemStack item = player.getHeldItemMainhand();
-			if(item != null && item.getItem() == Items.SKULL && item.getItemDamage() == 3) {
-				if(face != null) {
-					BlockPos tPos = pos.up(face.getFrontOffsetY());
+			if(item.getItem() == Items.PLAYER_HEAD) {
+				if(face == EnumFacing.UP) {
+					BlockPos tPos = pos.up(face.getYOffset());
 					
 		
 					if(world.isAirBlock(tPos)) {
-						IBlockState variant = world.getBlockState(tPos.down());
-						IBlockState test = world.getBlockState(tPos.down(2));
+						Block top = world.getBlockState(tPos.down()).getBlock();
+						Block bottom = world.getBlockState(tPos.down(2)).getBlock();
+						List<Block> list = Arrays.asList(Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS);
 						
-						if(variant.getBlock() == Blocks.PLANKS && test.getBlock() == Blocks.PLANKS && Blocks.PLANKS.getMetaFromState(variant) == Blocks.PLANKS.getMetaFromState(test)) {
-							if(!player.canPlayerEdit(tPos, face, item) || !Blocks.SKULL.canPlaceBlockAt(world, tPos))
+						if(top == bottom && list.contains(top)) {
+							if(!player.canPlayerEdit(tPos, face, item) || !Blocks.PLAYER_HEAD.isValidPosition(world.getBlockState(tPos), world, tPos))
 				                return;
 				            else {
-				                world.setBlockState(tPos, Blocks.SKULL.getDefaultState().withProperty(Blocks.SKULL.FACING, player.getHorizontalFacing()).withProperty(Blocks.SKULL.NODROP, Boolean.valueOf(false)));
+				                //TODO world.setBlockState(tPos, Blocks.PLAYER_HEAD.getDefaultState().withProperty(BlockPlayerHead..FACING, player.getHorizontalFacing()).withProperty(Blocks.PLAYER_HEAD.NODROP, Boolean.valueOf(false)));
 		
-				                if(!player.capabilities.isCreativeMode)
+				                if(!player.abilities.isCreativeMode)
 				                	item.shrink(1);
 				                
-				                world.setBlockToAir(tPos);
-				        		world.setBlockToAir(tPos.down());
-				        		world.setBlockToAir(tPos.down(2));
-				        		float rotation = player.rotationYaw + 180F;
+				                world.setBlockState(tPos, Blocks.AIR.getDefaultState());
+				        		world.setBlockState(tPos.down(), Blocks.AIR.getDefaultState());
+				        		world.setBlockState(tPos.down(2), Blocks.AIR.getDefaultState());
 				        		
-				        		if (rotation >= 360F) {
-				        			rotation -= 360F;
-				        		}
-
-				        		EntityDummy entitydummy = new EntityDummy(world);
-				        		entitydummy.setVariant((byte)variant.getBlock().getMetaFromState(variant));
-				        		entitydummy.setLocationAndAngles((double)tPos.getX() + 0.5D, (double)tPos.getY() - 1.95D, (double)tPos.getZ() + 0.5D, rotation, 0.0F);
-				        		world.spawnEntity(entitydummy);
+				        		if(!world.isRemote) {
+					        		float rotation = player.rotationYaw + 180F;
+					        		
+					        		if (rotation >= 360F) {
+					        			rotation -= 360F;
+					        		}
+	
+					        		EntityDummy entitydummy = new EntityDummy(world);
+					        		entitydummy.setVariant((byte)list.indexOf(top));
+					        		entitydummy.setLocationAndAngles((double)tPos.getX() + 0.5D, (double)tPos.getY() - 1.95D, (double)tPos.getZ() + 0.5D, rotation, 0.0F);
+					        		world.spawnEntity(entitydummy);
 				        	
-				                event.setCanceled(true);
+					        		event.setCanceled(true);
+				        		}
 				            }
 						}
 					}
 				}
-			}
+			//}
 		}
 	}
 }
