@@ -26,7 +26,7 @@ public class TileEntityIgniter extends TileEntity implements ITickable, IInterac
 		super(ModBlocks.TILE_IGNITER);
 	}
 
-	public InventoryBasic inventory = new InventoryBasic(new TextComponentTranslation("container.igniter"), 6) {
+	public InventoryBasic inventory = new InventoryBasic(new TextComponentTranslation("container.trapcraft.igniter"), 6) {
 		@Override
 		public int getInventoryStackLimit() {
 			return 8;

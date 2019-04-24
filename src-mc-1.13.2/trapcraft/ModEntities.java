@@ -19,10 +19,10 @@ public class ModEntities {
     public static class Registration {
 		
 		 @SubscribeEvent
-		 public static void registerBlocks(final RegistryEvent.Register<EntityType<?>> event) {
+		 public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
 			 IForgeRegistry<EntityType<?>> entityRegistry = event.getRegistry();
 			 
-			 entityRegistry.register(EntityType.Builder.create(EntityDummy.class, EntityDummy::new).build(EntityNames.DUMMY));
+			 entityRegistry.register(EntityType.Builder.create(EntityDummy.class, EntityDummy::new).build(EntityNames.DUMMY).setRegistryName(EntityNames.DUMMY));
 		 }
     }
 }

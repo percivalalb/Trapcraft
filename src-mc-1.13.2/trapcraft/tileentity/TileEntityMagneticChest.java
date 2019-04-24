@@ -290,7 +290,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
 
 	@Override
 	public ITextComponent getName() {
-		return new TextComponentTranslation("container.magnetic_chest");
+		return new TextComponentTranslation("container.trapcraft.magnetic_chest");
 	}
 	
 	@Override

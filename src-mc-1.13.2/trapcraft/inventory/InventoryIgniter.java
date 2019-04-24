@@ -6,7 +6,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class InventoryIgniter extends InventoryBasic {
 
 	public InventoryIgniter(int slotCount) {
-		super(new TextComponentTranslation("container.igniter"), slotCount);
+		super(new TextComponentTranslation("container.trapcraft.igniter"), slotCount);
 	}
 
 }

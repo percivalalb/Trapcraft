@@ -1,6 +1,6 @@
 {
-    "container.magnetic_chest": "Magnetic Chest",
-    "container.igniter": "Igniter",
+    "container.trapcraft.magnetic_chest": "Magnetic Chest",
+    "container.trapcraft.igniter": "Igniter",
 
     "block.trapcraft.fan": "Fan",
     "block.trapcraft.magnetic_chest": "Magnetic Chest",
@@ -9,5 +9,7 @@
     "block.trapcraft.spikes": "Spikes",
     "block.trapcraft.igniter": "Igniter",
 
-    "item.trapcraft.igniter_range": "Igniter Range Upgrade"
+    "item.trapcraft.igniter_range": "Igniter Range Upgrade",
+    
+	"entity.trapcraft.dummy": "Dummy"
 }
