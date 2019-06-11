@@ -2,7 +2,7 @@ package trapcraft.network.packet;
 
 import java.util.function.Supplier;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +42,7 @@ public class PacketMagneticChestTile {
 	public static class Handler {
         public static void handle(final PacketMagneticChestTile msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
-            	EntityPlayer player = ctx.get().getSender();
+            	PlayerEntity player = ctx.get().getSender();
             	TileEntity target = player.world.getTileEntity(msg.pos);
         		
         		if(!(target instanceof TileEntityTC))

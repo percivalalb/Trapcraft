@@ -1,5 +1,6 @@
 package trapcraft;
 
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +23,7 @@ public class ModEntities {
 		 public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
 			 IForgeRegistry<EntityType<?>> entityRegistry = event.getRegistry();
 			 
-			 entityRegistry.register(EntityType.Builder.create(EntityDummy.class, EntityDummy::new).build(EntityNames.DUMMY).setRegistryName(EntityNames.DUMMY));
+			 entityRegistry.register(EntityType.Builder.create(EntityDummy::new, EntityClassification.AMBIENT).setCustomClientFactory(EntityDummy::new).build(EntityNames.DUMMY).setRegistryName(EntityNames.DUMMY));
 		 }
     }
 }

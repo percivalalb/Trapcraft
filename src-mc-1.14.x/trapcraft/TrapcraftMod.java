@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import trapcraft.config.ConfigHandler;
 import trapcraft.lib.Reference;
 import trapcraft.proxy.ClientProxy;
 import trapcraft.proxy.CommonProxy;
@@ -25,6 +24,5 @@ public class TrapcraftMod {
 	public TrapcraftMod() {
 		INSTANCE = this;
         PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
-        ConfigHandler.init();
 	}
 }

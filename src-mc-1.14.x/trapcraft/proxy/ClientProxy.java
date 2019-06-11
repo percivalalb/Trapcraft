@@ -1,23 +1,23 @@
 package trapcraft.proxy;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.ExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import trapcraft.ModBlocks;
+import trapcraft.ModContainerTypes;
+import trapcraft.client.gui.GuiIgniter;
 import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.entity.EntityDummy;
-import trapcraft.handler.GuiHandler;
 import trapcraft.tileentity.TileEntityMagneticChest;
 
 @OnlyIn(Dist.CLIENT)
@@ -29,8 +29,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
-        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
         RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
+        ScreenManager.registerFactory(ModContainerTypes.IGNITER, GuiIgniter::new);
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagneticChest.class, new TileEntityMagneticChestRenderer());
     }
    
@@ -46,7 +46,7 @@ public class ClientProxy extends CommonProxy {
     }
     
     @Override
-	public EntityPlayer getPlayerEntity() {
+	public PlayerEntity getPlayerEntity() {
 		return Minecraft.getInstance().player;
 	}
 }

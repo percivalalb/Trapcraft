@@ -10,10 +10,10 @@ import trapcraft.item.ItemIgniterRange;
 import trapcraft.lib.ItemNames;
 import trapcraft.lib.Reference;
 
+@ObjectHolder(Reference.MOD_ID)
 public class ModItems {
 
-	@ObjectHolder(ItemNames.IGNITER_RANGE)
-	public static Item IGNITER_RANGE;
+	public static final Item IGNITER_RANGE = null;
 	
 	@Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class Registration {

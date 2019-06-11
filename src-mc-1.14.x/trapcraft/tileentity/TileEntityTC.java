@@ -1,7 +1,7 @@
 package trapcraft.tileentity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import trapcraft.api.Properties;
@@ -35,10 +35,10 @@ public class TileEntityTC extends TileEntity {
     public void setState(String newState) { this.state = newState; }
     
 
-    public boolean isUseableByPlayer(EntityPlayer player) { return owner.equals(player.getName()); }
+    public boolean isUseableByPlayer(PlayerEntity player) { return owner.equals(player.getName()); }
 
     @Override
-    public void read(NBTTagCompound nbtTagCompound) {
+    public void read(CompoundNBT nbtTagCompound) {
         super.read(nbtTagCompound);
 
         if (nbtTagCompound.contains(Properties.NBT_STATE)) {
@@ -55,7 +55,7 @@ public class TileEntityTC extends TileEntity {
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound nbtTagCompound) {
+    public CompoundNBT write(CompoundNBT nbtTagCompound) {
         super.write(nbtTagCompound);
 
         nbtTagCompound.putString(Properties.NBT_STATE, state);

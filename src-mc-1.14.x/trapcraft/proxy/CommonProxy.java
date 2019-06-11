@@ -1,17 +1,19 @@
 package trapcraft.proxy;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import trapcraft.config.ConfigHandler;
 import trapcraft.handler.ActionHandler;
 import trapcraft.network.PacketHandler;
 
 public class CommonProxy {
 	
 	public CommonProxy() {
+        ConfigHandler.init();
         // Add listeners for common events
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
@@ -31,7 +33,7 @@ public class CommonProxy {
        
     }
     
-    public EntityPlayer getPlayerEntity() {
+    public PlayerEntity getPlayerEntity() {
 		return null;
 	}
 }

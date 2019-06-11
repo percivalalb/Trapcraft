@@ -1,22 +1,30 @@
 package trapcraft.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReaderBase;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,31 +32,29 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author ProPercivalalb
  **/
-public class BlockSpikes extends Block {
+public class BlockSpikes extends Block implements IWaterLoggable {
 	
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 5D, 16.0D);
+	private DamageSource damageSource = new DamageSource("trapcraft.spikes").setDamageBypassesArmor();
 	
     public BlockSpikes() {
     	super(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL).tickRandomly());
+		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, Boolean.valueOf(false)));
     }
 
     @Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
 		return SHAPE;
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
 		return VoxelShapes.empty();
-	}
-	   
-	@Override
-	public boolean isFullCube(IBlockState state) {
-	    return false;
 	}
 	
 	@Override
-	public boolean isSolid(IBlockState state) {
+	public boolean isSolid(BlockState state) {
 		return false;
 	}
 	
@@ -59,38 +65,50 @@ public class BlockSpikes extends Block {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return BlockFaceShape.UNDEFINED;
-	}
-
-	 @Override
-		public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-			return facing == EnumFacing.DOWN && !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+		if(stateIn.get(WATERLOGGED)) {
+			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
 		}
 		
-		@Override
-		public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
-			IBlockState down = worldIn.getBlockState(pos.down());
-			return down.isTopSolid() || down.getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP) == BlockFaceShape.SOLID;
-		}
+		return facing == Direction.DOWN && !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+	}
+	
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+
+		return this.getDefaultState().with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+	}
+	
+	@Override
+	public IFluidState getFluidState(BlockState state) {
+		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+	}
+	
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(WATERLOGGED);
+	}
+	
+	@Override
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		return func_220055_a(worldIn, pos.down(), Direction.UP);
+	}
 
     @Override
-    public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity) {
-        if (entity instanceof EntityItem) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        if (entity instanceof ItemEntity) {
             return;
         }
 
         if (entity.fallDistance >= 5F) {
-            entity.attackEntityFrom(DamageSource.FALL, 20);
+            entity.attackEntityFrom(damageSource, 20);
             return;
         }
         else {
-            double motionX = entity.motionX;
-            double motionY = entity.motionY;
-            double motionZ = entity.motionZ;
-            int damageTodo = (int)((motionX + motionY + motionZ) / 1.5D);
-            entity.attackEntityFrom(DamageSource.GENERIC, 2 + damageTodo);
+        	entity.getMotion().dotProduct(new Vec3d(1, 1, 1));
+            float damageTodo = (float)entity.getMotion().dotProduct(new Vec3d(1, 1, 1)) / 1.5F;
+            entity.attackEntityFrom(damageSource, 2F + damageTodo);
             return;
         }
     }

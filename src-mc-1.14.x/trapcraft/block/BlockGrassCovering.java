@@ -1,29 +1,21 @@
 package trapcraft.block;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReaderBase;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,26 +28,21 @@ public class BlockGrassCovering extends Block {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 15.0D, 0.0D, 16.0D, 16D, 16.0D);
 	
 	public BlockGrassCovering() {
-		super(Block.Properties.create(Material.GRASS).hardnessAndResistance(0.2F, 1F).sound(SoundType.GROUND).tickRandomly());
+		super(Block.Properties.create(Material.ORGANIC).hardnessAndResistance(0.2F, 1F).sound(SoundType.GROUND).tickRandomly());
     }
  
 	@Override
-	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
 		return SHAPE;
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
 		return VoxelShapes.empty();
-	}
-    
-	@Override
-	public boolean isFullCube(IBlockState state) {
-	    return false;
 	}
 	
 	@Override
-	public boolean isSolid(IBlockState state) {
+	public boolean isSolid(BlockState state) {
 		return false;
 	}
 	
@@ -64,24 +51,18 @@ public class BlockGrassCovering extends Block {
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.SOLID;
 	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return BlockFaceShape.UNDEFINED;
-	}
     
     @Override
-	public IBlockState updatePostPlacement(IBlockState stateIn, EnumFacing facing, IBlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		return !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
 	
 	@Override
-	public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
-		for(EnumFacing facing : new EnumFacing[] {EnumFacing.EAST, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.NORTH}) {
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		for(Direction facing : new Direction[] {Direction.EAST, Direction.WEST, Direction.SOUTH, Direction.NORTH}) {
     		BlockPos posOff = pos.offset(facing);
-    		IBlockState blockstate = worldIn.getBlockState(posOff);
-    		if(blockstate.getBlockFaceShape(worldIn, posOff, facing.getOpposite()) == BlockFaceShape.SOLID || blockstate.getBlock() == this)
+    		BlockState blockstate = worldIn.getBlockState(posOff);
+    		if(Block.hasSolidSide(blockstate, worldIn, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
     			return true;
 
     	}
@@ -89,19 +70,14 @@ public class BlockGrassCovering extends Block {
 		return false;
 	}
 	
-	@Override
-	public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune) {
-		return Items.STICK;
-	}
-	
-	@Override
-	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
-		return 2;
-	}
+	//@Override
+	//public int getItemsToDropCount(BlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
+	//	return 2;
+	//}
 	
     @Override
-	public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity) {
-    	if(entity instanceof EntityLivingBase && !world.isRemote) {
+	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    	if(entity instanceof LivingEntity && !world.isRemote) {
     		world.destroyBlock(pos, true);
         }
     }

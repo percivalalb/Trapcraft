@@ -1,10 +1,8 @@
 package trapcraft.client.renders;
 
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.model.ModelBiped;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import trapcraft.api.Properties;
 import trapcraft.entity.EntityDummy;
@@ -12,12 +10,12 @@ import trapcraft.entity.EntityDummy;
 /**
  * @author ProPercivalalb
  */
-public class RenderDummy extends RenderLiving<EntityDummy> {
+public class RenderDummy extends LivingRenderer<EntityDummy, BipedModel<EntityDummy>> {
 	
 	private float scale = 1F;
 
-    public RenderDummy(RenderManager renderManagerIn) {
-        super(renderManagerIn, new ModelBiped(0.0F), 0.5F);
+    public RenderDummy(EntityRendererManager renderManagerIn) {
+        super(renderManagerIn, new BipedModel<EntityDummy>(0.0F), 0.5F);
     }
    
     @Override
@@ -27,7 +25,7 @@ public class RenderDummy extends RenderLiving<EntityDummy> {
 
     @Override
     protected void preRenderCallback(EntityDummy dummy, float partialTickTime) {
-    	GL11.glScalef(this.scale, this.scale, this.scale);
+    	//GlStateManager.scalef(this.scale, this.scale, this.scale);
     }
 
 	@Override
@@ -48,5 +46,10 @@ public class RenderDummy extends RenderLiving<EntityDummy> {
 		default:
 			return Properties.RES_MOB_DUMMY_OAK;	
 		}
+	}
+	
+	@Override
+	protected boolean canRenderName(EntityDummy entity) {
+		return false;
 	}
 }
