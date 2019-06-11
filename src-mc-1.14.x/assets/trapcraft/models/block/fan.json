@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/orientable",
+    "textures": {
+        "top": "trapcraft:block/fan_side",
+        "front": "trapcraft:block/fan_top",
+        "side": "trapcraft:block/fan_side"
+    }
+}
