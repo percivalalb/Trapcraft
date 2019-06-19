@@ -59,7 +59,7 @@ public class BlockFan extends BlockContainer {
     }
     
     public static EnumFacing getFacing(int meta) {
-        return EnumFacing.getFront(meta & 7);
+        return EnumFacing.byIndex(meta & 7);
     }
     
     @Override
@@ -69,7 +69,7 @@ public class BlockFan extends BlockContainer {
 
     @Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta)).withProperty(POWERED, Boolean.valueOf((meta & 8) > 0));
+		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta)).withProperty(POWERED, Boolean.valueOf((meta & 8) > 0));
 	}
 
 	@Override

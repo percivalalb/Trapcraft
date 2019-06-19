@@ -99,7 +99,7 @@ public class BlockMagneticChest extends BlockContainer {
     
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.getFront(meta);
+        EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
             enumfacing = EnumFacing.NORTH;
@@ -133,7 +133,7 @@ public class BlockMagneticChest extends BlockContainer {
     }
     
     @Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         if(entity.isEntityAlive() && !world.isRemote) {
             if (entity instanceof EntityItem) {
                 TileEntityMagneticChest tileEntityMagneticChest = (TileEntityMagneticChest)world.getTileEntity(pos);

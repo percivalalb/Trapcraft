@@ -21,7 +21,7 @@ public class ModItems {
 	
 	@SubscribeEvent
 	public static void onRegister(RegistryEvent.Register<Item> event) {
-		IGNITER_RANGE = new ItemIgniterRange().setUnlocalizedName("trapcraft.igniter_range").setRegistryName(Reference.MOD_ID, "igniter_range");
+		IGNITER_RANGE = new ItemIgniterRange().setTranslationKey("trapcraft.igniter_range").setRegistryName(Reference.MOD_ID, "igniter_range");
 
 		event.getRegistry().register(IGNITER_RANGE);
 	}

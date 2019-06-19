@@ -97,9 +97,9 @@ public class TileEntityFan extends TileEntity implements ITickable
     }
 
     public boolean isPathClear(Entity entity, EnumFacing facing) {
-    	int x = facing.getFrontOffsetX() * (MathHelper.floor(entity.posX) - this.pos.getX());
-    	int y = facing.getFrontOffsetY() * (MathHelper.floor(entity.posY) - this.pos.getY());
-    	int z = facing.getFrontOffsetZ() * (MathHelper.floor(entity.posZ) - this.pos.getZ());
+    	int x = facing.getXOffset() * (MathHelper.floor(entity.posX) - this.pos.getX());
+    	int y = facing.getYOffset() * (MathHelper.floor(entity.posY) - this.pos.getY());
+    	int z = facing.getZOffset() * (MathHelper.floor(entity.posZ) - this.pos.getZ());
     	boolean flag = true;
     	
         for(int l2 = 1; l2 < Math.abs(x + y + z); l2++) {

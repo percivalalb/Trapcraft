@@ -37,12 +37,12 @@ public class ModBlocks {
 
 	@SubscribeEvent
 	public static void onRegisterBlock(RegistryEvent.Register<Block> event) {
-		FAN = new BlockFan().setUnlocalizedName("trapcraft.fan").setRegistryName(Reference.MOD_ID, "fan");
-	  	MAGNETIC_CHEST = new BlockMagneticChest().setUnlocalizedName("trapcraft.magnetic_chest").setRegistryName(Reference.MOD_ID, "magnetic_chest");
-	  	GRASS_COVERING = new BlockGrassCovering().setUnlocalizedName("trapcraft.grass_covering").setRegistryName(Reference.MOD_ID, "grass_covering");
-	    BEAR_TRAP = new BlockBearTrap().setHardness(2.0F).setUnlocalizedName("trapcraft.bear_trap").setRegistryName(Reference.MOD_ID, "bear_trap");
-	    SPIKES = new BlockSpikes().setUnlocalizedName("trapcraft.spikes").setRegistryName(Reference.MOD_ID, "spikes");
-	    IGNITER = new BlockIgniter().setUnlocalizedName("trapcraft.igniter").setRegistryName(Reference.MOD_ID, "igniter");
+		FAN = new BlockFan().setTranslationKey("trapcraft.fan").setRegistryName(Reference.MOD_ID, "fan");
+	  	MAGNETIC_CHEST = new BlockMagneticChest().setTranslationKey("trapcraft.magnetic_chest").setRegistryName(Reference.MOD_ID, "magnetic_chest");
+	  	GRASS_COVERING = new BlockGrassCovering().setTranslationKey("trapcraft.grass_covering").setRegistryName(Reference.MOD_ID, "grass_covering");
+	    BEAR_TRAP = new BlockBearTrap().setHardness(2.0F).setTranslationKey("trapcraft.bear_trap").setRegistryName(Reference.MOD_ID, "bear_trap");
+	    SPIKES = new BlockSpikes().setTranslationKey("trapcraft.spikes").setRegistryName(Reference.MOD_ID, "spikes");
+	    IGNITER = new BlockIgniter().setTranslationKey("trapcraft.igniter").setRegistryName(Reference.MOD_ID, "igniter");
 	    
 	    GameRegistry.registerTileEntity(TileEntityMagneticChest.class, "trapcraft:magnetic_chest");
 	    GameRegistry.registerTileEntity(TileEntityFan.class, "trapcraft:fan");

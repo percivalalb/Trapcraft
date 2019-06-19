@@ -92,7 +92,7 @@ public class BlockIgniter extends BlockContainer {
     }
     
     public static EnumFacing getFacing(int meta) {
-        return EnumFacing.getFront(meta & 7);
+        return EnumFacing.byIndex(meta & 7);
     }
     
     @Override
@@ -134,7 +134,7 @@ public class BlockIgniter extends BlockContainer {
 
        
        
-       boolean flag = world.isBlockIndirectlyGettingPowered(pos) > 0;
+       boolean flag = world.isBlockPowered(pos);
        BlockPos firePos = pos.offset(facing, igniter.getRangeUpgrades() + 1);
 
        if(flag) {

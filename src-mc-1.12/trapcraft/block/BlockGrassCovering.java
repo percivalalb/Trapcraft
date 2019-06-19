@@ -65,7 +65,7 @@ public class BlockGrassCovering extends Block {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
@@ -95,7 +95,7 @@ public class BlockGrassCovering extends Block {
 	}
 	
     @Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
     	if(entity instanceof EntityLivingBase && !world.isRemote) {
             world.setBlockToAir(pos);
 

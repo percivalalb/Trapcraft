@@ -41,7 +41,7 @@ public class ActionHandler {
 			ItemStack item = player.getHeldItemMainhand();
 			if(item != null && item.getItem() == Items.SKULL && item.getItemDamage() == 3) {
 				if(face != null) {
-					BlockPos tPos = pos.up(face.getFrontOffsetY());
+					BlockPos tPos = pos.up(face.getYOffset());
 					
 		
 					if(world.isAirBlock(tPos)) {
