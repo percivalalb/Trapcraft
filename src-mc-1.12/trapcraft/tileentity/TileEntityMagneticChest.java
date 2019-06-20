@@ -2,12 +2,9 @@ package trapcraft.tileentity;
 
 import java.util.List;
 
-import net.minecraft.block.BlockChest;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
@@ -15,18 +12,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.ILockableContainer;
-import net.minecraft.world.LockCode;
 import trapcraft.ModBlocks;
-import trapcraft.TrapcraftMod;
 import trapcraft.block.BlockMagneticChest;
 
 /**
@@ -174,39 +165,32 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     }
     
     public void pullItemsIn() {
-    	List entity = this.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(this.pos).expand(2D, 1.0D, 2D));
+   		double centreX = (double)this.pos.getX() + 0.5D;
+   		double centreY = (double)this.pos.getY() + 0.5D;
+		double centreZ = (double)this.pos.getZ() + 0.5D;
+    	
+    	List<EntityItem> entities = this.world.getEntities(EntityItem.class, item -> item.getDistanceSq(centreX, centreY, centreZ) < 16D);
 
-        if (!entity.isEmpty()) {
-            for (int i = 0; i < entity.size(); i++) {
-            	Entity target = (Entity)entity.get(i);
-                if (!(target instanceof EntityItem))
-                    continue;
+    	for(EntityItem itemEntity : entities) {
+    		double diffX = -itemEntity.posX + centreX;
+    		double diffY = -itemEntity.posY + centreY;
+    		double diffZ = -itemEntity.posZ + centreZ;
+    		double speedMultiper = 0.05D;
+    		double d11 = itemEntity.posX - centreX;
+    		double d12 = itemEntity.posZ - centreZ;
+    		double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
+    		double angle = Math.asin(diffX / horizDiffSq);
+    		double d15 = Math.abs((double)MathHelper.sin((float)angle) * speedMultiper);
+    		double d16 = Math.abs((double)MathHelper.cos((float)angle) * speedMultiper);
+    		d15 = diffX <= 0.0D ? -d15 : d15;
+    		d16 = diffZ <= 0.0D ? -d16 : d16;
+    		if(MathHelper.abs((float)(itemEntity.motionX + itemEntity.motionY + itemEntity.motionZ))  >= 0.2D)
+    			continue;
 
-                EntityItem entityItem = (EntityItem)entity.get(i);
-                double centreX = (double)this.pos.getX() + 0.5D;
-                double centreY = (double)this.pos.getY() + 0.5D;
-                double centreZ = (double)this.pos.getZ() + 0.5D;
-                double d7 = centreX <= entityItem.posX ? -(entityItem.posX - centreX) : centreX - entityItem.posX;
-                double d8 = centreY <= entityItem.posY ? -(entityItem.posY - centreY) : centreY - entityItem.posY;
-                double d9 = centreZ <= entityItem.posZ ? -(entityItem.posZ - centreZ) : centreZ - entityItem.posZ;
-                double speedMultiper = 0.050000000000000003D;
-                double d11 = entityItem.posX - centreX;
-                double d12 = entityItem.posZ - centreZ;
-                double d13 = MathHelper.sqrt(d7 * d7 + d9 * d9);
-                double d14 = Math.asin(d7 / d13);
-                double d15 = (double)MathHelper.sin((float)d14) * speedMultiper;
-                double d16 = (double)MathHelper.cos((float)d14) * speedMultiper;
-                d16 = d9 <= 0.0D ? -d16 : d16;
-
-                if ((double)MathHelper.abs((float)(entityItem.motionX + entityItem.motionY + entityItem.motionZ)) >= 0.10000000000000001D)
-                    continue;
-
-                if (d7 != 0.0D && (double)MathHelper.abs((float)entityItem.motionZ) < 0.10000000000000001D)
-                    entityItem.motionX = d15;
-
-                if (d9 != 0.0D && (double)MathHelper.abs((float)entityItem.motionZ) < 0.10000000000000001D)
-                    entityItem.motionZ = d16;
-            }
+    		
+    		itemEntity.motionX = d15;
+    		itemEntity.motionY = diffY >= 0.7 ? speedMultiper * 2 : itemEntity.motionY;
+    		itemEntity.motionZ = d16;
         }
     }
     

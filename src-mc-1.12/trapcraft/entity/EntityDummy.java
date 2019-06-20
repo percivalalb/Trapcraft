@@ -1,13 +1,9 @@
 package trapcraft.entity;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +11,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 /**
@@ -52,45 +47,6 @@ public class EntityDummy extends EntityLiving {
         this.randomYawVelocity = 0.0F;
         this.motionX = 0.0D;
         this.motionZ = 0.0D;
-        List<Entity> nearByEntities = this.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(this.getPosition()).expand(16D, 16D, 16D));
-
-        for(int i = 0; i < nearByEntities.size(); i++) {
-        	Entity entity = nearByEntities.get(0);
-        	
-        	if(entity instanceof EntityMob) {
-            	EntityMob mob = (EntityMob)entity;
-
-            	if(this.canEntityBeSeen(mob)) {
-            		mob.setRevengeTarget(this);
-            		mob.setAttackTarget(this);
-            	}
-
-            	continue;
-        	}
-
-        	if(entity instanceof EntitySlime) {
-        		EntitySlime slime = (EntitySlime)entity;
-
-        		if(this.canEntityBeSeen(slime)) {
-        			slime.setRevengeTarget(this);
-        			slime.setAttackTarget(this);
-        		}
-
-        		continue;
-        	}
-
-        	if(!(entity instanceof EntityWolf)) {
-        		continue;
-        	}
-
-        	EntityWolf wolf = (EntityWolf)entity;
-
-        	if(this.canEntityBeSeen(wolf) && wolf.isAngry()) {
-        		wolf.setRevengeTarget(this);
-        		wolf.setAttackTarget(this);
-        	}
-        }
-
         super.onLivingUpdate();
     }
 

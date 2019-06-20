@@ -2,11 +2,11 @@ package trapcraft.tileentity;
 
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -19,7 +19,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
 import trapcraft.block.BlockFan;
 
 public class TileEntityFan extends TileEntity implements ITickable
@@ -27,10 +26,9 @@ public class TileEntityFan extends TileEntity implements ITickable
     public float speed = 1.0F;
     public double extraRange = 0.0D;
 
-    public TileEntityFan()
-    {
-        
-    }
+    public TileEntityFan() {
+  		super();
+  	}
 
     @Override
     public void update() {
@@ -41,58 +39,53 @@ public class TileEntityFan extends TileEntity implements ITickable
         EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFan.FACING);
         
         if(this.world.rand.nextInt(2) == 0)
-        	this.spawnParticles(this.world, this.pos);
-        List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getDirection());
+        	spawnParticles(this.world, this.pos);
+        List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getEnumFacing());
 
-        if(!list.isEmpty())
-        {
-            for (int i = 0; i < list.size(); i++)
-            {
-                Entity entity = (Entity)list.get(i);
-            	
-                double d = 0.050000000000000003D;
-                double d1 = 0.29999999999999999D;
-                d *= speed;
+        for(Entity entity : list) {
 
-                if (entity instanceof EntityItem)
-                {
-                    d1 *= 1.8D;
-                    d *= 1.3D;
-                }
-
-                //Item mode only
-                //if (!(entity instanceof EntityItem))
-               // {
-                 //   d = 0.0D;
-                //}
-
-                if(entity instanceof EntityMinecart)
-                    d *= 0.5D;
-
-                if((entity instanceof EntityFallingBlock) && facing == EnumFacing.UP)
-                    d = 0.0D;
-
-                if(!this.isPathClear(entity, facing))
-                    continue;
+        	if(!this.isPathClear(entity, facing))
+        		continue;
                 
-                if(facing == EnumFacing.DOWN && entity.motionY > -d1)
-                    entity.motionY += -d;
 
-                if(facing == EnumFacing.UP && entity.motionY < d1 * 0.5D)
-                    entity.motionY += d;
+        	double velocity = 0.05D; // Affects acceleration
+        	double threshholdVelocity = 0.3D; // Affects max speed
+        	velocity *= this.speed;
 
-                if(facing == EnumFacing.NORTH && entity.motionZ > -d1)
-                    entity.motionZ += -d;
+        	if(entity instanceof EntityItem) {
+        		threshholdVelocity *= 1.8D;
+        		velocity *= 1.3D;
+        	}
 
-                if(facing == EnumFacing.SOUTH && entity.motionZ < d1)
-                    entity.motionZ += d;
+        	if(entity instanceof EntityPlayer) {
+        		if(((EntityPlayer)entity).capabilities.isFlying)
+        			continue;
+        	}
 
-                if (facing == EnumFacing.WEST && entity.motionX > -d1)
-                    entity.motionX += -d;
+        	if(entity instanceof EntityMinecart)
+        		velocity *= 0.5D;
 
-                if (facing == EnumFacing.EAST && entity.motionX < d1)
-                    entity.motionX += d;
-            }
+        	if((entity instanceof EntityFallingBlock) && facing == EnumFacing.UP)
+        		velocity = 0.0D;
+        	
+        	
+        	if(facing == EnumFacing.UP) {
+        		threshholdVelocity *= 0.5D;
+        	}
+        	
+        	if(facing.getAxis() == Axis.X) {
+        		if(Math.abs(entity.motionX) < threshholdVelocity) {
+        			entity.motionX += facing.getXOffset() * velocity;
+        		}
+        	} else if(facing.getAxis() == Axis.Y) {
+        		if(Math.abs(entity.motionY) < threshholdVelocity) {
+        			entity.motionY += facing.getYOffset() * velocity;
+        		}
+        	} else if(facing.getAxis() == Axis.Z) {
+        		if(Math.abs(entity.motionZ) < threshholdVelocity) {
+        			entity.motionZ += facing.getZOffset() * velocity;
+        		}
+        	}
         }
     }
 
@@ -104,7 +97,7 @@ public class TileEntityFan extends TileEntity implements ITickable
     	
         for(int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
             
-            if(this.world.isBlockFullCube(this.pos.offset(facing, l2))) {
+        	if(this.world.isBlockFullCube(this.pos.offset(facing, l2))) {
                 flag = false;
             }
         }
@@ -120,7 +113,7 @@ public class TileEntityFan extends TileEntity implements ITickable
         return String.valueOf(f);
     }
 
-    public AxisAlignedBB getDirection() {
+    public AxisAlignedBB getEnumFacing() {
     	EnumFacing facing = this.world.getBlockState(this.pos).getValue(BlockFan.FACING);
         
         BlockPos endPos = this.pos.offset(facing, MathHelper.floor(5 + this.extraRange));
@@ -143,37 +136,18 @@ public class TileEntityFan extends TileEntity implements ITickable
     }
 
     public static void spawnParticles(World world, BlockPos pos) {
-    	double var7 = (double)((float)pos.getX() + world.rand.nextFloat());
-        double var9 = (double)((float)pos.getY() + world.rand.nextFloat());
-        double var11 = (double)((float)pos.getZ() + world.rand.nextFloat());
-        double velX = 0.0D;
-        double velY = 0.0D;
-        double velZ = 0.0D;
+    	double x = (double)((float)pos.getX() + world.rand.nextFloat());
+        double y = (double)((float)pos.getY() + world.rand.nextFloat());
+        double z = (double)((float)pos.getZ() + world.rand.nextFloat());
 
         EnumFacing facing = world.getBlockState(pos).getValue(BlockFan.FACING);
+        double velocity = 0.2F + world.rand.nextFloat() * 0.4F;
         
-        switch(facing) {
-        case DOWN:
-        	velY = -(double)(world.rand.nextFloat() * 0.6F);
-        	break;
-        case UP:
-        	velY = (double)(world.rand.nextFloat() * 0.6F);
-        	break;
-        case NORTH:
-        	velZ = -(double)(world.rand.nextFloat() * 0.6F);
-        	break;
-        case SOUTH:
-        	velZ = (double)(world.rand.nextFloat() * 0.6F);
-        	break;
-        case WEST:
-        	velX = -(double)(world.rand.nextFloat() * 0.6F);
-        	break;
-        case EAST:
-        	velX = (double)(world.rand.nextFloat() * 0.6F);
-        	break;
-        }
+        double velX = facing.getXOffset() * velocity;
+        double velY = facing.getYOffset() * velocity;
+        double velZ = facing.getZOffset() * velocity;
         
-        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, var7, var9, var11, velX, velY, velZ);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, velX, velY, velZ);
     }
     
     @Override
@@ -195,7 +169,7 @@ public class TileEntityFan extends TileEntity implements ITickable
     @Override
     public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = new NBTTagCompound();
-        return writeToNBT(tag);
+        return this.writeToNBT(tag);
     }
 
 	@Override

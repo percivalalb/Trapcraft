@@ -1,26 +1,19 @@
 package trapcraft.handler;
 
-import java.util.UUID;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import trapcraft.entity.EntityDummy;
 
@@ -28,7 +21,7 @@ import trapcraft.entity.EntityDummy;
  * @author ProPercivalalb
  **/
 public class ActionHandler {
-
+	
 	@SubscribeEvent
 	public void action(RightClickBlock event) {
 		EntityPlayer player = event.getEntityPlayer();
@@ -78,5 +71,24 @@ public class ActionHandler {
 				}
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void onEntitySpawn(EntityJoinWorldEvent event) {
+		Entity entity = event.getEntity();
+		
+		if(entity instanceof EntityMob) {
+			EntityMob mob = (EntityMob)entity;
+			mob.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(mob, EntityDummy.class, 10, true, false, (dummy) -> {
+	          return Math.abs(dummy.posY - mob.posY) <= 6.0D;
+	       }));
+		}
+	}
+	
+	public static void spawnDummy(World world, BlockPos tPos, float rotation, byte variant) {
+		EntityDummy entitydummy = new EntityDummy(world);
+		entitydummy.setVariant(variant);
+		entitydummy.setLocationAndAngles((double)tPos.getX() + 0.5D, (double)tPos.getY() - 1.95D, (double)tPos.getZ() + 0.5D, MathHelper.wrapDegrees(rotation), 0.0F);
+		world.spawnEntity(entitydummy);
 	}
 }
