@@ -1,5 +1,7 @@
 package trapcraft.tileentity;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,26 +11,19 @@ import net.minecraft.util.ITickable;
 import trapcraft.ModBlocks;
 import trapcraft.ModItems;
 import trapcraft.block.BlockIgniter;
+import trapcraft.inventory.InventoryIgniter;
 
 /**
  * @author ProPercivalalb
  **/
-public class TileEntityIgniter extends TileEntity implements ITickable {
+public class TileEntityIgniter extends TileEntity implements ITickable, IInventoryChangedListener {
 
-	public InventoryBasic inventory = new InventoryBasic("container.igniter", false, 6) {
-		@Override
-		public int getInventoryStackLimit() {
-			return 8;
-		}
-		
-		@Override
-		public void markDirty() {
-			if(hasWorld()) {
-				if(world.isRemote) {return;}
-				((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(world, pos);
-			}
-		}
-	};
+	public InventoryIgniter inventory;
+	public int lastUpgrades;
+	
+	public TileEntityIgniter() {
+		this.inventory = new InventoryIgniter(6);
+	}
 	  
     @Override
     public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
@@ -43,6 +38,9 @@ public class TileEntityIgniter extends TileEntity implements ITickable {
                 this.inventory.setInventorySlotContents(b0, new ItemStack(nbttagcompound1));
             }
         }
+        
+        this.inventory.addInventoryChangeListener(this);
+        this.lastUpgrades = this.getRangeUpgrades();
     }
 
     @Override
@@ -85,4 +83,14 @@ public class TileEntityIgniter extends TileEntity implements ITickable {
     		((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.world, this.pos);
     	}
     }
+    
+    @Override
+	public void onInventoryChanged(IInventory invBasic) {
+		if(!this.world.isRemote) {
+			int newUpgrades = this.getRangeUpgrades();
+			if(newUpgrades != this.lastUpgrades) {
+				((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.world, this.pos);
+			}
+		}
+	}
 }

@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockSpikes extends Block {
 	
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.3D, 1.0D);
+	private DamageSource damageSource = new DamageSource("trapcraft.spikes").setDamageBypassesArmor();
 	
     public BlockSpikes() {
         super(Material.IRON);
@@ -78,21 +79,21 @@ public class BlockSpikes extends Block {
 
     @Override
 	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-        if (entity instanceof EntityItem) {
-            return;
-        }
+    	 if (entity instanceof EntityItem) {
+             return;
+         }
 
-        if (entity.fallDistance >= 5F) {
-            entity.attackEntityFrom(DamageSource.FALL, 20);
-            return;
-        }
-        else {
-            double motionX = entity.motionX;
-            double motionY = entity.motionY;
-            double motionZ = entity.motionZ;
-            int damageTodo = (int)((motionX + motionY + motionZ) / 1.5D);
-            entity.attackEntityFrom(DamageSource.GENERIC, 2 + damageTodo);
-            return;
-        }
+         if (entity.fallDistance >= 5F) {
+             entity.attackEntityFrom(damageSource, 20);
+             return;
+         }
+         else {
+        	 double motionX = entity.motionX;
+             double motionY = entity.motionY;
+             double motionZ = entity.motionZ;
+             int damageTodo = (int)((motionX + motionY + motionZ) / 1.5D);
+             entity.attackEntityFrom(damageSource, 2F + damageTodo);
+             return;
+         }
     }
 }

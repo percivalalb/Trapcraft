@@ -5,7 +5,11 @@ import net.minecraft.inventory.InventoryBasic;
 public class InventoryIgniter extends InventoryBasic {
 
 	public InventoryIgniter(int slotCount) {
-		super("container.igniter", false, slotCount);
+		super("container.trapcraft.igniter", false, slotCount);
 	}
 
+	@Override
+	public int getInventoryStackLimit() {
+		return 8;
+	}
 }

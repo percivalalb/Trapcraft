@@ -51,8 +51,7 @@ public class BlockIgniter extends BlockContainer {
         if(worldIn.isRemote) {
             return true;
         }
-        else
-        {
+        else {
             TileEntityIgniter tileentityigniter = (TileEntityIgniter)worldIn.getTileEntity(pos);
 
             if (tileentityigniter != null) {
@@ -65,7 +64,16 @@ public class BlockIgniter extends BlockContainer {
     
     @Override
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-    	this.updateIgniterState((World)world, pos);
+    	if(world instanceof World && !((World)world).isRemote) 
+    		this.updateIgniterState((World)world, pos);
+    }
+    
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+    	if (!worldIn.isRemote) {
+    		this.updateIgniterState(worldIn, pos);
+    	}
     }
     
     @Override
@@ -76,6 +84,10 @@ public class BlockIgniter extends BlockContainer {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
     	worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)), 2);
+    	
+    	if (!worldIn.isRemote) {
+    		this.updateIgniterState(worldIn, pos);
+    	}
     }
     
     public static EnumFacing getFacing(int meta) {
@@ -115,26 +127,49 @@ public class BlockIgniter extends BlockContainer {
     
     
     public void updateIgniterState(World world, BlockPos pos) {
-       EnumFacing facing = world.getBlockState(pos).getValue(FACING);
-      
-       TileEntityIgniter igniter = (TileEntityIgniter)world.getTileEntity(pos);
-
-       
-       
-       boolean flag = world.isBlockPowered(pos);
-       BlockPos firePos = pos.offset(facing, igniter.getRangeUpgrades() + 1);
-
-       if(flag) {
-    	   if(world.isAirBlock(firePos)) {
-    		   world.setBlockState(firePos, Blocks.FIRE.getDefaultState());
-    	   }
-       }
-       else if(!flag && world.getBlockState(firePos).getBlock() == Blocks.FIRE) {
-    	   world.setBlockToAir(firePos);
-           world.playSound(firePos.getX() + 0.5D, firePos.getY() + 0.5D, firePos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
-       }
+    	EnumFacing facing = world.getBlockState(pos).getValue(FACING);
         
-    }
+        int distance = 1, oldDistance = 1;
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if(tileEntity instanceof TileEntityIgniter) {
+     	   TileEntityIgniter igniter = (TileEntityIgniter)world.getTileEntity(pos);
+     	   distance = igniter.getRangeUpgrades() + 1;
+     	   oldDistance = igniter.lastUpgrades + 1;
+        }
+        
+        updateIgniterState(world, pos, world.isBlockPowered(pos), facing, distance, oldDistance);
+        
+        if(tileEntity instanceof TileEntityIgniter) {
+     	   TileEntityIgniter igniter = (TileEntityIgniter)world.getTileEntity(pos);
+     	   igniter.lastUpgrades = distance - 1;
+        }
+     }
+     
+     private void updateIgniterState(World world, BlockPos pos, boolean powered, EnumFacing direction, int newDistance, int previousDistance) {
+     	// If distance has changed remove old fire
+         if(newDistance != previousDistance) {
+         	 BlockPos oldPos = pos.offset(direction, previousDistance);
+         	 removePossibleFire(world, oldPos);
+         }
+
+         BlockPos firePos = pos.offset(direction, newDistance);
+         
+         if(powered) {
+      	   if(world.isAirBlock(firePos)) {
+      		   world.setBlockState(firePos, Blocks.FIRE.getDefaultState());
+      	   }
+         }
+         else if(!powered) {
+         	removePossibleFire(world, firePos);
+         }
+      }
+     
+     public void removePossibleFire(World world, BlockPos pos) {
+     	if(world.getBlockState(pos).getBlock() == Blocks.FIRE) {
+     		world.setBlockState(pos, Blocks.AIR.getDefaultState());
+     		world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
+     	}
+     }
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
@@ -145,8 +180,12 @@ public class BlockIgniter extends BlockContainer {
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		
-		if(tileentity instanceof TileEntityIgniter) 
+		if(tileentity instanceof TileEntityIgniter) {
+			int upgrades = ((TileEntityIgniter) tileentity).getRangeUpgrades() + 1;
+			updateIgniterState(worldIn, pos, false, state.getValue(FACING), upgrades, upgrades);
+			
 			InventoryHelper.dropInventoryItems(worldIn, pos, ((TileEntityIgniter)tileentity).inventory);
+		}
 
 		super.breakBlock(worldIn, pos, state);
 	}
