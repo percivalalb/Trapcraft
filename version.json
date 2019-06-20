@@ -3,8 +3,8 @@
 	    "promos": {
 		"1.9.4-latest": "v3.0.0a",
         "1.9.4-recommended": "v3.0.0a",
-		"1.12.2-latest": "v2.4.3a",
-        "1.12.2-recommended": "v2.4.3a",
+		"1.12.2-latest": "2.4.4",
+        "1.12.2-recommended": "2.4.4",
 		"1.13.2-latest": "2.5.0",
         "1.13.2-recommended": "2.5.0",
 		"1.14.2-latest": "2.6.0",

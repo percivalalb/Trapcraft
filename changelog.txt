@@ -30,8 +30,15 @@ MC 1.13.2
 Initial release, parent version v2.4.3a
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-MC 1.12
+MC 1.12.2
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2.4.4 | 20th June April 2019
++ Readded dummy and improved back end
+# Player who are flying (i.e creative mode) are no longer affected by fans
+# Renamed Bear Trap to Trap
+* Fixed magnetic chest sometimes not pulling items in
+Initial release, parent version 2.5.0
 
 v2.4.3a | 3rd July 2017
 # All recipes are in json files
