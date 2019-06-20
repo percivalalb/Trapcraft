@@ -1,6 +1,5 @@
 package trapcraft.network;
 
-import trapcraft.lib.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
@@ -10,7 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-import trapcraft.api.Properties;
+import trapcraft.lib.Reference;
 import trapcraft.network.packet.MagneticChestTileMessage;
 
 /**

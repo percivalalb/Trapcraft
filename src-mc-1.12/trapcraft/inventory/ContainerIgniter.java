@@ -5,7 +5,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import trapcraft.ModItems;
-import trapcraft.TrapcraftMod;
 import trapcraft.tileentity.TileEntityIgniter;
 
 public class ContainerIgniter extends Container {

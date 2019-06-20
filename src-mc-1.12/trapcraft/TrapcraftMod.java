@@ -1,12 +1,5 @@
 package trapcraft;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -19,26 +12,11 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import trapcraft.api.OreDictionaryHelper;
-import trapcraft.api.Properties;
-import trapcraft.block.BlockBearTrap;
-import trapcraft.block.BlockFan;
-import trapcraft.block.BlockGrassCovering;
-import trapcraft.block.BlockIgniter;
-import trapcraft.block.BlockMagneticChest;
-import trapcraft.block.BlockSpikes;
 import trapcraft.entity.EntityDummy;
 import trapcraft.handler.ActionHandler;
-import trapcraft.item.ItemIgniterRange;
 import trapcraft.lib.Reference;
 import trapcraft.network.PacketDispatcher;
 import trapcraft.proxy.CommonProxy;
-import trapcraft.tileentity.TileEntityBearTrap;
-import trapcraft.tileentity.TileEntityFan;
-import trapcraft.tileentity.TileEntityIgniter;
-import trapcraft.tileentity.TileEntityMagneticChest;
 
 /**
  * @author ProPercivalalb

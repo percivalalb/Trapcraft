@@ -1,9 +1,10 @@
 package trapcraft.network;
 
-import io.netty.buffer.ByteBuf;
-
 import java.io.IOException;
 
+import com.google.common.base.Throwables;
+
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
@@ -13,8 +14,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import trapcraft.TrapcraftMod;
-
-import com.google.common.base.Throwables;
 
 /**
  * 

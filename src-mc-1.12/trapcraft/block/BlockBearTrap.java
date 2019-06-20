@@ -1,7 +1,5 @@
 package trapcraft.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -13,22 +11,17 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import trapcraft.api.Properties;
 import trapcraft.tileentity.TileEntityBearTrap;
 
 public class BlockBearTrap extends BlockContainer {
@@ -90,21 +83,19 @@ public class BlockBearTrap extends BlockContainer {
 	
 	@Override
 	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+		if(state.getValue(TRIGGERED)) {
+			return;
+		}
+			
+		
         if ((entity instanceof EntityPlayer) || !(entity instanceof EntityLiving)) {
             return;
         }
 
-        EntityLiving entityliving = (EntityLiving)entity;
+        EntityLiving livingEntity = (EntityLiving)entity;
         world.setBlockState(pos, state.withProperty(TRIGGERED, true), 3);
-        TileEntityBearTrap tileentitybeartrap = (TileEntityBearTrap)world.getTileEntity(pos);
-        tileentitybeartrap.entityliving = entityliving;
-        tileentitybeartrap.moveSpeed = 0;
-        tileentitybeartrap.prevHealth = (float)entityliving.getHealth();
-        tileentitybeartrap.moveSpeed = entityliving.getAIMoveSpeed();
-        tileentitybeartrap.posX = entityliving.posX;
-        tileentitybeartrap.posY = entityliving.posY;
-        tileentitybeartrap.posZ = entityliving.posZ;
-        return;
+        TileEntityBearTrap bearTrap = (TileEntityBearTrap)world.getTileEntity(pos);
+        bearTrap.setTrappedEntity(livingEntity);
     }
 
 	@Override

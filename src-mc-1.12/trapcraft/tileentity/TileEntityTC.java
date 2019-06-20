@@ -2,11 +2,8 @@ package trapcraft.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import trapcraft.api.Properties;
-import trapcraft.network.PacketDispatcher;
-import trapcraft.network.packet.MagneticChestTileMessage;
 
 /**
  * @author ProPercivalalb

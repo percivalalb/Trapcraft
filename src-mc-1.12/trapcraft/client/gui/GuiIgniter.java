@@ -3,7 +3,6 @@ package trapcraft.client.gui;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import trapcraft.api.Properties;
 import trapcraft.inventory.ContainerIgniter;
