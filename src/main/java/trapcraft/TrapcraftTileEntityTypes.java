@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import trapcraft.lib.Reference;
+import trapcraft.api.Constants;
 import trapcraft.tileentity.TileEntityBearTrap;
 import trapcraft.tileentity.TileEntityFan;
 import trapcraft.tileentity.TileEntityIgniter;
@@ -14,7 +14,7 @@ import trapcraft.tileentity.TileEntityMagneticChest;
 
 public class TrapcraftTileEntityTypes {
 
-    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, Reference.MOD_ID);
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, Constants.MOD_ID);
 
 	public static final RegistryObject<TileEntityType<?>> MAGNETIC_CHEST = TILE_ENTITIES.register("magnetic_chest", () -> new TileEntityType<>(TileEntityMagneticChest::new, Sets.newHashSet(TrapcraftBlocks.MAGNETIC_CHEST.get()), null));
 	public static final RegistryObject<TileEntityType<?>> FAN = TILE_ENTITIES.register("fan", () -> new TileEntityType<>(TileEntityFan::new, Sets.newHashSet(TrapcraftBlocks.FAN.get()), null));

@@ -26,22 +26,22 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import trapcraft.api.Constants;
 import trapcraft.client.gui.GuiIgniter;
 import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.data.TrapcraftRecipeProvider;
 import trapcraft.entity.EntityDummy;
 import trapcraft.handler.ActionHandler;
-import trapcraft.lib.Reference;
 import trapcraft.network.PacketHandler;
 import trapcraft.tileentity.TileEntityMagneticChest;
 
-@Mod(Reference.MOD_ID)
+@Mod(Constants.MOD_ID)
 public class TrapcraftMod {
 
-	public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_NAME);
+	public static final Logger LOGGER = LogManager.getLogger(Constants.MOD_NAME);
 	private static final String PROTOCOL_VERSION = Integer.toString(1);
-	public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Reference.MOD_ID, "channel"))
+	public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, "channel"))
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)
             .networkProtocolVersion(() -> PROTOCOL_VERSION)

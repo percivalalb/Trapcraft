@@ -9,6 +9,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import trapcraft.api.Constants;
 import trapcraft.block.BlockBearTrap;
 import trapcraft.block.BlockFan;
 import trapcraft.block.BlockGrassCovering;
@@ -16,11 +17,10 @@ import trapcraft.block.BlockIgniter;
 import trapcraft.block.BlockMagneticChest;
 import trapcraft.block.BlockSpikes;
 import trapcraft.client.renders.TileEntityItemStackMagneticChestRenderer;
-import trapcraft.lib.Reference;
 
 public class TrapcraftBlocks {
 
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Reference.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = TrapcraftItems.ITEMS;
 
 	public static final RegistryObject<Block> FAN = BLOCKS.register("fan", () -> new BlockFan());
