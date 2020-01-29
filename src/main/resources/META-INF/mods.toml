@@ -1,0 +1,23 @@
+modLoader="javafml"
+loaderVersion="[26,)"
+issueTrackerURL="https://github.com/percivalalb/Trapcraft/issues"
+displayURL="https://minecraft.curseforge.com/projects/trapcraft/"
+logoFile="tc_logo.png"
+
+[[mods]] #mandatory
+	modId="trapcraft"
+	version="${file.jarVersion}"
+	updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/master/version.json"
+	displayName="Trapcraft"
+	credits="Authored By ProPercivalalb"
+	authors="ProPercivalalb, Stewiecraft"
+	description='''
+    Addeds new blocks to create traps with, (Fan, Bear Trap, Igniter, Magnetic Chest and Grass Coverings), also a dummy. Plus upgrade your traps with special upgrades!
+    '''
+	
+[[dependencies.doggytalents]] #optional
+    modId="forge"
+    mandatory=true
+    versionRange="[26.0.15,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
