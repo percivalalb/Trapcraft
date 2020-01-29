@@ -3,7 +3,6 @@ package trapcraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -12,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,14 +35,11 @@ import trapcraft.lib.Reference;
 import trapcraft.network.PacketHandler;
 import trapcraft.tileentity.TileEntityMagneticChest;
 
-/**
- * @author ProPercivalalb
- **/
-@Mod(value = Reference.MOD_ID)
+@Mod(Reference.MOD_ID)
 public class TrapcraftMod {
 
 	public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_NAME);
-	private static final String PROTOCOL_VERSION = Integer.toString(2);
+	private static final String PROTOCOL_VERSION = Integer.toString(1);
 	public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Reference.MOD_ID, "channel"))
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)
@@ -58,17 +55,16 @@ public class TrapcraftMod {
 
 	    modEventBus.addListener(this::gatherData);
 	    modEventBus.addListener(this::commonSetup);
-	    modEventBus.addListener(this::clientSetup);
 	    modEventBus.addListener(this::interModProcess);
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-
+		    modEventBus.addListener(this::clientSetup);
+	        modEventBus.addListener(this::registerBlockColors);
+	        modEventBus.addListener(this::registerItemColors);
 		});
 
 		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-        modEventBus.addListener(this::registerBlockColors);
-        modEventBus.addListener(this::registerItemColors);
 		forgeEventBus.register(new ActionHandler());
 
 	    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
@@ -80,6 +76,7 @@ public class TrapcraftMod {
 	    PacketHandler.register();
     }
 
+	@OnlyIn(Dist.CLIENT)
 	private void clientSetup(final FMLClientSetupEvent event) {
 	    RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
         ScreenManager.registerFactory(ModContainerTypes.IGNITER, GuiIgniter::new);
