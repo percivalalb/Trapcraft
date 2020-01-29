@@ -1,8 +1,0 @@
-{
-    "parent": "minecraft:block/cube_bottom_top",
-    "textures": {
-        "bottom": "trapcraft:block/igniter_bottom",
-        "side": "trapcraft:block/igniter_side",
-        "top": "trapcraft:block/igniter_top"
-    }
-}

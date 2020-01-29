@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "triggered=true": { "model": "trapcraft:bear_trap_closed" },
-        "triggered=false": { "model": "trapcraft:bear_trap_open" },
-        "inventory":  { "model": "trapcraft:bear_trap_open"}
-    }
-}
