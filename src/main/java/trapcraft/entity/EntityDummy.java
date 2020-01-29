@@ -18,25 +18,25 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity;
 import net.minecraftforge.fml.network.NetworkHooks;
-import trapcraft.ModEntities;
+import trapcraft.TrapcraftEntityTypes;
 
 /**
  * @author ProPercivalalb
  **/
 public class EntityDummy extends LivingEntity {
-	
+
 	private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(EntityDummy.class, DataSerializers.BYTE);
-   
+
 	public EntityDummy(SpawnEntity packet, World world) {
 		this(world);
 	}
-	
+
     public EntityDummy(World world) {
-        this(ModEntities.DUMMY, world);
+        this(TrapcraftEntityTypes.DUMMY.get(), world);
     }
-    
-    public EntityDummy(EntityType<?> type, World world) {
-        super(ModEntities.DUMMY, world);
+
+    public EntityDummy(EntityType<? extends LivingEntity> type, World world) {
+        super(type, world);
     }
 
     @Override
@@ -53,10 +53,10 @@ public class EntityDummy extends LivingEntity {
         super.registerData();
         this.dataManager.register(VARIANT, Byte.valueOf((byte)0));
     }
-    
+
     @Override
     protected void jump() {}
-    
+
     @Override
     public void livingTick() {
         this.randomYawVelocity = 0.0F;
@@ -75,15 +75,15 @@ public class EntityDummy extends LivingEntity {
         super.readAdditional(compound);
         this.setVariant(compound.getByte("variant"));
     }
-    
+
     public void setVariant(byte index) {
     	this.dataManager.set(VARIANT, index);
     }
-    
+
     public byte getVariant() {
     	return this.dataManager.get(VARIANT);
     }
-    
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public boolean getAlwaysRenderNameTagForRender() {
@@ -102,14 +102,14 @@ public class EntityDummy extends LivingEntity {
 
 	@Override
 	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
-		
+
 	}
 
 	@Override
 	public HandSide getPrimaryHand() {
 		return HandSide.RIGHT;
 	}
-	
+
 	@Override
 	public IPacket<?> createSpawnPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);

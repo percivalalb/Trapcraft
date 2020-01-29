@@ -1,4 +1,4 @@
-package trapcraft.tileentity;
+package trapcraft.block.tileentity;
 
 import java.util.List;
 

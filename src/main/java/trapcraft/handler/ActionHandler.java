@@ -23,14 +23,14 @@ import trapcraft.entity.EntityDummy;
  **/
 public class ActionHandler {
 
-	public static List<Block> PLANKS = Collections.<Block>unmodifiableList(Arrays.asList(Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS));
-	
+	public final static List<Block> PLANKS = Collections.<Block>unmodifiableList(Arrays.asList(Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS));
+
 	@SubscribeEvent
 	public void action(final EntityPlaceEvent event) {
 		World world = event.getBlockSnapshot().getWorld().getWorld();
 		BlockState state = event.getPlacedBlock();
 		BlockPos tPos = event.getBlockSnapshot().getPos();
-		
+
 		if(state.getBlock() == Blocks.PLAYER_HEAD) {
 			Block top = world.getBlockState(tPos.down()).getBlock();
 			Block bottom = world.getBlockState(tPos.down(2)).getBlock();
@@ -38,7 +38,7 @@ public class ActionHandler {
 				world.setBlockState(tPos, Blocks.AIR.getDefaultState());
 				world.setBlockState(tPos.down(), Blocks.AIR.getDefaultState());
 				world.setBlockState(tPos.down(2), Blocks.AIR.getDefaultState());
-		        		
+
 				if(!world.isRemote) {
 					float rotation = event.getEntity().rotationYaw + 180F;
 					this.spawnDummy(world, tPos, rotation, (byte)PLANKS.indexOf(top));
@@ -47,9 +47,9 @@ public class ActionHandler {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
-	public void onEntitySpawn(EntityJoinWorldEvent event) {
+	public void onEntitySpawn(final EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
 		if(entity instanceof MobEntity) {
 			MobEntity mob = (MobEntity)entity;
@@ -58,11 +58,11 @@ public class ActionHandler {
 	       }));
 		}
 	}
-	
-	public static void spawnDummy(World world, BlockPos tPos, float rotation, byte variant) {
+
+	public void spawnDummy(World world, BlockPos tPos, float rotation, byte variant) {
 		EntityDummy entitydummy = new EntityDummy(world);
 		entitydummy.setVariant(variant);
-		entitydummy.setLocationAndAngles((double)tPos.getX() + 0.5D, (double)tPos.getY() - 1.95D, (double)tPos.getZ() + 0.5D, MathHelper.wrapDegrees(rotation), 0.0F);
+		entitydummy.setLocationAndAngles(tPos.getX() + 0.5D, tPos.getY() - 1.95D, tPos.getZ() + 0.5D, MathHelper.wrapDegrees(rotation), 0.0F);
 		world.addEntity(entitydummy);
 	}
 }

@@ -7,8 +7,8 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import trapcraft.ModContainerTypes;
-import trapcraft.ModItems;
+import trapcraft.TrapcraftContainerTypes;
+import trapcraft.TrapcraftItems;
 
 public class ContainerIgniter extends Container {
 
@@ -20,7 +20,7 @@ public class ContainerIgniter extends Container {
 
 
 	public ContainerIgniter(int windowId, PlayerInventory playerInventory, IInventory igniter) {
-		super(ModContainerTypes.IGNITER, windowId);
+		super(TrapcraftContainerTypes.IGNITER.get(), windowId);
 		this.igniter = igniter;
 		Container.assertInventorySize(igniter, 6);
 
@@ -29,13 +29,13 @@ public class ContainerIgniter extends Container {
             this.addSlot(new Slot(igniter, i, 196, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack.getItem() == ModItems.IGNITER_RANGE;
+            	    return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
             	}
             });
             this.addSlot(new Slot(igniter, i + 3, 214, 26 + i * 18) {
             	@Override
             	public boolean isItemValid(ItemStack stack) {
-            	    return stack.getItem() == ModItems.IGNITER_RANGE;
+            	    return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
             	}
             });
         }

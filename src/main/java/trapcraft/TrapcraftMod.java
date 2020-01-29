@@ -29,6 +29,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import trapcraft.client.gui.GuiIgniter;
 import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
+import trapcraft.data.TrapcraftRecipeProvider;
 import trapcraft.entity.EntityDummy;
 import trapcraft.handler.ActionHandler;
 import trapcraft.lib.Reference;
@@ -53,6 +54,12 @@ public class TrapcraftMod {
 
 	    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+	    TrapcraftBlocks.BLOCKS.register(modEventBus);
+	    TrapcraftTileEntityTypes.TILE_ENTITIES.register(modEventBus);
+	    TrapcraftItems.ITEMS.register(modEventBus);
+	    TrapcraftEntityTypes.ENTITIES.register(modEventBus);
+	    TrapcraftContainerTypes.CONTAINERS.register(modEventBus);
+
 	    modEventBus.addListener(this::gatherData);
 	    modEventBus.addListener(this::commonSetup);
 	    modEventBus.addListener(this::interModProcess);
@@ -66,10 +73,6 @@ public class TrapcraftMod {
 		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
 		forgeEventBus.register(new ActionHandler());
-
-	    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-
-	    });
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
@@ -79,7 +82,7 @@ public class TrapcraftMod {
 	@OnlyIn(Dist.CLIENT)
 	private void clientSetup(final FMLClientSetupEvent event) {
 	    RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
-        ScreenManager.registerFactory(ModContainerTypes.IGNITER, GuiIgniter::new);
+        ScreenManager.registerFactory(TrapcraftContainerTypes.IGNITER.get(), GuiIgniter::new);
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagneticChest.class, new TileEntityMagneticChestRenderer());
     }
 
@@ -87,12 +90,12 @@ public class TrapcraftMod {
 	    BlockColors blockColors = event.getBlockColors();
 	    blockColors.register((state, blockAccess, pos, tintIndex) -> {
             return blockAccess != null && pos != null ? BiomeColors.getGrassColor(blockAccess, pos) : -1;
-        }, ModBlocks.GRASS_COVERING);
+        }, TrapcraftBlocks.GRASS_COVERING.get());
 	}
 
 	private void registerItemColors(final ColorHandlerEvent.Item event) {
 	    ItemColors itemColors = event.getItemColors();
-        itemColors.register((stack, tintIndex) -> GrassColors.get(0.5D, 1.0D), ModBlocks.GRASS_COVERING);
+        itemColors.register((stack, tintIndex) -> GrassColors.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
     }
 
     private void interModProcess(final InterModProcessEvent event) {
@@ -107,7 +110,7 @@ public class TrapcraftMod {
         }
 
         if (event.includeServer()) {
-
+            gen.addProvider(new TrapcraftRecipeProvider(event.getGenerator()));
         }
     }
 }

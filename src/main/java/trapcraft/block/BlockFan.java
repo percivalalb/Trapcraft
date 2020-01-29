@@ -26,20 +26,20 @@ import trapcraft.tileentity.TileEntityFan;
  * @author ProPercivalalb
  **/
 public class BlockFan extends ContainerBlock {
-	
+
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
-	
+
     public BlockFan() {
     	super(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F, 2.0F).sound(SoundType.STONE));
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST).with(POWERED, false));
     }
-    
+
     @Override
     public TileEntity createNewTileEntity(IBlockReader world) {
         return new TileEntityFan();
     }
-    
+
     @Override
    	public BlockState getStateForPlacement(BlockItemUseContext context) {
     	BlockPos blockpos = context.getPos();
@@ -47,7 +47,7 @@ public class BlockFan extends ContainerBlock {
     	boolean flag = world.isBlockPowered(blockpos) || world.isBlockPowered(blockpos.up());
    		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite()).with(POWERED, flag);
    	}
-    
+
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
@@ -55,19 +55,19 @@ public class BlockFan extends ContainerBlock {
 
     @Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate((Direction)state.get(FACING)));
+        return state.with(FACING, rot.rotate(state.get(FACING)));
     }
 
     @Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation((Direction)state.get(FACING)));
+        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
     }
 
     @Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING, POWERED);
 	}
-    
+
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
     	if (!worldIn.isRemote) {
@@ -76,26 +76,26 @@ public class BlockFan extends ContainerBlock {
     }
 
     @Override
-	public void neighborChanged(BlockState p_220069_1_, World worldIn, BlockPos pos, Block p_220069_4_, BlockPos p_220069_5_, boolean p_220069_6_) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
     	if (!worldIn.isRemote) {
-    		this.updateFanState(p_220069_1_, worldIn, pos);
+    		this.updateFanState(state, worldIn, pos);
     	}
 	}
 
 	@Override
-    public void onBlockAdded(BlockState p_220082_1_, World worldIn, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
-    	if (p_220082_4_.getBlock() != p_220082_1_.getBlock()) {
+    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    	if (oldState.getBlock() != state.getBlock()) {
     		if (!worldIn.isRemote && worldIn.getTileEntity(pos) == null) {
-    			this.updateFanState(p_220082_1_, worldIn, pos);
+    			this.updateFanState(state, worldIn, pos);
     		}
     	}
     }
-    
+
     private void updateFanState(BlockState state, World worldIn, BlockPos pos) {
     	boolean flag = worldIn.isBlockPowered(pos);
         if(flag != state.get(POWERED)) {
         	worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(flag)), 2);
         }
-		
+
 	}
 }
