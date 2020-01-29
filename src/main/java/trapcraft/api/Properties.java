@@ -7,7 +7,7 @@ import trapcraft.lib.Reference;
  * @author ProPercivalalb
  **/
 public class Properties {
-	
+
 	//Texture Path
 	public static final ResourceLocation RES_BLOCK_MAGNETIC_CHEST = new ResourceLocation(Reference.MOD_ID, "textures/entity/chest/magnetic_chest.png");
 	public static final ResourceLocation RES_GUI_IGNITER = new ResourceLocation(Reference.MOD_ID, "gui/igniter.png");
@@ -17,10 +17,4 @@ public class Properties {
 	public static final ResourceLocation RES_MOB_DUMMY_JUNGLE = new ResourceLocation(Reference.MOD_ID, "textures/entity/dummy/dummy_jungle.png");
 	public static final ResourceLocation RES_MOB_DUMMY_ACACIA = new ResourceLocation(Reference.MOD_ID, "textures/entity/dummy/dummy_acacia.png");
 	public static final ResourceLocation RES_MOB_DUMMY_DARK_OAK = new ResourceLocation(Reference.MOD_ID, "textures/entity/dummy/dummy_dark_oak.png");
-	
-    //NBT Data
-    public static final String NBT_OWNER_KEY = "teOwner";
-    public static final String NBT_CUSTOM_NAME = "CustomName";
-    public static final String NBT_ROTATION = "rotation";
-    public static final String NBT_STATE = "state";
 }
