@@ -48,7 +48,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
             mods {
-                lasermod {
+                trapcraft {
                     source sourceSets.main
 					source sourceSets.api
                 }
@@ -59,7 +59,7 @@ minecraft {
             workingDirectory project.file('run-server')
             property 'forge.logging.console.level', 'debug'
             mods {
-                doggytalents {
+                trapcraft {
                     source sourceSets.main
 					source sourceSets.api
                 }
@@ -69,9 +69,9 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'lasermod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'trapcraft', '--all', '--output', file('src/generated/resources/')
             mods {
-                lasermod {
+                trapcraft {
                     source sourceSets.main
 					source sourceSets.api
                 }

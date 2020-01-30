@@ -1,9 +1,13 @@
 package trapcraft.data;
 
+import java.nio.file.Path;
 import java.util.function.Consumer;
+
+import com.google.gson.JsonObject;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.data.ShapedRecipeBuilder;
@@ -17,6 +21,11 @@ public class TrapcraftRecipeProvider extends RecipeProvider {
 
     public TrapcraftRecipeProvider(DataGenerator generatorIn) {
         super(generatorIn);
+    }
+
+    @Override
+    protected void saveRecipeAdvancement(DirectoryCache cache, JsonObject advancementJson, Path pathIn) {
+
     }
 
     @Override

@@ -31,6 +31,9 @@ import trapcraft.client.gui.GuiIgniter;
 import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.config.ConfigHandler;
+import trapcraft.data.TrapcraftBlockstateProvider;
+import trapcraft.data.TrapcraftItemModelProvider;
+import trapcraft.data.TrapcraftLootTableProvider;
 import trapcraft.data.TrapcraftRecipeProvider;
 import trapcraft.entity.EntityDummy;
 import trapcraft.handler.ActionHandler;
@@ -109,11 +112,14 @@ public class TrapcraftMod {
         DataGenerator gen = event.getGenerator();
 
         if (event.includeClient()) {
-
+            TrapcraftBlockstateProvider blockstates = new TrapcraftBlockstateProvider(gen, event.getExistingFileHelper());
+            gen.addProvider(blockstates);
+            gen.addProvider(new TrapcraftItemModelProvider(gen, blockstates.getExistingHelper()));
         }
 
         if (event.includeServer()) {
-            gen.addProvider(new TrapcraftRecipeProvider(event.getGenerator()));
+            gen.addProvider(new TrapcraftRecipeProvider(gen));
+            gen.addProvider(new TrapcraftLootTableProvider(gen));
         }
     }
 }
