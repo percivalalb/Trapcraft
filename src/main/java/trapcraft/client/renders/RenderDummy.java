@@ -12,8 +12,6 @@ import trapcraft.entity.EntityDummy;
  */
 public class RenderDummy extends LivingRenderer<EntityDummy, BipedModel<EntityDummy>> {
 
-	private float scale = 1F;
-
     public RenderDummy(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new BipedModel<EntityDummy>(0.0F), 0.5F);
     }
@@ -21,11 +19,6 @@ public class RenderDummy extends LivingRenderer<EntityDummy, BipedModel<EntityDu
     @Override
     public void doRender(EntityDummy dummy, double x, double y, double z, float entityYaw, float partialTicks) {
         super.doRender(dummy, x, y, z, entityYaw, partialTicks);
-    }
-
-    @Override
-    protected void preRenderCallback(EntityDummy dummy, float partialTickTime) {
-    	//GlStateManager.scalef(this.scale, this.scale, this.scale);
     }
 
 	@Override
