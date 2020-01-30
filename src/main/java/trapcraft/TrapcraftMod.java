@@ -30,6 +30,7 @@ import trapcraft.api.Constants;
 import trapcraft.client.gui.GuiIgniter;
 import trapcraft.client.renders.RenderDummy;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
+import trapcraft.config.ConfigHandler;
 import trapcraft.data.TrapcraftRecipeProvider;
 import trapcraft.entity.EntityDummy;
 import trapcraft.handler.ActionHandler;
@@ -51,6 +52,8 @@ public class TrapcraftMod {
 
 	public TrapcraftMod() {
 		INSTANCE = this;
+		ConfigHandler.init();
+
 
 	    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

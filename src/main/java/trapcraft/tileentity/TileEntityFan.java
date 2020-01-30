@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import trapcraft.TrapcraftTileEntityTypes;
+import trapcraft.api.ConfigValues;
 import trapcraft.block.BlockFan;
 
 public class TileEntityFan extends TileEntity implements ITickableTileEntity
@@ -49,8 +50,8 @@ public class TileEntityFan extends TileEntity implements ITickableTileEntity
         		continue;
 
 
-        	double velocity = 0.05D; // Affects acceleration
-        	double threshholdVelocity = 0.3D; // Affects max speed
+        	double velocity = ConfigValues.FAN_ACCELERATION; // Affects acceleration
+        	double threshholdVelocity = ConfigValues.FAN_MAX_SPEED; // Affects max speed
         	velocity *= this.speed;
 
         	if(entity instanceof ItemEntity) {
@@ -107,7 +108,7 @@ public class TileEntityFan extends TileEntity implements ITickableTileEntity
     public AxisAlignedBB getDirection() {
     	Direction facing = this.world.getBlockState(this.pos).get(BlockFan.FACING);
 
-        BlockPos endPos = this.pos.offset(facing, MathHelper.floor(5 + this.extraRange));
+        BlockPos endPos = this.pos.offset(facing, MathHelper.floor(ConfigValues.FAN_RANGE + this.extraRange));
         if(facing == Direction.WEST)
         	endPos = endPos.add(0, 1, 1);
         else if(facing == Direction.NORTH)

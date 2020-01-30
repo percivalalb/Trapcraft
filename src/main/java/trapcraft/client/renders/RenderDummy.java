@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import trapcraft.api.Constants;
-import trapcraft.api.Properties;
 import trapcraft.entity.EntityDummy;
 
 /**

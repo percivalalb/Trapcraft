@@ -6,7 +6,6 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import trapcraft.api.Constants;
-import trapcraft.api.Properties;
 import trapcraft.inventory.ContainerIgniter;
 
 public class GuiIgniter extends ContainerScreen<ContainerIgniter> {
