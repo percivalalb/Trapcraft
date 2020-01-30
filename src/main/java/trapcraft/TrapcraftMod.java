@@ -92,6 +92,7 @@ public class TrapcraftMod {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagneticChest.class, new TileEntityMagneticChestRenderer());
     }
 
+	@OnlyIn(Dist.CLIENT)
 	private void registerBlockColors(final ColorHandlerEvent.Block event) {
 	    BlockColors blockColors = event.getBlockColors();
 	    blockColors.register((state, blockAccess, pos, tintIndex) -> {
@@ -99,6 +100,7 @@ public class TrapcraftMod {
         }, TrapcraftBlocks.GRASS_COVERING.get());
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	private void registerItemColors(final ColorHandlerEvent.Item event) {
 	    ItemColors itemColors = event.getItemColors();
         itemColors.register((stack, tintIndex) -> GrassColors.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
