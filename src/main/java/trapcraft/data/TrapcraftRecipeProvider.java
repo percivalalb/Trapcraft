@@ -14,8 +14,10 @@ import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftItems;
+import trapcraft.api.Constants;
 
 public class TrapcraftRecipeProvider extends RecipeProvider {
 
@@ -91,7 +93,7 @@ public class TrapcraftRecipeProvider extends RecipeProvider {
             .addIngredient(Items.BLUE_DYE, 1)
             .addIngredient(Blocks.BROWN_WOOL, 1)
             .addCriterion("has_brown_wool", this.hasItem(Blocks.BROWN_WOOL))
-            .build(consumer);
+            .build(consumer, new ResourceLocation(Constants.MOD_ID, "player_head"));
 
         ShapedRecipeBuilder.shapedRecipe(TrapcraftBlocks.SPIKES.get(), 1)
             .patternLine(" I ")
