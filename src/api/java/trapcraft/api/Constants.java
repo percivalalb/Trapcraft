@@ -12,7 +12,7 @@ public class Constants {
 	public static final String		 MOD_NAME         = "Trapcraft";
 
 	// ResourceLocations
-    public static final ResourceLocation RES_BLOCK_MAGNETIC_CHEST = new ResourceLocation(MOD_ID, "textures/entity/chest/magnetic_chest.png");
+    public static final ResourceLocation RES_BLOCK_MAGNETIC_CHEST = new ResourceLocation(MOD_ID, "entity/chest/magnetic_chest");
     public static final ResourceLocation RES_GUI_IGNITER          = new ResourceLocation(MOD_ID, "gui/igniter.png");
     public static final ResourceLocation RES_MOB_DUMMY_OAK        = new ResourceLocation(MOD_ID, "textures/entity/dummy/dummy_oak.png");
     public static final ResourceLocation RES_MOB_DUMMY_BIRCH      = new ResourceLocation(MOD_ID, "textures/entity/dummy/dummy_birch.png");

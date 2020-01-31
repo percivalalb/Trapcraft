@@ -12,7 +12,7 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
     }
 
     public ExistingFileHelper getExistingHelper() {
-        return existingFileHelper;
+        return this.models().existingFileHelper;
     }
 
     @Override

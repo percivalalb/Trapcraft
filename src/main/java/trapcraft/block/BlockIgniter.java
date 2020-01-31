@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Mirror;
@@ -45,9 +46,9 @@ public class BlockIgniter extends ContainerBlock {
     }
 
     @Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if(worldIn.isRemote) {
-            return true;
+            return ActionResultType.SUCCESS;
         } else {
             TileEntityIgniter tileentityigniter = (TileEntityIgniter)worldIn.getTileEntity(pos);
 
@@ -59,7 +60,7 @@ public class BlockIgniter extends ContainerBlock {
                 }
             }
 
-            return true;
+            return ActionResultType.SUCCESS;
         }
     }
 

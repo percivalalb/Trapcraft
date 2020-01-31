@@ -28,7 +28,7 @@ import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTable.Builder;
 import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraft.world.storage.loot.ValidationResults;
+import net.minecraft.world.storage.loot.ValidationTracker;
 import net.minecraft.world.storage.loot.conditions.RandomChanceWithLooting;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftEntityTypes;
@@ -48,7 +48,7 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationResults validationresults) {}
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker validationTracker) {}
 
     private static class Blocks extends BlockLootTables {
 

@@ -1,5 +1,8 @@
 package trapcraft.client.renders;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.Item;
@@ -9,14 +12,18 @@ import trapcraft.tileentity.TileEntityMagneticChest;
 
 public class TileEntityItemStackMagneticChestRenderer extends ItemStackTileEntityRenderer {
 
-	private final TileEntityMagneticChest chestBasic = new TileEntityMagneticChest();
+	private static TileEntityMagneticChest chestBasic;
 
 	@Override
-	public void renderByItem(ItemStack itemStackIn) {
+	public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		Item item = itemStackIn.getItem();
 
 		if (item == TrapcraftBlocks.MAGNETIC_CHEST_ITEM.get()) {
-			 TileEntityRendererDispatcher.instance.renderAsItem(this.chestBasic);
+		    TileEntityRendererDispatcher.instance.renderNullable(chestBasic, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 		}
+	}
+
+	public static void setDummyTE() {
+	    TileEntityItemStackMagneticChestRenderer.chestBasic = new TileEntityMagneticChest();
 	}
 }

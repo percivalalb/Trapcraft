@@ -54,7 +54,7 @@ public class ActionHandler {
 		if(entity instanceof MobEntity) {
 			MobEntity mob = (MobEntity)entity;
 			mob.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, EntityDummy.class, 10, true, false, (dummy) -> {
-	          return Math.abs(dummy.posY - mob.posY) <= 6.0D;
+	          return Math.abs(dummy.getPosY() - mob.getPosY()) <= 6.0D;
 	       }));
 		}
 	}

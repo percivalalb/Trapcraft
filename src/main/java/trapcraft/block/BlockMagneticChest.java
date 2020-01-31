@@ -19,18 +19,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.tileentity.TileEntityMagneticChest;
 
 /**
  * @author ProPercivalalb
  **/
 public class BlockMagneticChest extends ChestBlock {
-	
+
     public BlockMagneticChest() {
-    	super(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F, 2.0F).sound(SoundType.WOOD));
+    	super(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F, 2.0F).sound(SoundType.WOOD), () -> TrapcraftTileEntityTypes.MAGNETIC_CHEST.get());
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
     }
-    
+
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         Direction direction = context.getPlacementHorizontalFacing().getOpposite();
@@ -38,17 +39,17 @@ public class BlockMagneticChest extends ChestBlock {
 
         return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
      }
-    
+
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
     	return new TileEntityMagneticChest();
 	}
-    
+
     @Override
     protected Stat<ResourceLocation> getOpenStat() {
     	return Stats.CUSTOM.get(Stats.TRIGGER_TRAPPED_CHEST); //TODO
 	}
-    
+
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
     	if(!worldIn.isRemote && entityIn.isAlive()) {

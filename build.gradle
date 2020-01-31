@@ -15,7 +15,7 @@ apply plugin: 'maven'
 
 version = project.output_version
 group = 'com.github.percivalalb' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'Trapcraft-1.14.4'
+archivesBaseName = 'Trapcraft-1.15.2'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -41,7 +41,7 @@ configurations {
 }
 
 minecraft {
-    mappings channel: 'stable', version: project.mcp_mappings
+    mappings channel: 'snapshot', version: project.mcp_mappings
 	
     runs {
         client {

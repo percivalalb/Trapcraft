@@ -1,8 +1,13 @@
 package trapcraft;
 
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -23,25 +28,38 @@ public class TrapcraftBlocks {
     public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = TrapcraftItems.ITEMS;
 
-	public static final RegistryObject<Block> FAN = BLOCKS.register("fan", () -> new BlockFan());
-    public static final RegistryObject<Block> MAGNETIC_CHEST = BLOCKS.register("magnetic_chest", () -> new BlockMagneticChest());
-    public static final RegistryObject<Block> GRASS_COVERING = BLOCKS.register("grass_covering", () -> new BlockGrassCovering());
-    public static final RegistryObject<Block> BEAR_TRAP = BLOCKS.register("bear_trap", () -> new BlockBearTrap());
-    public static final RegistryObject<Block> SPIKES = BLOCKS.register("spikes", () -> new BlockSpikes());
-    public static final RegistryObject<Block> IGNITER = BLOCKS.register("igniter", () -> new BlockIgniter());
+	public static final RegistryObject<Block> FAN = makeBlockWithItem("fan", () -> new BlockFan());
+    private static final Pair<RegistryObject<Block>, RegistryObject<Item>> MAGNETIC_CHEST_PAIR = makeBlockWithItemCustom("magnetic_chest", () -> new BlockMagneticChest(), (blockObj) -> makeMagneticChestItem(blockObj));
+    public static final RegistryObject<Block> MAGNETIC_CHEST = MAGNETIC_CHEST_PAIR.getLeft();
+    public static final RegistryObject<Item> MAGNETIC_CHEST_ITEM = MAGNETIC_CHEST_PAIR.getRight();
+    public static final RegistryObject<Block> GRASS_COVERING = makeBlockWithItem("grass_covering", () -> new BlockGrassCovering());
+    public static final RegistryObject<Block> BEAR_TRAP = makeBlockWithItem("bear_trap", () -> new BlockBearTrap());
+    public static final RegistryObject<Block> SPIKES = makeBlockWithItem("spikes", () -> new BlockSpikes());
+    public static final RegistryObject<Block> IGNITER = makeBlockWithItem("igniter", () -> new BlockIgniter());
 
-    private static final RegistryObject<Item> FAN_ITEM = ITEMS.register("fan", () -> makeBlockItem(FAN));
-    public static final RegistryObject<Item> MAGNETIC_CHEST_ITEM = ITEMS.register("magnetic_chest", () -> new BlockItem(MAGNETIC_CHEST.get(), new Item.Properties().group(ItemGroup.REDSTONE).setTEISR(() -> TileEntityItemStackMagneticChestRenderer::new)));
-    private static final RegistryObject<Item> GRASS_COVERING_ITEM = ITEMS.register("grass_covering", () -> makeBlockItem(GRASS_COVERING));
-    private static final RegistryObject<Item> BEAR_TRAP_ITEM = ITEMS.register("bear_trap", () -> makeBlockItem(BEAR_TRAP));
-    private static final RegistryObject<Item> SPIKES_ITEM = ITEMS.register("spikes", () -> makeBlockItem(SPIKES));
-    private static final RegistryObject<Item> IGNITER_ITEM = ITEMS.register("igniter", () -> makeBlockItem(IGNITER));
+    private static RegistryObject<Block> makeBlockWithItem(final String name, final Supplier<Block> blockSupplier) {
+        return makeBlockWithItemCustom(name, blockSupplier, (blockObj) -> makeBlockItem(blockObj)).getLeft();
+    }
 
-    private static BlockItem makeBlockItem(Supplier<Block> fan) {
-        return makeBlockItem(fan, ItemGroup.REDSTONE);
+    private static Pair<RegistryObject<Block>, RegistryObject<Item>> makeBlockWithItemCustom(final String name, final Supplier<Block> blockSupplier, final Function<RegistryObject<Block>, Item> itemFunction) {
+        RegistryObject<Block> blockObj = BLOCKS.register(name, blockSupplier);
+        RegistryObject<Item> itemObj   = ITEMS.register(name, () -> itemFunction.apply(blockObj));
+        return Pair.of(blockObj, itemObj);
+    }
+
+    private static BlockItem makeMagneticChestItem(Supplier<Block> blockSupplier) {
+        return makeBlockItemWithISTER(blockSupplier, ItemGroup.REDSTONE, TileEntityItemStackMagneticChestRenderer::new);
+    }
+
+    private static BlockItem makeBlockItem(Supplier<Block> blockSupplier) {
+        return makeBlockItem(blockSupplier, ItemGroup.REDSTONE);
     }
 
     private static BlockItem makeBlockItem(Supplier<Block> block, ItemGroup group) {
         return new BlockItem(block.get(), new Item.Properties().group(group));
+    }
+
+    private static BlockItem makeBlockItemWithISTER(Supplier<Block> block, ItemGroup group, Callable<ItemStackTileEntityRenderer> ister) {
+        return new BlockItem(block.get(), new Item.Properties().group(group).setISTER(() -> ister));
     }
 }

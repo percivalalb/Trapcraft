@@ -59,7 +59,6 @@ public class EntityDummy extends LivingEntity {
 
     @Override
     public void livingTick() {
-        this.randomYawVelocity = 0.0F;
         this.setMotion(0.0D, this.getMotion().getY(), 0.0D);
         super.livingTick();
     }

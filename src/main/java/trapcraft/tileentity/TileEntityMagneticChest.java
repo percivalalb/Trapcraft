@@ -35,12 +35,12 @@ public class TileEntityMagneticChest extends ChestTileEntity implements IChestLi
        		double centreX = this.pos.getX() + 0.5D;
        		double centreY = this.pos.getY() + 0.5D;
     		double centreZ = this.pos.getZ() + 0.5D;
-    		double diffX = -itemEntity.posX + centreX;
-    		double diffY = -itemEntity.posY + centreY;
-    		double diffZ = -itemEntity.posZ + centreZ;
+    		double diffX = -itemEntity.getPosX() + centreX;
+    		double diffY = -itemEntity.getPosY() + centreY;
+    		double diffZ = -itemEntity.getPosZ() + centreZ;
     		double speedMultiper = 0.05D;
-    		double d11 = itemEntity.posX - centreX;
-    		double d12 = itemEntity.posZ - centreZ;
+    		double d11 = itemEntity.getPosX() - centreX;
+    		double d12 = itemEntity.getPosZ() - centreZ;
     		double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
     		double angle = Math.asin(diffX / horizDiffSq);
     		double d15 = Math.abs(MathHelper.sin((float)angle) * speedMultiper);

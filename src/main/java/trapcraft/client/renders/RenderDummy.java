@@ -16,13 +16,8 @@ public class RenderDummy extends LivingRenderer<EntityDummy, BipedModel<EntityDu
         super(renderManagerIn, new BipedModel<EntityDummy>(0.0F), 0.5F);
     }
 
-    @Override
-    public void doRender(EntityDummy dummy, double x, double y, double z, float entityYaw, float partialTicks) {
-        super.doRender(dummy, x, y, z, entityYaw, partialTicks);
-    }
-
 	@Override
-	protected ResourceLocation getEntityTexture(EntityDummy dummy) {
+    public ResourceLocation getEntityTexture(EntityDummy dummy) {
 		switch(dummy.getVariant()) {
 		case 0:
 			return Constants.RES_MOB_DUMMY_OAK;

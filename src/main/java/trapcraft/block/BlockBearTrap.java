@@ -18,7 +18,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -30,8 +30,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import trapcraft.tileentity.TileEntityBearTrap;
 
 public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
@@ -41,22 +39,22 @@ public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
 	public static final BooleanProperty TRIGGERED = BooleanProperty.create("triggered");
 
 	public BlockBearTrap() {
-		super(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL));
+		super(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL));
 		this.setDefaultState(this.stateContainer.getBaseState().with(TRIGGERED, Boolean.valueOf(false)).with(WATERLOGGED, Boolean.valueOf(false)));
 
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!worldIn.isRemote) {
 			TileEntityBearTrap bearTrap = (TileEntityBearTrap)worldIn.getTileEntity(pos);
 			if(state.get(TRIGGERED) && !bearTrap.hasTrappedEntity()) {
 				worldIn.setBlockState(pos, state.with(TRIGGERED, false), 3);
-		    	return true;
+		    	return ActionResultType.SUCCESS;
 			}
 		}
 
-    	return false;
+    	return ActionResultType.PASS;
     }
 
 	@Override
@@ -68,18 +66,6 @@ public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
 	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
 		return VoxelShapes.empty();
 	}
-
-	@Override
-	public boolean isSolid(BlockState state) {
-		return false;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.SOLID;
-	}
-
 
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
@@ -138,6 +124,12 @@ public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
     public boolean hasComparatorInputOverride(BlockState state) {
         return true;
     }
+
+    @Override
+    public Block.OffsetType getOffsetType() {
+        return Block.OffsetType.XZ;
+    }
+
 
     @Override
     public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
