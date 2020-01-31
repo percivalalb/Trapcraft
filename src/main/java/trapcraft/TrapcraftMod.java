@@ -29,9 +29,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import trapcraft.api.Constants;
-import trapcraft.client.gui.GuiIgniter;
-import trapcraft.client.renders.RenderDummy;
-import trapcraft.client.renders.TileEntityItemStackMagneticChestRenderer;
+import trapcraft.client.gui.IgniterScreen;
+import trapcraft.client.renders.DummyRenderer;
+import trapcraft.client.renders.ItemStackTileEntityMagneticChestRenderer;
 import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.config.ConfigHandler;
 import trapcraft.data.TrapcraftBlockstateProvider;
@@ -89,12 +89,12 @@ public class TrapcraftMod {
 
 	@OnlyIn(Dist.CLIENT)
 	private void clientSetup(final FMLClientSetupEvent event) {
-	    RenderingRegistry.registerEntityRenderingHandler(TrapcraftEntityTypes.DUMMY.get(), RenderDummy::new);
-        ScreenManager.registerFactory(TrapcraftContainerTypes.IGNITER.get(), GuiIgniter::new);
+	    RenderingRegistry.registerEntityRenderingHandler(TrapcraftEntityTypes.DUMMY.get(), DummyRenderer::new);
+        ScreenManager.registerFactory(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
         ClientRegistry.bindTileEntityRenderer(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), TileEntityMagneticChestRenderer::new);
 
         // Must be set here to avoid registry object missing error
-        TileEntityItemStackMagneticChestRenderer.setDummyTE();
+        ItemStackTileEntityMagneticChestRenderer.setDummyTE();
     }
 
 	@OnlyIn(Dist.CLIENT)

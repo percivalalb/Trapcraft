@@ -1,4 +1,4 @@
-package trapcraft.tileentity;
+package trapcraft.block.tileentity;
 
 import java.util.List;
 
@@ -21,24 +21,24 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.api.ConfigValues;
-import trapcraft.block.BlockFan;
+import trapcraft.block.FanBlock;
 
-public class TileEntityFan extends TileEntity implements ITickableTileEntity
+public class FanTileEntity extends TileEntity implements ITickableTileEntity
 {
     public float speed = 1.0F;
     public double extraRange = 0.0D;
 
-    public TileEntityFan() {
+    public FanTileEntity() {
   		super(TrapcraftTileEntityTypes.FAN.get());
   	}
 
     @Override
     public void tick() {
 
-        if(!this.world.getBlockState(this.pos).get(BlockFan.POWERED))
+        if(!this.world.getBlockState(this.pos).get(FanBlock.POWERED))
             return;
 
-        Direction facing = this.world.getBlockState(this.pos).get(BlockFan.FACING);
+        Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
 
         if(this.world.rand.nextInt(2) == 0)
         	spawnParticles(this.world, this.pos);
@@ -106,7 +106,7 @@ public class TileEntityFan extends TileEntity implements ITickableTileEntity
     }
 
     public AxisAlignedBB getDirection() {
-    	Direction facing = this.world.getBlockState(this.pos).get(BlockFan.FACING);
+    	Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
 
         BlockPos endPos = this.pos.offset(facing, MathHelper.floor(ConfigValues.FAN_RANGE + this.extraRange));
         if(facing == Direction.WEST)
@@ -132,7 +132,7 @@ public class TileEntityFan extends TileEntity implements ITickableTileEntity
         double y = pos.getY() + world.rand.nextFloat();
         double z = pos.getZ() + world.rand.nextFloat();
 
-        Direction facing = world.getBlockState(pos).get(BlockFan.FACING);
+        Direction facing = world.getBlockState(pos).get(FanBlock.FACING);
         double velocity = 0.2F + world.rand.nextFloat() * 0.4F;
 
         double velX = facing.getXOffset() * velocity;

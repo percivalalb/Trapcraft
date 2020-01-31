@@ -6,11 +6,11 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import trapcraft.api.Constants;
-import trapcraft.inventory.ContainerIgniter;
+import trapcraft.inventory.IgniterContainer;
 
-public class GuiIgniter extends ContainerScreen<ContainerIgniter> {
+public class IgniterScreen extends ContainerScreen<IgniterContainer> {
 
-	public GuiIgniter(ContainerIgniter container, PlayerInventory playerInventory, ITextComponent title) {
+	public IgniterScreen(IgniterContainer container, PlayerInventory playerInventory, ITextComponent title) {
 		super(container, playerInventory, title);
 		this.xSize = 238;
 		this.ySize = 89;

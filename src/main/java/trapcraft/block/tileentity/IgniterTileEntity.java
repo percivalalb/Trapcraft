@@ -1,4 +1,4 @@
-package trapcraft.tileentity;
+package trapcraft.block.tileentity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,22 +16,22 @@ import net.minecraft.util.text.TranslationTextComponent;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftItems;
 import trapcraft.TrapcraftTileEntityTypes;
-import trapcraft.block.BlockIgniter;
-import trapcraft.inventory.ContainerIgniter;
-import trapcraft.inventory.InventoryIgniter;
+import trapcraft.block.IgniterBlock;
+import trapcraft.inventory.IgniterContainer;
+import trapcraft.inventory.IgniterInventory;
 
 /**
  * @author ProPercivalalb
  **/
-public class TileEntityIgniter extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventoryChangedListener {
+public class IgniterTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventoryChangedListener {
 
 
-	public InventoryIgniter inventory;
+	public IgniterInventory inventory;
 	public int lastUpgrades;
 
-	public TileEntityIgniter() {
+	public IgniterTileEntity() {
 		super(TrapcraftTileEntityTypes.IGNITER.get());
-		this.inventory = new InventoryIgniter(6);
+		this.inventory = new IgniterInventory(6);
 	}
 
     @Override
@@ -86,7 +86,7 @@ public class TileEntityIgniter extends TileEntity implements ITickableTileEntity
     @Override
     public void tick() {
     	if(!this.world.isRemote) {
-    		((BlockIgniter)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
+    		((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
     	}
     }
 
@@ -95,14 +95,14 @@ public class TileEntityIgniter extends TileEntity implements ITickableTileEntity
 		if(!this.world.isRemote) {
 			int newUpgrades = this.getRangeUpgrades();
 			if(newUpgrades != this.lastUpgrades) {
-				((BlockIgniter)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
+				((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
 			}
 		}
 	}
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new ContainerIgniter(windowId, playerInventory, this.inventory);
+		return new IgniterContainer(windowId, playerInventory, this.inventory);
 	}
 
 	@Override

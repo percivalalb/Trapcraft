@@ -23,19 +23,19 @@ import trapcraft.TrapcraftEntityTypes;
 /**
  * @author ProPercivalalb
  **/
-public class EntityDummy extends LivingEntity {
+public class DummyEntity extends LivingEntity {
 
-	private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(EntityDummy.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(DummyEntity.class, DataSerializers.BYTE);
 
-	public EntityDummy(SpawnEntity packet, World world) {
+	public DummyEntity(SpawnEntity packet, World world) {
 		this(world);
 	}
 
-    public EntityDummy(World world) {
+    public DummyEntity(World world) {
         this(TrapcraftEntityTypes.DUMMY.get(), world);
     }
 
-    public EntityDummy(EntityType<? extends LivingEntity> type, World world) {
+    public DummyEntity(EntityType<? extends LivingEntity> type, World world) {
         super(type, world);
     }
 

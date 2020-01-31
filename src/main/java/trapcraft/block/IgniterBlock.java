@@ -31,16 +31,16 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
-import trapcraft.tileentity.TileEntityIgniter;
+import trapcraft.block.tileentity.IgniterTileEntity;
 
 /**
  * @author ProPercivalalb
  **/
-public class BlockIgniter extends ContainerBlock {
+public class IgniterBlock extends ContainerBlock {
 
 	public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
-    public BlockIgniter() {
+    public IgniterBlock() {
     	super(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.5F, 2.0F).sound(SoundType.STONE));
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
     }
@@ -50,7 +50,7 @@ public class BlockIgniter extends ContainerBlock {
         if(worldIn.isRemote) {
             return ActionResultType.SUCCESS;
         } else {
-            TileEntityIgniter tileentityigniter = (TileEntityIgniter)worldIn.getTileEntity(pos);
+            IgniterTileEntity tileentityigniter = (IgniterTileEntity)worldIn.getTileEntity(pos);
 
             if (tileentityigniter != null) {
             	if(player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
@@ -122,16 +122,16 @@ public class BlockIgniter extends ContainerBlock {
 
        int distance = 1, oldDistance = 1;
        TileEntity tileEntity = world.getTileEntity(pos);
-       if(tileEntity instanceof TileEntityIgniter) {
-    	   TileEntityIgniter igniter = (TileEntityIgniter)world.getTileEntity(pos);
+       if(tileEntity instanceof IgniterTileEntity) {
+    	   IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
     	   distance = igniter.getRangeUpgrades() + 1;
     	   oldDistance = igniter.lastUpgrades + 1;
        }
 
        updateIgniterState(world, pos, world.isBlockPowered(pos), facing, distance, oldDistance);
 
-       if(tileEntity instanceof TileEntityIgniter) {
-    	   TileEntityIgniter igniter = (TileEntityIgniter)world.getTileEntity(pos);
+       if(tileEntity instanceof IgniterTileEntity) {
+    	   IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
     	   igniter.lastUpgrades = distance - 1;
        }
     }
@@ -164,18 +164,18 @@ public class BlockIgniter extends ContainerBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader world) {
-		return new TileEntityIgniter();
+		return new IgniterTileEntity();
 	}
 
 	@Override
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if(state.getBlock() != newState.getBlock()) {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if(tileentity instanceof TileEntityIgniter) {
-				int upgrades = ((TileEntityIgniter) tileentity).getRangeUpgrades() + 1;
+			if(tileentity instanceof IgniterTileEntity) {
+				int upgrades = ((IgniterTileEntity) tileentity).getRangeUpgrades() + 1;
 				updateIgniterState(worldIn, pos, false, state.get(FACING), upgrades, upgrades);
 
-				InventoryHelper.dropInventoryItems(worldIn, pos, ((TileEntityIgniter)tileentity).inventory);
+				InventoryHelper.dropInventoryItems(worldIn, pos, ((IgniterTileEntity)tileentity).inventory);
 
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}

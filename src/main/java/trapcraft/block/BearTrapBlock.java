@@ -30,15 +30,15 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import trapcraft.tileentity.TileEntityBearTrap;
+import trapcraft.block.tileentity.BearTrapTileEntity;
 
-public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
+public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
 
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
 	public static final BooleanProperty TRIGGERED = BooleanProperty.create("triggered");
 
-	public BlockBearTrap() {
+	public BearTrapBlock() {
 		super(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL));
 		this.setDefaultState(this.stateContainer.getBaseState().with(TRIGGERED, Boolean.valueOf(false)).with(WATERLOGGED, Boolean.valueOf(false)));
 
@@ -47,7 +47,7 @@ public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!worldIn.isRemote) {
-			TileEntityBearTrap bearTrap = (TileEntityBearTrap)worldIn.getTileEntity(pos);
+			BearTrapTileEntity bearTrap = (BearTrapTileEntity)worldIn.getTileEntity(pos);
 			if(state.get(TRIGGERED) && !bearTrap.hasTrappedEntity()) {
 				worldIn.setBlockState(pos, state.with(TRIGGERED, false), 3);
 		    	return ActionResultType.SUCCESS;
@@ -74,7 +74,7 @@ public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
 
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader world) {
-		return new TileEntityBearTrap();
+		return new BearTrapTileEntity();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class BlockBearTrap extends ContainerBlock implements IWaterLoggable {
 
         MobEntity livingEntity = (MobEntity)entity;
         world.setBlockState(pos, state.with(TRIGGERED, true), 3);
-        TileEntityBearTrap bearTrap = (TileEntityBearTrap)world.getTileEntity(pos);
+        BearTrapTileEntity bearTrap = (BearTrapTileEntity)world.getTileEntity(pos);
         bearTrap.setTrappedEntity(livingEntity);
     }
 

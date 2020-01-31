@@ -9,10 +9,10 @@ import net.minecraft.util.Util;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import trapcraft.api.Constants;
-import trapcraft.tileentity.TileEntityMagneticChest;
+import trapcraft.block.tileentity.MagneticChestTileEntity;
 
 @OnlyIn(Dist.CLIENT)
-public class TileEntityMagneticChestRenderer extends ChestTileEntityRenderer<TileEntityMagneticChest> {
+public class TileEntityMagneticChestRenderer extends ChestTileEntityRenderer<MagneticChestTileEntity> {
 
     public static final Material CHEST_TRAPPED_MATERIAL = Util.make(() -> {
         return new Material(Atlases.CHEST_ATLAS, Constants.RES_BLOCK_MAGNETIC_CHEST);
@@ -23,7 +23,7 @@ public class TileEntityMagneticChestRenderer extends ChestTileEntityRenderer<Til
     }
 
     @Override
-    protected Material getMaterial(TileEntityMagneticChest tileEntity, ChestType chestType) {
+    protected Material getMaterial(MagneticChestTileEntity tileEntity, ChestType chestType) {
         return CHEST_TRAPPED_MATERIAL;
     }
 }

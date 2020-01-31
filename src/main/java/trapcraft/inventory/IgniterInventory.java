@@ -8,9 +8,9 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class InventoryIgniter extends Inventory implements INamedContainerProvider {
+public class IgniterInventory extends Inventory implements INamedContainerProvider {
 	
-	public InventoryIgniter(int slotCount) {
+	public IgniterInventory(int slotCount) {
 		super(slotCount);
 	}
 	
@@ -21,7 +21,7 @@ public class InventoryIgniter extends Inventory implements INamedContainerProvid
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new ContainerIgniter(windowId, playerInventory, this);
+		return new IgniterContainer(windowId, playerInventory, this);
 	}
 
 	@Override

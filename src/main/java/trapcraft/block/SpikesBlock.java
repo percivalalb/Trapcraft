@@ -29,13 +29,13 @@ import net.minecraft.world.World;
 /**
  * @author ProPercivalalb
  **/
-public class BlockSpikes extends Block implements IWaterLoggable {
+public class SpikesBlock extends Block implements IWaterLoggable {
 
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 5D, 16.0D);
 	private DamageSource damageSource = new DamageSource("trapcraft.spikes").setDamageBypassesArmor();
 
-    public BlockSpikes() {
+    public SpikesBlock() {
     	super(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL).tickRandomly());
 		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, Boolean.valueOf(false)));
     }

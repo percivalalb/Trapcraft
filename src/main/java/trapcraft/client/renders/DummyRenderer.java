@@ -5,19 +5,19 @@ import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
 import trapcraft.api.Constants;
-import trapcraft.entity.EntityDummy;
+import trapcraft.entity.DummyEntity;
 
 /**
  * @author ProPercivalalb
  */
-public class RenderDummy extends LivingRenderer<EntityDummy, BipedModel<EntityDummy>> {
+public class DummyRenderer extends LivingRenderer<DummyEntity, BipedModel<DummyEntity>> {
 
-    public RenderDummy(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new BipedModel<EntityDummy>(0.0F), 0.5F);
+    public DummyRenderer(EntityRendererManager renderManagerIn) {
+        super(renderManagerIn, new BipedModel<DummyEntity>(0.0F), 0.5F);
     }
 
 	@Override
-    public ResourceLocation getEntityTexture(EntityDummy dummy) {
+    public ResourceLocation getEntityTexture(DummyEntity dummy) {
 		switch(dummy.getVariant()) {
 		case 0:
 			return Constants.RES_MOB_DUMMY_OAK;
@@ -37,7 +37,7 @@ public class RenderDummy extends LivingRenderer<EntityDummy, BipedModel<EntityDu
 	}
 
 	@Override
-	protected boolean canRenderName(EntityDummy entity) {
+	protected boolean canRenderName(DummyEntity entity) {
 		return false;
 	}
 }

@@ -20,11 +20,11 @@ import net.minecraft.world.World;
 /**
  * @author ProPercivalalb
  **/
-public class BlockGrassCovering extends Block {
+public class GrassCoveringBlock extends Block {
 
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 15.0D, 0.0D, 16.0D, 16D, 16.0D);
 
-	public BlockGrassCovering() {
+	public GrassCoveringBlock() {
 		super(Block.Properties.create(Material.ORGANIC).hardnessAndResistance(0.2F, 1F).sound(SoundType.GROUND).tickRandomly());
     }
 

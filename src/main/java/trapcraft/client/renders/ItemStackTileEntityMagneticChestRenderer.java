@@ -8,11 +8,11 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import trapcraft.TrapcraftBlocks;
-import trapcraft.tileentity.TileEntityMagneticChest;
+import trapcraft.block.tileentity.MagneticChestTileEntity;
 
-public class TileEntityItemStackMagneticChestRenderer extends ItemStackTileEntityRenderer {
+public class ItemStackTileEntityMagneticChestRenderer extends ItemStackTileEntityRenderer {
 
-	private static TileEntityMagneticChest chestBasic;
+	private static MagneticChestTileEntity chestBasic;
 
 	@Override
 	public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
@@ -24,6 +24,6 @@ public class TileEntityItemStackMagneticChestRenderer extends ItemStackTileEntit
 	}
 
 	public static void setDummyTE() {
-	    TileEntityItemStackMagneticChestRenderer.chestBasic = new TileEntityMagneticChest();
+	    ItemStackTileEntityMagneticChestRenderer.chestBasic = new MagneticChestTileEntity();
 	}
 }

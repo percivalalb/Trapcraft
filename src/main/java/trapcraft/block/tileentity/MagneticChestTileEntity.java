@@ -1,4 +1,4 @@
-package trapcraft.tileentity;
+package trapcraft.block.tileentity;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import trapcraft.TrapcraftTileEntityTypes;
 /**
  * @author ProPercivalalb
  **/
-public class TileEntityMagneticChest extends ChestTileEntity implements IChestLid, ITickableTileEntity {
+public class MagneticChestTileEntity extends ChestTileEntity implements IChestLid, ITickableTileEntity {
 
-    public TileEntityMagneticChest() {
+    public MagneticChestTileEntity() {
         super(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get());
     }
 

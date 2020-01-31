@@ -17,9 +17,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author ProPercivalalb
  **/
-public class ItemIgniterRange extends Item {
+public class IgniterRangeItem extends Item {
 
-	public ItemIgniterRange() {
+	public IgniterRangeItem() {
 		super(new Item.Properties().group(ItemGroup.REDSTONE).maxStackSize(8));
 	}
 

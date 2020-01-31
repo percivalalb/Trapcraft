@@ -10,16 +10,16 @@ import net.minecraft.item.ItemStack;
 import trapcraft.TrapcraftContainerTypes;
 import trapcraft.TrapcraftItems;
 
-public class ContainerIgniter extends Container {
+public class IgniterContainer extends Container {
 
 	private IInventory igniter;
 
-	public ContainerIgniter(int windowId, PlayerInventory playerInventory) {
+	public IgniterContainer(int windowId, PlayerInventory playerInventory) {
 		this(windowId, playerInventory, new Inventory(6));
 	}
 
 
-	public ContainerIgniter(int windowId, PlayerInventory playerInventory, IInventory igniter) {
+	public IgniterContainer(int windowId, PlayerInventory playerInventory, IInventory igniter) {
 		super(TrapcraftContainerTypes.IGNITER.get(), windowId);
 		this.igniter = igniter;
 		Container.assertInventorySize(igniter, 6);

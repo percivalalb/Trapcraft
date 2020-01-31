@@ -20,24 +20,24 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import trapcraft.tileentity.TileEntityFan;
+import trapcraft.block.tileentity.FanTileEntity;
 
 /**
  * @author ProPercivalalb
  **/
-public class BlockFan extends ContainerBlock {
+public class FanBlock extends ContainerBlock {
 
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
-    public BlockFan() {
+    public FanBlock() {
     	super(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F, 2.0F).sound(SoundType.STONE));
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST).with(POWERED, false));
     }
 
     @Override
     public TileEntity createNewTileEntity(IBlockReader world) {
-        return new TileEntityFan();
+        return new FanTileEntity();
     }
 
     @Override

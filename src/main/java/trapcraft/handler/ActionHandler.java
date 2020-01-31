@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import trapcraft.entity.EntityDummy;
+import trapcraft.entity.DummyEntity;
 
 /**
  * @author ProPercivalalb
@@ -53,14 +53,14 @@ public class ActionHandler {
 		Entity entity = event.getEntity();
 		if(entity instanceof MobEntity) {
 			MobEntity mob = (MobEntity)entity;
-			mob.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, EntityDummy.class, 10, true, false, (dummy) -> {
+			mob.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, DummyEntity.class, 10, true, false, (dummy) -> {
 	          return Math.abs(dummy.getPosY() - mob.getPosY()) <= 6.0D;
 	       }));
 		}
 	}
 
 	public void spawnDummy(World world, BlockPos tPos, float rotation, byte variant) {
-		EntityDummy entitydummy = new EntityDummy(world);
+		DummyEntity entitydummy = new DummyEntity(world);
 		entitydummy.setVariant(variant);
 		entitydummy.setLocationAndAngles(tPos.getX() + 0.5D, tPos.getY() - 1.95D, tPos.getZ() + 0.5D, MathHelper.wrapDegrees(rotation), 0.0F);
 		world.addEntity(entitydummy);

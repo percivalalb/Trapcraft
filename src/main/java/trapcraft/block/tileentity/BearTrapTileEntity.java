@@ -1,4 +1,4 @@
-package trapcraft.tileentity;
+package trapcraft.block.tileentity;
 
 import java.util.EnumSet;
 import java.util.UUID;
@@ -17,7 +17,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.server.ServerWorld;
 import trapcraft.TrapcraftTileEntityTypes;
 
-public class TileEntityBearTrap extends TileEntity implements ITickableTileEntity {
+public class BearTrapTileEntity extends TileEntity implements ITickableTileEntity {
 
 	private DamageSource damageSource = new DamageSource("trapcraft.bear_trap").setDamageBypassesArmor();
 	@Nullable
@@ -26,7 +26,7 @@ public class TileEntityBearTrap extends TileEntity implements ITickableTileEntit
 	private UUID id;
 	private int nextDamageTick;
 
-    public TileEntityBearTrap() {
+    public BearTrapTileEntity() {
 		super(TrapcraftTileEntityTypes.BEAR_TRAP.get());
 	}
 
@@ -56,8 +56,8 @@ public class TileEntityBearTrap extends TileEntity implements ITickableTileEntit
 
     class DoNothingGoal extends Goal {
     	private MobEntity trappedEntity;
-    	private TileEntityBearTrap trap;
-        public DoNothingGoal(MobEntity trappedEntity, TileEntityBearTrap trap) {
+    	private BearTrapTileEntity trap;
+        public DoNothingGoal(MobEntity trappedEntity, BearTrapTileEntity trap) {
         	this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
         	this.trappedEntity = trappedEntity;
         	this.trap = trap;
