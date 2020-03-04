@@ -7,7 +7,7 @@ logoFile="tc_logo.png"
 [[mods]] #mandatory
 	modId="trapcraft"
 	version="${file.jarVersion}"
-	updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/master/version.json"
+	updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/1.15.x/version.json"
 	displayName="Trapcraft"
 	credits="Authored By ProPercivalalb"
 	authors="ProPercivalalb, Stewiecraft"

@@ -1,13 +1,11 @@
 package trapcraft;
 
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -48,7 +46,7 @@ public class TrapcraftBlocks {
     }
 
     private static BlockItem makeMagneticChestItem(Supplier<Block> blockSupplier) {
-        return makeBlockItemWithISTER(blockSupplier, ItemGroup.REDSTONE, ItemStackTileEntityMagneticChestRenderer::new);
+        return new BlockItem(blockSupplier.get(), new Item.Properties().group(ItemGroup.REDSTONE).setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
     }
 
     private static BlockItem makeBlockItem(Supplier<Block> blockSupplier) {
@@ -57,9 +55,5 @@ public class TrapcraftBlocks {
 
     private static BlockItem makeBlockItem(Supplier<Block> block, ItemGroup group) {
         return new BlockItem(block.get(), new Item.Properties().group(group));
-    }
-
-    private static BlockItem makeBlockItemWithISTER(Supplier<Block> block, ItemGroup group, Callable<ItemStackTileEntityRenderer> ister) {
-        return new BlockItem(block.get(), new Item.Properties().group(group).setISTER(() -> ister));
     }
 }

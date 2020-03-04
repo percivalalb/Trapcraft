@@ -19,7 +19,7 @@ public class ItemStackTileEntityMagneticChestRenderer extends ItemStackTileEntit
 		Item item = itemStackIn.getItem();
 
 		if (item == TrapcraftBlocks.MAGNETIC_CHEST_ITEM.get()) {
-		    TileEntityRendererDispatcher.instance.renderNullable(chestBasic, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+		    TileEntityRendererDispatcher.instance.renderItem(chestBasic, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 		}
 	}
 

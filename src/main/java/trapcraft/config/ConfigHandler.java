@@ -3,6 +3,7 @@ package trapcraft.config;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -15,7 +16,7 @@ public class ConfigHandler {
     private static ForgeConfigSpec CONFIG_SERVER_SPEC;
     private static ForgeConfigSpec CONFIG_CLIENT_SPEC;
 
-    public static void init() {
+    public static void init(IEventBus eventBus) {
         Pair<ServerConfig, ForgeConfigSpec> commonPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
         CONFIG_SERVER_SPEC = commonPair.getRight();
         SERVER = commonPair.getLeft();
@@ -26,8 +27,8 @@ public class ConfigHandler {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, CONFIG_SERVER_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CONFIG_CLIENT_SPEC);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ConfigHandler::loadConfig);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ConfigHandler::reloadConfig);
+        eventBus.addListener(ConfigHandler::loadConfig);
+        eventBus.addListener(ConfigHandler::reloadConfig);
     }
 
     public static void loadConfig(final ModConfig.Loading event) {

@@ -8,6 +8,7 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -123,11 +124,6 @@ public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
     @Override
     public boolean hasComparatorInputOverride(BlockState state) {
         return true;
-    }
-
-    @Override
-    public Block.OffsetType getOffsetType() {
-        return Block.OffsetType.XZ;
     }
 
 

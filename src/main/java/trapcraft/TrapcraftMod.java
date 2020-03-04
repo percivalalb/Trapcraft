@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.Atlases;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.data.DataGenerator;
@@ -56,8 +58,6 @@ public class TrapcraftMod {
 
 	public TrapcraftMod() {
 		INSTANCE = this;
-		ConfigHandler.init();
-
 
 	    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -81,6 +81,8 @@ public class TrapcraftMod {
 		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
 		forgeEventBus.register(new ActionHandler());
+
+	    ConfigHandler.init(modEventBus);
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
@@ -93,6 +95,7 @@ public class TrapcraftMod {
         ScreenManager.registerFactory(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
         ClientRegistry.bindTileEntityRenderer(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), TileEntityMagneticChestRenderer::new);
 
+        RenderTypeLookup.setRenderLayer(TrapcraftBlocks.SPIKES.get(), RenderType.getCutout());
         // Must be set here to avoid registry object missing error
         ItemStackTileEntityMagneticChestRenderer.setDummyTE();
     }
@@ -101,7 +104,7 @@ public class TrapcraftMod {
 	private void registerBlockColors(final ColorHandlerEvent.Block event) {
 	    BlockColors blockColors = event.getBlockColors();
 	    blockColors.register((state, blockAccess, pos, tintIndex) -> {
-            return blockAccess != null && pos != null ? BiomeColors.func_228358_a_(blockAccess, pos) : -1; // func_228358_a_ = getGrassColor
+            return blockAccess != null && pos != null ? BiomeColors.getGrassColor(blockAccess, pos) : -1;
         }, TrapcraftBlocks.GRASS_COVERING.get());
 	}
 
@@ -113,8 +116,7 @@ public class TrapcraftMod {
 
 	@OnlyIn(Dist.CLIENT)
 	private void addTexturesToAtlas(final TextureStitchEvent.Pre event) {
-	    if (event.getMap().getBasePath().equals(Atlases.CHEST_ATLAS)) {
-    	    TrapcraftMod.LOGGER.info(event.getMap().getBasePath());
+	    if (event.getMap().getTextureLocation().equals(Atlases.CHEST_ATLAS)) {
     	    event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
 	    }
 	}

@@ -97,7 +97,6 @@ public class SpikesBlock extends Block implements IWaterLoggable {
             return;
         }
         else {
-        	entity.getMotion().dotProduct(new Vec3d(1, 1, 1));
             float damageTodo = (float)entity.getMotion().dotProduct(new Vec3d(1, 1, 1)) / 1.5F;
             entity.attackEntityFrom(damageSource, 2F + damageTodo);
             return;
