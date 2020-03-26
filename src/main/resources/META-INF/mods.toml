@@ -15,7 +15,7 @@ logoFile="tc_logo.png"
     Addeds new blocks to create traps with, (Fan, Bear Trap, Igniter, Magnetic Chest and Grass Coverings), also a dummy. Plus upgrade your traps with special upgrades!
     '''
 	
-[[dependencies.doggytalents]] #optional
+[[dependencies.trapcraft]] #optional
     modId="forge"
     mandatory=true
     versionRange="[31.0.0,)" #mandatory
