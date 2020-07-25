@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "side": "trapcraft:block/igniter_side",
+    "front": "trapcraft:block/igniter_top",
+    "top": "trapcraft:block/igniter_side"
+  }
+}

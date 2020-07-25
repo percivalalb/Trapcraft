@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "trapcraft:block/fan_vertical",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "trapcraft:block/fan_vertical"
+    },
+    "facing=north": {
+      "model": "trapcraft:block/fan"
+    },
+    "facing=south": {
+      "model": "trapcraft:block/fan",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "trapcraft:block/fan",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "trapcraft:block/fan",
+      "y": 90
+    }
+  }
+}

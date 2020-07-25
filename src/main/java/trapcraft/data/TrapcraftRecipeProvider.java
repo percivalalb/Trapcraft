@@ -26,6 +26,11 @@ public class TrapcraftRecipeProvider extends RecipeProvider {
     }
 
     @Override
+    public String getName() {
+        return "Trapcraft Recipes";
+    }
+
+    @Override
     protected void saveRecipeAdvancement(DirectoryCache cache, JsonObject advancementJson, Path pathIn) {
 
     }

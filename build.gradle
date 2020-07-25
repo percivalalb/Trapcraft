@@ -29,6 +29,7 @@ sourceSets {
 	main {
 		compileClasspath += sourceSets.api.output
 		runtimeClasspath += sourceSets.api.output
+		resources.srcDirs += 'src/generated/resources'
 	}
 	test {
 		compileClasspath += sourceSets.api.output
@@ -45,6 +46,7 @@ minecraft {
 	
     runs {
         client {
+            taskName 'trapcraft_client'
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -56,6 +58,7 @@ minecraft {
         }
 
         server {
+            taskName 'trapcraft_server'
             workingDirectory project.file('run-server')
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -67,9 +70,10 @@ minecraft {
         }
 
         data {
+            taskName 'trapcraft_data'
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'trapcraft', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'trapcraft', '--all', '--output', '"' + file('src/generated/resources/') + '"', '--existing', '"' + sourceSets.main.resources.srcDirs[0] + '"'
             mods {
                 trapcraft {
                     source sourceSets.main

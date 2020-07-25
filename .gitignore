@@ -21,7 +21,7 @@ build
 eclipse
 run
 run-server
-src/generated
+src/generated/resources/.cache
 
 # Files from Forge MDK
 forge*changelog.txt

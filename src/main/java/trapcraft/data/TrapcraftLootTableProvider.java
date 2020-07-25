@@ -40,6 +40,11 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
     }
 
     @Override
+    public String getName() {
+        return "Trapcraft LootTables";
+    }
+
+    @Override
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, Builder>>>, LootParameterSet>> getTables() {
         return ImmutableList.of(
                 Pair.of(Blocks::new, LootParameterSets.BLOCK),
@@ -59,8 +64,7 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
             dropsSelf(TrapcraftBlocks.BEAR_TRAP);
             dropsSelf(TrapcraftBlocks.SPIKES);
             dropsSelf(TrapcraftBlocks.IGNITER);
-            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, () -> Items.STICK, RandomValueRange.of(1.0F, 3.0F));
-
+            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, Items.STICK.delegate, RandomValueRange.of(1.0F, 3.0F));
         }
 
         private void dropsSelf(Supplier<? extends Block> block) {
@@ -85,7 +89,6 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
         protected void addTables() {
             this.registerLootTable(TrapcraftEntityTypes.DUMMY, LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(Items.SHULKER_SHELL)).acceptCondition(RandomChanceWithLooting.builder(0.5F, 0.0625F))));
         }
-
 
         protected void registerLootTable(Supplier<? extends EntityType<?>> type, LootTable.Builder table) {
            this.registerLootTable(type.get().getLootTable(), table);

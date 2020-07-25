@@ -1,0 +1,7 @@
+{
+  "parent": "block/orientable_vertical",
+  "textures": {
+    "side": "trapcraft:block/fan_side",
+    "front": "trapcraft:block/fan_top"
+  }
+}

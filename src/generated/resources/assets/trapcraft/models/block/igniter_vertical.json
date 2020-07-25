@@ -1,0 +1,7 @@
+{
+  "parent": "block/orientable_vertical",
+  "textures": {
+    "side": "trapcraft:block/igniter_side",
+    "front": "trapcraft:block/igniter_top"
+  }
+}

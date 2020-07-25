@@ -26,14 +26,14 @@ public class TrapcraftBlocks {
     public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = TrapcraftItems.ITEMS;
 
-	public static final RegistryObject<Block> FAN = makeBlockWithItem("fan", () -> new FanBlock());
+	public static final RegistryObject<Block> FAN = makeBlockWithItem("fan", FanBlock::new);
     private static final Pair<RegistryObject<Block>, RegistryObject<Item>> MAGNETIC_CHEST_PAIR = makeBlockWithItemCustom("magnetic_chest", () -> new MagneticChestBlock(), (blockObj) -> makeMagneticChestItem(blockObj));
     public static final RegistryObject<Block> MAGNETIC_CHEST = MAGNETIC_CHEST_PAIR.getLeft();
     public static final RegistryObject<Item> MAGNETIC_CHEST_ITEM = MAGNETIC_CHEST_PAIR.getRight();
-    public static final RegistryObject<Block> GRASS_COVERING = makeBlockWithItem("grass_covering", () -> new GrassCoveringBlock());
-    public static final RegistryObject<Block> BEAR_TRAP = makeBlockWithItem("bear_trap", () -> new BearTrapBlock());
-    public static final RegistryObject<Block> SPIKES = makeBlockWithItem("spikes", () -> new SpikesBlock());
-    public static final RegistryObject<Block> IGNITER = makeBlockWithItem("igniter", () -> new IgniterBlock());
+    public static final RegistryObject<Block> GRASS_COVERING = makeBlockWithItem("grass_covering", GrassCoveringBlock::new);
+    public static final RegistryObject<Block> BEAR_TRAP = makeBlockWithItem("bear_trap", BearTrapBlock::new);
+    public static final RegistryObject<Block> SPIKES = makeBlockWithItem("spikes", SpikesBlock::new);
+    public static final RegistryObject<Block> IGNITER = makeBlockWithItem("igniter", IgniterBlock::new);
 
     private static RegistryObject<Block> makeBlockWithItem(final String name, final Supplier<Block> blockSupplier) {
         return makeBlockWithItemCustom(name, blockSupplier, (blockObj) -> makeBlockItem(blockObj)).getLeft();

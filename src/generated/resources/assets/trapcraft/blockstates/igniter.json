@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "trapcraft:block/igniter_vertical",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "trapcraft:block/igniter_vertical"
+    },
+    "facing=north": {
+      "model": "trapcraft:block/igniter"
+    },
+    "facing=south": {
+      "model": "trapcraft:block/igniter",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "trapcraft:block/igniter",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "trapcraft:block/igniter",
+      "y": 90
+    }
+  }
+}
