@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.IChestLid;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -16,7 +15,7 @@ import trapcraft.TrapcraftTileEntityTypes;
 /**
  * @author ProPercivalalb
  **/
-public class MagneticChestTileEntity extends ChestTileEntity implements IChestLid, ITickableTileEntity {
+public class MagneticChestTileEntity extends ChestTileEntity implements ITickableTileEntity {
 
     public MagneticChestTileEntity() {
         super(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get());
