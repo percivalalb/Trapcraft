@@ -14,7 +14,7 @@ import trapcraft.block.tileentity.MagneticChestTileEntity;
 
 public class TrapcraftTileEntityTypes {
 
-    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, Constants.MOD_ID);
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MOD_ID);
 
 	public static final RegistryObject<TileEntityType<? extends MagneticChestTileEntity>> MAGNETIC_CHEST = TILE_ENTITIES.register("magnetic_chest", () -> new TileEntityType<>(MagneticChestTileEntity::new, Sets.newHashSet(TrapcraftBlocks.MAGNETIC_CHEST.get()), null));
 	public static final RegistryObject<TileEntityType<?>> FAN = TILE_ENTITIES.register("fan", () -> new TileEntityType<>(FanTileEntity::new, Sets.newHashSet(TrapcraftBlocks.FAN.get()), null));

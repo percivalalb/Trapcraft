@@ -3,6 +3,7 @@ package trapcraft.block.tileentity;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -143,10 +144,10 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-    	super.read(compound);
-    	this.speed = compound.getFloat("speed");
-    	this.extraRange = compound.getDouble("extraRange");
+    public void read(BlockState state, CompoundNBT nbt) {
+    	super.read(state, nbt);
+    	this.speed = nbt.getFloat("speed");
+    	this.extraRange = nbt.getDouble("extraRange");
     }
 
     @Override
@@ -172,7 +173,7 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
 		super.onDataPacket(net, packet);
-		this.read(packet.getNbtCompound());
+		this.read(null, packet.getNbtCompound()); // TODO Pass blockstate
 		if(!this.world.isRemote)
 			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
 		return;

@@ -1,6 +1,6 @@
 {
-  "parent": "item/chest",
+  "parent": "minecraft:item/chest",
   "textures": {
-    "particle": "block/oak_planks"
+    "particle": "minecraft:block/oak_planks"
   }
 }

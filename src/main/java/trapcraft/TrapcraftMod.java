@@ -87,6 +87,7 @@ public class TrapcraftMod {
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
 	    PacketHandler.register();
+	    TrapcraftEntityTypes.addEntityAttributes();
     }
 
 	@OnlyIn(Dist.CLIENT)

@@ -4,7 +4,9 @@ import java.util.Collections;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -16,6 +18,7 @@ import net.minecraft.util.HandSide;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity;
 import net.minecraftforge.fml.network.NetworkHooks;
 import trapcraft.TrapcraftEntityTypes;
@@ -39,14 +42,9 @@ public class DummyEntity extends LivingEntity {
         super(type, world);
     }
 
-    @Override
-	protected void registerAttributes() {
-	    super.registerAttributes();
-	    this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-	    this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
-	    this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-	    this.getAttribute(NAMETAG_DISTANCE).setBaseValue(4D);
-	}
+    public static AttributeModifierMap.MutableAttribute createAttributeMap() {
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 20.0D).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F).createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 1.0D).createMutableAttribute(ForgeMod.NAMETAG_DISTANCE.get(), 4.0D);
+    }
 
     @Override
     protected void registerData() {

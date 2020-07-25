@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -72,10 +73,10 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 
 
     @Override
-    public void read(CompoundNBT compound) {
-    	super.read(compound);
-    	if(compound.hasUniqueId("trapped_entity")) {
-    		this.id = compound.getUniqueId("trapped_entity");
+    public void read(BlockState state, CompoundNBT nbt) {
+    	super.read(state, nbt);
+    	if(nbt.hasUniqueId("trapped_entity")) {
+    		this.id = nbt.getUniqueId("trapped_entity");
     	}
     }
 

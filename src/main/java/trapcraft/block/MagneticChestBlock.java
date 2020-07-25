@@ -8,7 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.stats.Stat;
@@ -35,7 +35,7 @@ public class MagneticChestBlock extends ChestBlock {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         Direction direction = context.getPlacementHorizontalFacing().getOpposite();
-        IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
 
         return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
      }

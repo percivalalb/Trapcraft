@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[32,)"
 issueTrackerURL="https://github.com/percivalalb/Trapcraft/issues"
 displayURL="https://minecraft.curseforge.com/projects/trapcraft/"
 logoFile="tc_logo.png"
@@ -7,7 +7,7 @@ logoFile="tc_logo.png"
 [[mods]] #mandatory
 	modId="trapcraft"
 	version="${file.jarVersion}"
-	updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/1.15.x/version.json"
+	updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/1.16.x/version.json"
 	displayName="Trapcraft"
 	credits="Authored By ProPercivalalb"
 	authors="ProPercivalalb, Stewiecraft"
@@ -18,6 +18,6 @@ logoFile="tc_logo.png"
 [[dependencies.trapcraft]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[31.0.0,)" #mandatory
+    versionRange="[32.0.0,)" #mandatory
     ordering="NONE"
     side="BOTH"

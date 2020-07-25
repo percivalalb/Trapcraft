@@ -1,11 +1,11 @@
 {
-  "parent": "block/block",
+  "parent": "minecraft:block/block",
   "textures": {
-    "top": "block/grass_block_top",
-    "side": "block/grass_block_top",
-    "overlay": "block/grass_block_top",
-    "particle": "block/dirt",
-    "bottom": "block/dirt"
+    "top": "minecraft:block/grass_block_top",
+    "side": "minecraft:block/grass_block_top",
+    "overlay": "minecraft:block/grass_block_top",
+    "particle": "minecraft:block/dirt",
+    "bottom": "minecraft:block/dirt"
   },
   "elements": [
     {

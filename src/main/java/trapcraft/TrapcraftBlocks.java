@@ -23,7 +23,7 @@ import trapcraft.client.renders.ItemStackTileEntityMagneticChestRenderer;
 
 public class TrapcraftBlocks {
 
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Constants.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = TrapcraftItems.ITEMS;
 
 	public static final RegistryObject<Block> FAN = makeBlockWithItem("fan", FanBlock::new);

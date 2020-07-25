@@ -1,5 +1,6 @@
 package trapcraft.block.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -35,9 +36,9 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
 	}
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
-        ListNBT nbttaglist = compound.getList("Items", 10);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
+        ListNBT nbttaglist = nbt.getList("Items", 10);
 
         for(int i = 0; i < nbttaglist.size(); ++i) {
         	CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);

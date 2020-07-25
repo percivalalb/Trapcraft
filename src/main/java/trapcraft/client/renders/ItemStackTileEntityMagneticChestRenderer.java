@@ -3,6 +3,7 @@ package trapcraft.client.renders;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.Item;
@@ -15,11 +16,12 @@ public class ItemStackTileEntityMagneticChestRenderer extends ItemStackTileEntit
 	private static MagneticChestTileEntity chestBasic;
 
 	@Override
-	public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-		Item item = itemStackIn.getItem();
+	//public void render(ItemStack stack, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+		Item item = stack.getItem();
 
 		if (item == TrapcraftBlocks.MAGNETIC_CHEST_ITEM.get()) {
-		    TileEntityRendererDispatcher.instance.renderItem(chestBasic, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+		    TileEntityRendererDispatcher.instance.renderItem(chestBasic, matrixStack, buffer, combinedLight, combinedOverlay);
 		}
 	}
 

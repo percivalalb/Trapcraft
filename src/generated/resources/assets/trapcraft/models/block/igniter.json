@@ -1,5 +1,5 @@
 {
-  "parent": "block/orientable",
+  "parent": "minecraft:block/orientable",
   "textures": {
     "side": "trapcraft:block/igniter_side",
     "front": "trapcraft:block/igniter_top",
