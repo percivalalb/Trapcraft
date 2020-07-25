@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/orientable_vertical",
+  "parent": "minecraft:block/orientable_with_bottom",
   "textures": {
     "side": "trapcraft:block/fan_side",
-    "front": "trapcraft:block/fan_top"
+    "front": "trapcraft:block/fan_side",
+    "bottom": "trapcraft:block/fan_bottom",
+    "top": "trapcraft:block/fan_top"
   }
 }

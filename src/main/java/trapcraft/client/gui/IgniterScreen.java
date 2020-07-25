@@ -21,7 +21,6 @@ public class IgniterScreen extends ContainerScreen<IgniterContainer> {
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        //TODO this.renderHoveredToolTip(matrixStack, mouseX, mouseY);
     }
 
 	@Override
