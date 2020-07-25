@@ -1,8 +1,52 @@
 {
-  "parent": "block/orientable",
+  "parent": "block/block",
   "textures": {
     "side": "trapcraft:block/igniter_side",
-    "front": "trapcraft:block/igniter_top",
-    "top": "trapcraft:block/igniter_side"
-  }
+    "top": "trapcraft:block/igniter_top",
+    "bottom": "trapcraft:block/igniter_bottom",
+    "particle": "trapcraft:block/igniter_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#side",
+          "cullface": "down",
+          "rotation": 180
+        },
+        "up": {
+          "texture": "#side",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#top",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#bottom",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west",
+          "rotation": 270
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east",
+          "rotation": 90
+        }
+      }
+    }
+  ]
 }

@@ -9,12 +9,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Direction.AxisDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ExistingFileHelper;
+import net.minecraftforge.client.model.generators.ModelBuilder.FaceRotation;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -130,22 +132,41 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
     }
 
     protected void registerOrientable(Supplier<? extends Block> blockIn) {
-        ModelFile model = this.models().orientable(name(blockIn),
-                extend(blockTexture(blockIn), "_side"),
-                extend(blockTexture(blockIn), "_top"),
-                extend(blockTexture(blockIn), "_side"));
+        BlockModelBuilder model = this.models().withExistingParent(name(blockIn), ModelProvider.BLOCK_FOLDER + "/block");
 
-        ModelFile modelVertical = this.models().orientableVertical(name(blockIn) + "_vertical",
+        model.element().allFaces((dir, f) -> {
+            if (dir.getAxis() == Axis.Z) {
+                f = f.texture(dir == Direction.NORTH ? "#top" : "#bottom");
+            } else {
+                f = f.texture("#side");
+                f = f.rotation(
+                        dir == Direction.UP ? FaceRotation.ZERO :
+                        dir == Direction.EAST  ? FaceRotation.CLOCKWISE_90 :
+                        dir == Direction.DOWN  ? FaceRotation.UPSIDE_DOWN :
+                                                 FaceRotation.COUNTERCLOCKWISE_90
+                );
+            }
+            f = f.cullface(dir);
+        });
+        model.texture("side", extend(blockTexture(blockIn), "_side"));
+        model.texture("top", extend(blockTexture(blockIn), "_top"));
+        model.texture("bottom", extend(blockTexture(blockIn), "_bottom"));
+        model.texture("particle", extend(blockTexture(blockIn), "_side"));
+
+        ModelFile modelVertical = this.models().orientableWithBottom(name(blockIn) + "_vertical",
                 extend(blockTexture(blockIn), "_side"),
+                extend(blockTexture(blockIn), "_side"),
+                extend(blockTexture(blockIn), "_bottom"),
                 extend(blockTexture(blockIn), "_top"));
 
         this.getVariantBuilder(blockIn.get()).forAllStatesExcept(state -> {
+            Direction facing = state.get(FanBlock.FACING);
             int xRot = 0;
-            int yRot = ((int) state.get(FanBlock.FACING).getHorizontalAngle()) + 180;
-            boolean vertical = state.get(FanBlock.FACING).getAxis().isVertical();
+            int yRot = ((int) facing.getHorizontalAngle()) + 180;
+            boolean vertical = facing.getAxis().isVertical();
 
             if (vertical) {
-                xRot = state.get(FanBlock.FACING).getAxisDirection() == AxisDirection.NEGATIVE ? 180 : 0;
+                xRot = facing.getAxisDirection() == AxisDirection.NEGATIVE ? 180 : 0;
                 yRot = 0;
             }
             yRot %= 360;
