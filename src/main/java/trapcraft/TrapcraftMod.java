@@ -21,7 +21,7 @@ import trapcraft.proxy.CommonProxy;
 /**
  * @author ProPercivalalb
  **/
-@Mod(name = Reference.MOD_NAME, version = Reference.MOD_VERSION, modid = Reference.MOD_ID, updateJSON = Reference.UPDATE_URL)
+@Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID)
 public class TrapcraftMod {
 
      @SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)

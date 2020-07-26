@@ -1,17 +1,16 @@
 [
 {
-  "modid": "Trapcraft",
+  "modid": "trapcraft",
   "name": "Trapcraft",
-  "description": "Addeds new blocks to create traps with, (Fan, Bear Trap, Igniter, Magnetic Chest and Grass Coverings), also a dummy. Plus upgrade your traps with special upgrades!",
-  "version": "v2.4.3a",
+  "description": "Adds new blocks to create traps with, (Fan, Bear Trap, Igniter, Magnetic Chest and Grass Coverings), also a dummy. Plus upgrade your traps with special upgrades!",
+  "version": "${version}",
   "credits": "Updated by ProPercivalalb, created by Stewiecraft",
-  "mcversion": "1.12",
-  "updateUrl": "http://www.minecraftforum.net/topic/1684171-/",
+  "mcversion": "${mcversion}",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/trapcraft",
+  "updateUrl": "",
   "authors": ["ProPercivalalb", "Stewiecraft "],
   "parent":"",
   "screenshots": [],
-  "dependencies": [
-     "mod_MinecraftForge"
-  ]
+  "dependencies": []
 }
 ]
