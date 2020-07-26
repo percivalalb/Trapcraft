@@ -14,18 +14,18 @@ import trapcraft.lib.Reference;
 @EventBusSubscriber
 public class ModItems {
 
-	public static Item IGNITER_RANGE;
-	
-	@SubscribeEvent
-	public static void onRegister(RegistryEvent.Register<Item> event) {
-		IGNITER_RANGE = new ItemIgniterRange().setTranslationKey("trapcraft.igniter_range").setRegistryName(Reference.MOD_ID, "igniter_range");
+    public static Item IGNITER_RANGE;
 
-		event.getRegistry().register(IGNITER_RANGE);
-	}
-	
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public static void setItemModels(ModelRegistryEvent event) {
-		ModelHelper.setModel(IGNITER_RANGE, 0, "trapcraft:igniter_range");
-	}
+    @SubscribeEvent
+    public static void onRegister(RegistryEvent.Register<Item> event) {
+        IGNITER_RANGE = new ItemIgniterRange().setTranslationKey("trapcraft.igniter_range").setRegistryName(Reference.MOD_ID, "igniter_range");
+
+        event.getRegistry().register(IGNITER_RANGE);
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void setItemModels(ModelRegistryEvent event) {
+        ModelHelper.setModel(IGNITER_RANGE, 0, "trapcraft:igniter_range");
+    }
 }

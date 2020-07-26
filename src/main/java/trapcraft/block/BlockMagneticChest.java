@@ -42,8 +42,8 @@ public class BlockMagneticChest extends BlockContainer {
     private Random rand = new Random();
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     protected static final AxisAlignedBB field_185569_b = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
-    
-    
+
+
     public BlockMagneticChest() {
         super(Material.WOOD);
         this.setHardness(2.5F);
@@ -70,7 +70,7 @@ public class BlockMagneticChest extends BlockContainer {
 
         return false;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public boolean hasCustomBreakingProgress(IBlockState state) {
@@ -86,7 +86,7 @@ public class BlockMagneticChest extends BlockContainer {
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
         return Container.calcRedstoneFromInventory(this.getLockableContainer(worldIn, pos));
     }
-    
+
     @Override
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.byIndex(meta);
@@ -111,19 +111,19 @@ public class BlockMagneticChest extends BlockContainer {
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
     }
-    
+
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, new IProperty[] {FACING});
     }
-    
+
     @Override
     public TileEntity createNewTileEntity(World world, int meat) {
         return new TileEntityMagneticChest();
     }
-    
+
     @Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         if(entity.isEntityAlive() && !world.isRemote) {
             if (entity instanceof EntityItem) {
                 TileEntityMagneticChest tileEntityMagneticChest = (TileEntityMagneticChest)world.getTileEntity(pos);
@@ -131,7 +131,7 @@ public class BlockMagneticChest extends BlockContainer {
             }
         }
     }
-    
+
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
@@ -158,15 +158,15 @@ public class BlockMagneticChest extends BlockContainer {
 
         super.breakBlock(worldIn, pos, state);
     }
-    
+
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-    	if(playerIn.isSneaking())
-    		return true;
-    	else if(worldIn.isSideSolid(pos.up(), EnumFacing.DOWN))
+        if(playerIn.isSneaking())
             return true;
-    	else {
-    		ILockableContainer ilockablecontainer = this.getLockableContainer(worldIn, pos);
+        else if(worldIn.isSideSolid(pos.up(), EnumFacing.DOWN))
+            return true;
+        else {
+            ILockableContainer ilockablecontainer = this.getLockableContainer(worldIn, pos);
 
             if(ilockablecontainer != null) {
                 playerIn.displayGUIChest(ilockablecontainer);
@@ -176,7 +176,7 @@ public class BlockMagneticChest extends BlockContainer {
             return true;
         }
     }
-    
+
     public ILockableContainer getLockableContainer(World worldIn, BlockPos pos)
     {
         TileEntity tileentity = worldIn.getTileEntity(pos);
@@ -187,7 +187,7 @@ public class BlockMagneticChest extends BlockContainer {
         }
         else
         {
-        	TileEntityMagneticChest ilockablecontainer = (TileEntityMagneticChest)tileentity;
+            TileEntityMagneticChest ilockablecontainer = (TileEntityMagneticChest)tileentity;
 
             if (this.isBlocked(worldIn, pos))
             {
@@ -199,7 +199,7 @@ public class BlockMagneticChest extends BlockContainer {
             }
         }
     }
-    
+
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());

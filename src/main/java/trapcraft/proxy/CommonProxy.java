@@ -17,45 +17,45 @@ import trapcraft.tileentity.TileEntityIgniter;
  **/
 public class CommonProxy implements IGuiHandler {
 
-	public void onModPre() {}
+    public void onModPre() {}
     public void onModLoad() {}
     public void onModPost() {}
-    
+
     public void handleTileEntityPacket(BlockPos pos, EnumFacing facing, String owner, String customName, String state) {}
 
-	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		BlockPos pos = new BlockPos(x, y, z);
-		
-		TileEntity tileentity = world.getTileEntity(pos);
-		if(id == 1)
-			if(tileentity instanceof TileEntityIgniter)
-				return new ContainerIgniter((TileEntityIgniter)tileentity, player);
-	
-		return null;
-	}
+    @Override
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        BlockPos pos = new BlockPos(x, y, z);
 
-	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		BlockPos pos = new BlockPos(x, y, z);
-		
-		TileEntity tileentity = world.getTileEntity(pos);
-		if(id == 1)
-			if(tileentity instanceof TileEntityIgniter)
-				return new GuiIgniter((TileEntityIgniter)tileentity, player);
-	
-		return null;
-	}
-	
-	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return ctx.getServerHandler().player;
-	}
-	
-	public EntityPlayer getPlayerEntity() {
-		return null;
-	}
-	
-	public IThreadListener getThreadFromContext(MessageContext ctx) {
-		return ctx.getServerHandler().player.getServer();
-	}
+        TileEntity tileentity = world.getTileEntity(pos);
+        if(id == 1)
+            if(tileentity instanceof TileEntityIgniter)
+                return new ContainerIgniter((TileEntityIgniter)tileentity, player);
+
+        return null;
+    }
+
+    @Override
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        BlockPos pos = new BlockPos(x, y, z);
+
+        TileEntity tileentity = world.getTileEntity(pos);
+        if(id == 1)
+            if(tileentity instanceof TileEntityIgniter)
+                return new GuiIgniter((TileEntityIgniter)tileentity, player);
+
+        return null;
+    }
+
+    public EntityPlayer getPlayerEntity(MessageContext ctx) {
+        return ctx.getServerHandler().player;
+    }
+
+    public EntityPlayer getPlayerEntity() {
+        return null;
+    }
+
+    public IThreadListener getThreadFromContext(MessageContext ctx) {
+        return ctx.getServerHandler().player.getServer();
+    }
 }

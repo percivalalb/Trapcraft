@@ -10,30 +10,30 @@ import trapcraft.tileentity.TileEntityIgniter;
 
 public class GuiIgniter extends GuiContainer {
 
-	private TileEntityIgniter igniter;
-	private EntityPlayer player;
-	
-	public GuiIgniter(TileEntityIgniter par1TileEntityIgniter, EntityPlayer par2EntityPlayer) {
-		super(new ContainerIgniter(par1TileEntityIgniter, par2EntityPlayer));
-		this.igniter = par1TileEntityIgniter;
-		this.player = par2EntityPlayer;
-		this.xSize = 238;
-		this.ySize = 89;
-	}
+    private TileEntityIgniter igniter;
+    private EntityPlayer player;
 
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public GuiIgniter(TileEntityIgniter par1TileEntityIgniter, EntityPlayer par2EntityPlayer) {
+        super(new ContainerIgniter(par1TileEntityIgniter, par2EntityPlayer));
+        this.igniter = par1TileEntityIgniter;
+        this.player = par2EntityPlayer;
+        this.xSize = 238;
+        this.ySize = 89;
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
-	
-	@Override
+
+    @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2){
         String s = this.igniter.inventory.getDisplayName().getUnformattedText();
         this.fontRenderer.drawString(s, 90 + this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
     }
-    
+
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

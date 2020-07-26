@@ -23,42 +23,42 @@ import trapcraft.proxy.CommonProxy;
  **/
 @Mod(name = Reference.MOD_NAME, version = Reference.MOD_VERSION, modid = Reference.MOD_ID, updateJSON = Reference.UPDATE_URL)
 public class TrapcraftMod {
-	
+
      @SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
      public static CommonProxy PROXY;
-     
+
      @Instance(Reference.MOD_ID)
      public static TrapcraftMod INSTANCE;
-     
+
      @EventHandler
-	 public void preLoad(FMLPreInitializationEvent event) throws Exception {
-    	 this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
-    	 
-		 this.registerCreature(EntityDummy.class, "dummy", 0);
+     public void preLoad(FMLPreInitializationEvent event) throws Exception {
+         this.loadConfig(new Configuration(event.getSuggestedConfigurationFile()));
 
-		 PROXY.onModPre();
-	 }
+         this.registerCreature(EntityDummy.class, "dummy", 0);
 
-	 @EventHandler
-	 public void load(FMLInitializationEvent var1) {
-	     PROXY.onModLoad();
-		 //Event Buses
-	     MinecraftForge.EVENT_BUS.register(new ActionHandler());
-	     NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, PROXY);
-		 PacketDispatcher.registerPackets();
-	 }
-	 
-	 @EventHandler
-	 public void post(FMLPostInitializationEvent var1) {
-		 PROXY.onModPost();
-	 }
+         PROXY.onModPre();
+     }
 
-	 public void registerCreature(Class var1, String var2, int var3) {
-		 EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, var2), var1, var2, var3, INSTANCE, 128, 1, true);
-	 }
-	 
-	 public void loadConfig(Configuration var1) {
-		 var1.load();
-		 var1.save();
-	 }
+     @EventHandler
+     public void load(FMLInitializationEvent var1) {
+         PROXY.onModLoad();
+         //Event Buses
+         MinecraftForge.EVENT_BUS.register(new ActionHandler());
+         NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, PROXY);
+         PacketDispatcher.registerPackets();
+     }
+
+     @EventHandler
+     public void post(FMLPostInitializationEvent var1) {
+         PROXY.onModPost();
+     }
+
+     public void registerCreature(Class var1, String var2, int var3) {
+         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, var2), var1, var2, var3, INSTANCE, 128, 1, true);
+     }
+
+     public void loadConfig(Configuration var1) {
+         var1.load();
+         var1.save();
+     }
 }

@@ -18,13 +18,13 @@ import trapcraft.inventory.InventoryIgniter;
  **/
 public class TileEntityIgniter extends TileEntity implements ITickable, IInventoryChangedListener {
 
-	public InventoryIgniter inventory;
-	public int lastUpgrades;
-	
-	public TileEntityIgniter() {
-		this.inventory = new InventoryIgniter(6);
-	}
-	  
+    public InventoryIgniter inventory;
+    public int lastUpgrades;
+
+    public TileEntityIgniter() {
+        this.inventory = new InventoryIgniter(6);
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
         super.readFromNBT(par1NBTTagCompound);
@@ -38,7 +38,7 @@ public class TileEntityIgniter extends TileEntity implements ITickable, IInvento
                 this.inventory.setInventorySlotContents(b0, new ItemStack(nbttagcompound1));
             }
         }
-        
+
         this.inventory.addInventoryChangeListener(this);
         this.lastUpgrades = this.getRangeUpgrades();
     }
@@ -58,39 +58,39 @@ public class TileEntityIgniter extends TileEntity implements ITickable, IInvento
         }
 
         par1NBTTagCompound.setTag("Items", nbttaglist);
-        
+
         return par1NBTTagCompound;
     }
-    
-    
+
+
     public int getRangeUpgrades() {
-    	int upgrades = 0;
+        int upgrades = 0;
         for(int i = 0; i < this.inventory.getSizeInventory(); ++i) {
-    		ItemStack stack = this.inventory.getStackInSlot(i);
-    		if(stack != null) {
-    			if(stack.getItem() == ModItems.IGNITER_RANGE) {
-    				upgrades += stack.getCount();
-    			}
-    		}
-    	}
-    	
-    	return Math.min(upgrades, 100);
+            ItemStack stack = this.inventory.getStackInSlot(i);
+            if(stack != null) {
+                if(stack.getItem() == ModItems.IGNITER_RANGE) {
+                    upgrades += stack.getCount();
+                }
+            }
+        }
+
+        return Math.min(upgrades, 100);
     }
-    
+
     @Override
     public void update() {
-    	if(!this.world.isRemote) {
-    		((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.world, this.pos);
-    	}
+        if(!this.world.isRemote) {
+            ((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.world, this.pos);
+        }
     }
-    
+
     @Override
-	public void onInventoryChanged(IInventory invBasic) {
-		if(!this.world.isRemote) {
-			int newUpgrades = this.getRangeUpgrades();
-			if(newUpgrades != this.lastUpgrades) {
-				((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.world, this.pos);
-			}
-		}
-	}
+    public void onInventoryChanged(IInventory invBasic) {
+        if(!this.world.isRemote) {
+            int newUpgrades = this.getRangeUpgrades();
+            if(newUpgrades != this.lastUpgrades) {
+                ((BlockIgniter)ModBlocks.IGNITER).updateIgniterState(this.world, this.pos);
+            }
+        }
+    }
 }

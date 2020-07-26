@@ -21,10 +21,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author ProPercivalalb
  **/
 public class BlockSpikes extends Block {
-	
-	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.3D, 1.0D);
-	private DamageSource damageSource = new DamageSource("trapcraft.spikes").setDamageBypassesArmor();
-	
+
+    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.3D, 1.0D);
+    private DamageSource damageSource = new DamageSource("trapcraft.spikes").setDamageBypassesArmor();
+
     public BlockSpikes() {
         super(Material.IRON);
         this.setHardness(2.0F);
@@ -34,52 +34,52 @@ public class BlockSpikes extends Block {
     }
 
     @Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return NULL_AABB;
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return AABB;
     }
-	   
-	@Override
-	public boolean isFullCube(IBlockState state) {
-	    return false;
-	}
-
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-	    return false;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-	    return super.canPlaceBlockAt(worldIn, pos) ? this.canBlockStay(worldIn, pos) : false;
-	}
-
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		if(!this.canBlockStay((World)world, pos)) {
-			this.dropBlockAsItem((World)world, pos, world.getBlockState(pos), 0);
-			((World)world).setBlockToAir(pos);
-		}
-	}
-
-    public boolean canBlockStay(World world, BlockPos pos) {
-		IBlockState blockstate = world.getBlockState(pos.down());
-		return blockstate.getBlock().isSideSolid(blockstate, world, pos.down(), EnumFacing.UP);
-	}
 
     @Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-    	 if (entity instanceof EntityItem) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return NULL_AABB;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return super.canPlaceBlockAt(worldIn, pos) ? this.canBlockStay(worldIn, pos) : false;
+    }
+
+    @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        if(!this.canBlockStay((World)world, pos)) {
+            this.dropBlockAsItem((World)world, pos, world.getBlockState(pos), 0);
+            ((World)world).setBlockToAir(pos);
+        }
+    }
+
+    public boolean canBlockStay(World world, BlockPos pos) {
+        IBlockState blockstate = world.getBlockState(pos.down());
+        return blockstate.getBlock().isSideSolid(blockstate, world, pos.down(), EnumFacing.UP);
+    }
+
+    @Override
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+         if (entity instanceof EntityItem) {
              return;
          }
 
@@ -88,7 +88,7 @@ public class BlockSpikes extends Block {
              return;
          }
          else {
-        	 double motionX = entity.motionX;
+             double motionX = entity.motionX;
              double motionY = entity.motionY;
              double motionZ = entity.motionZ;
              int damageTodo = (int)((motionX + motionY + motionZ) / 1.5D);

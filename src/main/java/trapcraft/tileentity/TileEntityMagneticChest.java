@@ -25,7 +25,7 @@ import trapcraft.block.BlockMagneticChest;
  **/
 public class TileEntityMagneticChest extends TileEntityLockable implements ITickable, IInventory {
 
-	public float lidAngle;
+    public float lidAngle;
     /** The angle of the ender chest lid last tick */
     public float prevLidAngle;
     public int numPlayersUsing;
@@ -106,7 +106,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
     @Override
     public void update() {
         this.pullItemsIn();
-        
+
         if (++this.ticksSinceSync % 20 * 4 == 0)
             this.world.addBlockEvent(this.pos, ModBlocks.MAGNETIC_CHEST, 1, this.numPlayersUsing);
 
@@ -163,70 +163,70 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
 
         return compound;
     }
-    
+
     public void pullItemsIn() {
-   		double centreX = (double)this.pos.getX() + 0.5D;
-   		double centreY = (double)this.pos.getY() + 0.5D;
-		double centreZ = (double)this.pos.getZ() + 0.5D;
-    	
-    	List<EntityItem> entities = this.world.getEntities(EntityItem.class, item -> item.getDistanceSq(centreX, centreY, centreZ) < 16D);
+           double centreX = (double)this.pos.getX() + 0.5D;
+           double centreY = (double)this.pos.getY() + 0.5D;
+        double centreZ = (double)this.pos.getZ() + 0.5D;
 
-    	for(EntityItem itemEntity : entities) {
-    		double diffX = -itemEntity.posX + centreX;
-    		double diffY = -itemEntity.posY + centreY;
-    		double diffZ = -itemEntity.posZ + centreZ;
-    		double speedMultiper = 0.05D;
-    		double d11 = itemEntity.posX - centreX;
-    		double d12 = itemEntity.posZ - centreZ;
-    		double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
-    		double angle = Math.asin(diffX / horizDiffSq);
-    		double d15 = Math.abs((double)MathHelper.sin((float)angle) * speedMultiper);
-    		double d16 = Math.abs((double)MathHelper.cos((float)angle) * speedMultiper);
-    		d15 = diffX <= 0.0D ? -d15 : d15;
-    		d16 = diffZ <= 0.0D ? -d16 : d16;
-    		if(MathHelper.abs((float)(itemEntity.motionX + itemEntity.motionY + itemEntity.motionZ))  >= 0.2D)
-    			continue;
+        List<EntityItem> entities = this.world.getEntities(EntityItem.class, item -> item.getDistanceSq(centreX, centreY, centreZ) < 16D);
 
-    		
-    		itemEntity.motionX = d15;
-    		itemEntity.motionY = diffY >= 0.7 ? speedMultiper * 2 : itemEntity.motionY;
-    		itemEntity.motionZ = d16;
+        for(EntityItem itemEntity : entities) {
+            double diffX = -itemEntity.posX + centreX;
+            double diffY = -itemEntity.posY + centreY;
+            double diffZ = -itemEntity.posZ + centreZ;
+            double speedMultiper = 0.05D;
+            double d11 = itemEntity.posX - centreX;
+            double d12 = itemEntity.posZ - centreZ;
+            double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
+            double angle = Math.asin(diffX / horizDiffSq);
+            double d15 = Math.abs((double)MathHelper.sin((float)angle) * speedMultiper);
+            double d16 = Math.abs((double)MathHelper.cos((float)angle) * speedMultiper);
+            d15 = diffX <= 0.0D ? -d15 : d15;
+            d16 = diffZ <= 0.0D ? -d16 : d16;
+            if(MathHelper.abs((float)(itemEntity.motionX + itemEntity.motionY + itemEntity.motionZ))  >= 0.2D)
+                continue;
+
+
+            itemEntity.motionX = d15;
+            itemEntity.motionY = diffY >= 0.7 ? speedMultiper * 2 : itemEntity.motionY;
+            itemEntity.motionZ = d16;
         }
     }
-    
+
 
     public boolean insertStackFromEntity(EntityItem entityItem) {
-	    boolean succesful = false;
+        boolean succesful = false;
 
-	    if (entityItem == null || entityItem.isDead)
-	        return false;
-	    else {
-	        ItemStack itemstack = entityItem.getItem().copy();
-	        ItemStack itemstack1 = this.insertStack(itemstack);
+        if (entityItem == null || entityItem.isDead)
+            return false;
+        else {
+            ItemStack itemstack = entityItem.getItem().copy();
+            ItemStack itemstack1 = this.insertStack(itemstack);
 
-	        if (!itemstack1.isEmpty())
-	        	entityItem.setItem(itemstack1);
-	        else {
-	        	succesful = true;
-	        	entityItem.setDead();
-	        }
+            if (!itemstack1.isEmpty())
+                entityItem.setItem(itemstack1);
+            else {
+                succesful = true;
+                entityItem.setDead();
+            }
 
-	        return succesful;
-	    }
-	}
-	
+            return succesful;
+        }
+    }
+
     public ItemStack insertStack(ItemStack stack) {
-    	int j = this.getSizeInventory();
+        int j = this.getSizeInventory();
 
         for (int k = 0; k < j && stack.getCount() > 0; ++k)
-        	stack = tryInsertStackToSlot(stack, k);
+            stack = tryInsertStackToSlot(stack, k);
 
         if (stack.isEmpty())
             stack = ItemStack.EMPTY;
 
         return stack;
     }
-    
+
     public ItemStack tryInsertStackToSlot(ItemStack stack, int slot) {
         ItemStack slotStack = this.getStackInSlot(slot);
 
@@ -236,11 +236,11 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
             if (slotStack.isEmpty()) {
                 int max = Math.min(stack.getMaxStackSize(), this.getInventoryStackLimit());
                 if (max >= stack.getCount()) {
-                	this.setInventorySlotContents(slot, stack);
+                    this.setInventorySlotContents(slot, stack);
                     stack = ItemStack.EMPTY;
                 }
                 else
-                	this.setInventorySlotContents(slot, stack.splitStack(max));
+                    this.setInventorySlotContents(slot, stack.splitStack(max));
                 changed = true;
             }
             else if (this.areItemStacksEqualItem(slotStack, stack)) {
@@ -259,36 +259,36 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
 
         return stack;
     }
-    
+
     private boolean areItemStacksEqualItem(ItemStack p_145894_0_, ItemStack p_145894_1_) {
         return p_145894_0_.getItem() != p_145894_1_.getItem() ? false : (p_145894_0_.getItemDamage() != p_145894_1_.getItemDamage() ? false : (p_145894_0_.getCount() > p_145894_0_.getMaxStackSize() ? false : ItemStack.areItemStackTagsEqual(p_145894_0_, p_145894_1_)));
     }
 
-    
+
     @Override
     public boolean isItemValidForSlot(int side, ItemStack itemStack) {
         return true;
     }
 
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return this.world.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
     }
-	
+
     public void setInvName(String customName) { this.customName = customName; }
 
-	@Override
-	public String getName() {
-		return (this.hasCustomName() ? this.customName : "container.magnetic_chest");
-	}
+    @Override
+    public String getName() {
+        return (this.hasCustomName() ? this.customName : "container.magnetic_chest");
+    }
 
-	@Override
-	public boolean hasCustomName() {
-		return customName != null && customName.length() > 0;
-	}
+    @Override
+    public boolean hasCustomName() {
+        return customName != null && customName.length() > 0;
+    }
 
-	@Override
-	public void openInventory(EntityPlayer player) {
+    @Override
+    public void openInventory(EntityPlayer player) {
         if (!player.isSpectator()) {
             if (this.numPlayersUsing < 0)
                 this.numPlayersUsing = 0;
@@ -299,7 +299,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
         }
     }
 
-	@Override
+    @Override
     public void closeInventory(EntityPlayer player) {
         if (!player.isSpectator() && this.getBlockType() instanceof BlockMagneticChest) {
             --this.numPlayersUsing;
@@ -308,38 +308,38 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
         }
     }
 
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
 
-	@Override
-	public void setField(int id, int value) {
-		
-	}
+    @Override
+    public void setField(int id, int value) {
 
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
+    }
 
-	@Override
-	public void clear() {
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
         this.inventory.clear();
     }
 
-	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-		 return new ContainerChest(playerInventory, this, playerIn);
-	}
+    @Override
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+         return new ContainerChest(playerInventory, this, playerIn);
+    }
 
-	@Override
-	public String getGuiID() {
-		return "trapcraft:magnetic_chest";
-	}
-	
-	@Override
-	public boolean isEmpty()
+    @Override
+    public String getGuiID() {
+        return "trapcraft:magnetic_chest";
+    }
+
+    @Override
+    public boolean isEmpty()
     {
         for (ItemStack itemstack : this.inventory)
         {

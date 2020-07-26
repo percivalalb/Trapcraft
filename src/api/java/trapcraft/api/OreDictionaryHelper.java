@@ -7,5 +7,5 @@ package trapcraft.api;
  **/
 public class OreDictionaryHelper {
 
-	public static final String PLANKS = "plankWood"; //Oak, Spruce, Birch, Jungle and other mod woods.
+    public static final String PLANKS = "plankWood"; //Oak, Spruce, Birch, Jungle and other mod woods.
 }

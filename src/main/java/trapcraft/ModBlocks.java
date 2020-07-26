@@ -33,56 +33,56 @@ public class ModBlocks {
     public static Block SPIKES;
     public static Block IGNITER;
 
-	@SubscribeEvent
-	public static void onRegisterBlock(RegistryEvent.Register<Block> event) {
-		FAN = new BlockFan().setTranslationKey("trapcraft.fan").setRegistryName(Reference.MOD_ID, "fan");
-	  	MAGNETIC_CHEST = new BlockMagneticChest().setTranslationKey("trapcraft.magnetic_chest").setRegistryName(Reference.MOD_ID, "magnetic_chest");
-	  	GRASS_COVERING = new BlockGrassCovering().setTranslationKey("trapcraft.grass_covering").setRegistryName(Reference.MOD_ID, "grass_covering");
-	    BEAR_TRAP = new BlockBearTrap().setHardness(2.0F).setTranslationKey("trapcraft.bear_trap").setRegistryName(Reference.MOD_ID, "bear_trap");
-	    SPIKES = new BlockSpikes().setTranslationKey("trapcraft.spikes").setRegistryName(Reference.MOD_ID, "spikes");
-	    IGNITER = new BlockIgniter().setTranslationKey("trapcraft.igniter").setRegistryName(Reference.MOD_ID, "igniter");
-	    
-	    GameRegistry.registerTileEntity(TileEntityMagneticChest.class, "trapcraft:magnetic_chest");
-	    GameRegistry.registerTileEntity(TileEntityFan.class, "trapcraft:fan");
-		GameRegistry.registerTileEntity(TileEntityBearTrap.class, "trapcraft:bear_trap");
-	    GameRegistry.registerTileEntity(TileEntityIgniter.class, "trapcraft:igniter");
-		
-		MAGNETIC_CHEST.setHarvestLevel("axe", 0);
-		FAN.setHarvestLevel("pickaxe", 0);
-		BEAR_TRAP.setHarvestLevel("pickaxe", 0);
-		SPIKES.setHarvestLevel("pickaxe", 0);
-		IGNITER.setHarvestLevel("pickaxe", 0);
-		
-		event.getRegistry().register(FAN);
-		event.getRegistry().register(MAGNETIC_CHEST);
-		event.getRegistry().register(GRASS_COVERING);
-		event.getRegistry().register(BEAR_TRAP);
-		event.getRegistry().register(SPIKES);
-		event.getRegistry().register(IGNITER);
-	}
-	
-	@SubscribeEvent
-	public static void onRegisterItem(RegistryEvent.Register<Item> event) {
-		event.getRegistry().register(makeItemBlock(MAGNETIC_CHEST));
-		event.getRegistry().register(makeItemBlock(GRASS_COVERING));
-		event.getRegistry().register(makeItemBlock(FAN));
-		event.getRegistry().register(makeItemBlock(BEAR_TRAP));
-		event.getRegistry().register(makeItemBlock(SPIKES));
-		event.getRegistry().register(makeItemBlock(IGNITER));
-	}
-	
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public static void setItemModels(ModelRegistryEvent event) {
-		ModelHelper.setModel(FAN, 0, "trapcraft:fan");
-		ModelHelper.setModel(MAGNETIC_CHEST, 0, "trapcraft:magnetic_chest");
-		ModelHelper.setModel(BEAR_TRAP, 0, "trapcraft:bear_trap");
-		ModelHelper.setModel(GRASS_COVERING, 0, "trapcraft:grass_covering");
-		ModelHelper.setModel(SPIKES, 0, "trapcraft:spikes");
-		ModelHelper.setModel(IGNITER, 0, "trapcraft:igniter");
-	}
-	
-	private static ItemBlock makeItemBlock(Block block) {
+    @SubscribeEvent
+    public static void onRegisterBlock(RegistryEvent.Register<Block> event) {
+        FAN = new BlockFan().setTranslationKey("trapcraft.fan").setRegistryName(Reference.MOD_ID, "fan");
+        MAGNETIC_CHEST = new BlockMagneticChest().setTranslationKey("trapcraft.magnetic_chest").setRegistryName(Reference.MOD_ID, "magnetic_chest");
+        GRASS_COVERING = new BlockGrassCovering().setTranslationKey("trapcraft.grass_covering").setRegistryName(Reference.MOD_ID, "grass_covering");
+        BEAR_TRAP = new BlockBearTrap().setHardness(2.0F).setTranslationKey("trapcraft.bear_trap").setRegistryName(Reference.MOD_ID, "bear_trap");
+        SPIKES = new BlockSpikes().setTranslationKey("trapcraft.spikes").setRegistryName(Reference.MOD_ID, "spikes");
+        IGNITER = new BlockIgniter().setTranslationKey("trapcraft.igniter").setRegistryName(Reference.MOD_ID, "igniter");
+
+        GameRegistry.registerTileEntity(TileEntityMagneticChest.class, "trapcraft:magnetic_chest");
+        GameRegistry.registerTileEntity(TileEntityFan.class, "trapcraft:fan");
+        GameRegistry.registerTileEntity(TileEntityBearTrap.class, "trapcraft:bear_trap");
+        GameRegistry.registerTileEntity(TileEntityIgniter.class, "trapcraft:igniter");
+
+        MAGNETIC_CHEST.setHarvestLevel("axe", 0);
+        FAN.setHarvestLevel("pickaxe", 0);
+        BEAR_TRAP.setHarvestLevel("pickaxe", 0);
+        SPIKES.setHarvestLevel("pickaxe", 0);
+        IGNITER.setHarvestLevel("pickaxe", 0);
+
+        event.getRegistry().register(FAN);
+        event.getRegistry().register(MAGNETIC_CHEST);
+        event.getRegistry().register(GRASS_COVERING);
+        event.getRegistry().register(BEAR_TRAP);
+        event.getRegistry().register(SPIKES);
+        event.getRegistry().register(IGNITER);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterItem(RegistryEvent.Register<Item> event) {
+        event.getRegistry().register(makeItemBlock(MAGNETIC_CHEST));
+        event.getRegistry().register(makeItemBlock(GRASS_COVERING));
+        event.getRegistry().register(makeItemBlock(FAN));
+        event.getRegistry().register(makeItemBlock(BEAR_TRAP));
+        event.getRegistry().register(makeItemBlock(SPIKES));
+        event.getRegistry().register(makeItemBlock(IGNITER));
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void setItemModels(ModelRegistryEvent event) {
+        ModelHelper.setModel(FAN, 0, "trapcraft:fan");
+        ModelHelper.setModel(MAGNETIC_CHEST, 0, "trapcraft:magnetic_chest");
+        ModelHelper.setModel(BEAR_TRAP, 0, "trapcraft:bear_trap");
+        ModelHelper.setModel(GRASS_COVERING, 0, "trapcraft:grass_covering");
+        ModelHelper.setModel(SPIKES, 0, "trapcraft:spikes");
+        ModelHelper.setModel(IGNITER, 0, "trapcraft:igniter");
+    }
+
+    private static ItemBlock makeItemBlock(Block block) {
         return (ItemBlock)new ItemBlock(block).setRegistryName(block.getRegistryName());
     }
 }

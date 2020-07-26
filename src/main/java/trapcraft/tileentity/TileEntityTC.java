@@ -9,8 +9,8 @@ import trapcraft.api.Properties;
  * @author ProPercivalalb
  **/
 public class TileEntityTC extends TileEntity {
-	
-	private String owner;
+
+    private String owner;
     private String customName;
     private String state;
 
@@ -19,7 +19,7 @@ public class TileEntityTC extends TileEntity {
         customName = "";
         state = "";
     }
-    
+
     /* Block Owner */
     public String getOwner() { return owner; }
     public boolean hasOwner() { return owner != null && owner.length() > 0; }
@@ -31,7 +31,7 @@ public class TileEntityTC extends TileEntity {
     /* Block State */
     public String getState() { return state; }
     public void setState(String newState) { this.state = newState; }
-    
+
 
     public boolean isUseableByPlayer(EntityPlayer player) { return owner.equals(player.getName()); }
 
@@ -42,7 +42,7 @@ public class TileEntityTC extends TileEntity {
         if (nbtTagCompound.hasKey(Properties.NBT_STATE)) {
             state = nbtTagCompound.getString(Properties.NBT_STATE);
         }
-        
+
         if (nbtTagCompound.hasKey(Properties.NBT_OWNER_KEY)) {
             owner = nbtTagCompound.getString(Properties.NBT_OWNER_KEY);
         }
@@ -57,7 +57,7 @@ public class TileEntityTC extends TileEntity {
         super.writeToNBT(nbtTagCompound);
 
         nbtTagCompound.setString(Properties.NBT_STATE, state);
-        
+
         if (hasOwner()) {
             nbtTagCompound.setString(Properties.NBT_OWNER_KEY, owner);
         }
@@ -68,6 +68,6 @@ public class TileEntityTC extends TileEntity {
     //TODO
     //@Override
     //public Packet getDescriptionPacket() {
-    //	return PacketDispatcher.getPacket(new MagneticChestTileMessage(this.pos, this.owner, this.customName, this.state));
+    //    return PacketDispatcher.getPacket(new MagneticChestTileMessage(this.pos, this.owner, this.customName, this.state));
     //}
 }

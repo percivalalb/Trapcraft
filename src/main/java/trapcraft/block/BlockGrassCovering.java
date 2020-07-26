@@ -24,76 +24,76 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author ProPercivalalb
  **/
 public class BlockGrassCovering extends Block {
-    
-	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 1.0D - 0.0625D, 0.0D, 1.0D, 1.0D, 1.0D);
-	
-	public BlockGrassCovering() {
+
+    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 1.0D - 0.0625D, 0.0D, 1.0D, 1.0D, 1.0D);
+
+    public BlockGrassCovering() {
         super(Material.GRASS);
         this.setHardness(0.2F);
         this.setSoundType(SoundType.GROUND);
         this.setTickRandomly(true);
         this.setCreativeTab(CreativeTabs.REDSTONE);
     }
- 
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
-	}
 
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return AABB;
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return NULL_AABB;
     }
-    
-	@Override
-	public boolean isFullCube(IBlockState state) {
-	    return false;
-	}
 
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-	    return false;
-	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-	    return EnumBlockRenderType.MODEL;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
-	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-	    return super.canPlaceBlockAt(worldIn, pos) ? this.canBlockStay(worldIn, pos) : false;
-	}
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return super.canPlaceBlockAt(worldIn, pos) ? this.canBlockStay(worldIn, pos) : false;
+    }
 
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		if(!this.canBlockStay((World)world, pos)) {
-			this.dropBlockAsItem((World)world, pos, world.getBlockState(pos), 0);
-			((World)world).setBlockToAir(pos);
-		}
-	}
+    @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        if(!this.canBlockStay((World)world, pos)) {
+            this.dropBlockAsItem((World)world, pos, world.getBlockState(pos), 0);
+            ((World)world).setBlockToAir(pos);
+        }
+    }
 
     public boolean canBlockStay(World world, BlockPos pos) {
-    	for(EnumFacing facing : EnumFacing.HORIZONTALS) {
-    		BlockPos posOff = pos.offset(facing);
-    		IBlockState blockstate = world.getBlockState(posOff);
-    		if(blockstate.getBlock().isSideSolid(blockstate, world, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
-    			return true;
+        for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+            BlockPos posOff = pos.offset(facing);
+            IBlockState blockstate = world.getBlockState(posOff);
+            if(blockstate.getBlock().isSideSolid(blockstate, world, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
+                return true;
 
-    	}
-    	
-    	return false;
-	}
-	
+        }
+
+        return false;
+    }
+
     @Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-    	if(entity instanceof EntityLivingBase && !world.isRemote) {
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+        if(entity instanceof EntityLivingBase && !world.isRemote) {
             world.setBlockToAir(pos);
 
             for (int l = 0; l < 2; l++) {

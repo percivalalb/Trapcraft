@@ -15,15 +15,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  **/
 public class ItemIgniterRange extends Item {
 
-	public ItemIgniterRange() {
-		super();
-		this.setMaxStackSize(8);
-		this.setCreativeTab(CreativeTabs.REDSTONE);
-	}
+    public ItemIgniterRange() {
+        super();
+        this.setMaxStackSize(8);
+        this.setCreativeTab(CreativeTabs.REDSTONE);
+    }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-    	tooltip.add("+1 to Block range");
+        tooltip.add("+1 to Block range");
     }
 }

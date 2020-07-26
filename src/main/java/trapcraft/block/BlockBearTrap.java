@@ -25,69 +25,69 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import trapcraft.tileentity.TileEntityBearTrap;
 
 public class BlockBearTrap extends BlockContainer {
-	
-	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.15D, 1.0D);
-	public static final PropertyBool TRIGGERED = PropertyBool.create("triggered");
-	
-	public BlockBearTrap() {
-		super(Material.IRON);
-		this.setSoundType(SoundType.METAL);
-		this.setCreativeTab(CreativeTabs.REDSTONE);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(TRIGGERED, Boolean.valueOf(false)));
-	}
-	
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(state.getValue(TRIGGERED)) {
-			worldIn.setBlockState(pos, state.withProperty(TRIGGERED, false), 3);
-	    	return true;
-		}
-    	return false;
-    }
-	
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
-	}
 
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.15D, 1.0D);
+    public static final PropertyBool TRIGGERED = PropertyBool.create("triggered");
+
+    public BlockBearTrap() {
+        super(Material.IRON);
+        this.setSoundType(SoundType.METAL);
+        this.setCreativeTab(CreativeTabs.REDSTONE);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(TRIGGERED, Boolean.valueOf(false)));
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(state.getValue(TRIGGERED)) {
+            worldIn.setBlockState(pos, state.withProperty(TRIGGERED, false), 3);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return AABB;
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return NULL_AABB;
     }
-	   
-	@Override
-	public boolean isFullCube(IBlockState state) {
-	    return false;
-	}
 
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-	    return false;
-	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-	    return EnumBlockRenderType.MODEL;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityBearTrap();
-	}
-	
-	@Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if(state.getValue(TRIGGERED)) {
-			return;
-		}
-			
-		
+    @Override
+    public TileEntity createNewTileEntity(World world, int meta) {
+        return new TileEntityBearTrap();
+    }
+
+    @Override
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+        if(state.getValue(TRIGGERED)) {
+            return;
+        }
+
+
         if ((entity instanceof EntityPlayer) || !(entity instanceof EntityLiving)) {
             return;
         }
@@ -98,24 +98,24 @@ public class BlockBearTrap extends BlockContainer {
         bearTrap.setTrappedEntity(livingEntity);
     }
 
-	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-	    return super.canPlaceBlockAt(worldIn, pos) ? this.canBlockStay(worldIn, pos) : false;
-	}
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return super.canPlaceBlockAt(worldIn, pos) ? this.canBlockStay(worldIn, pos) : false;
+    }
 
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		if(!this.canBlockStay((World)world, pos)) {
-			this.dropBlockAsItem((World)world, pos, world.getBlockState(pos), 0);
-			((World)world).setBlockToAir(pos);
-		}
-	}
+    @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        if(!this.canBlockStay((World)world, pos)) {
+            this.dropBlockAsItem((World)world, pos, world.getBlockState(pos), 0);
+            ((World)world).setBlockToAir(pos);
+        }
+    }
 
     public boolean canBlockStay(World world, BlockPos pos) {
-		IBlockState blockstate = world.getBlockState(pos.down());
-		return blockstate.getBlock().isSideSolid(blockstate, world, pos.down(), EnumFacing.UP);
-	}
-    
+        IBlockState blockstate = world.getBlockState(pos.down());
+        return blockstate.getBlock().isSideSolid(blockstate, world, pos.down(), EnumFacing.UP);
+    }
+
     @Override
     public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
@@ -125,22 +125,22 @@ public class BlockBearTrap extends BlockContainer {
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
         return blockState.getValue(TRIGGERED) ? 15 : 0;
     }
-    
+
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(TRIGGERED, meta != 0);
     }
-    
+
     @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(TRIGGERED) ? 1 : 0;
     }
-    
+
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, new IProperty[] {TRIGGERED});
     }
-    
+
     @Override
     public boolean canProvidePower(IBlockState state) {
         return state.getValue(TRIGGERED);
