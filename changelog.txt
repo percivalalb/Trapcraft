@@ -11,6 +11,11 @@ Update List Key
 MC 1.15.x
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+2.7.1 | 26th July 2020
+# Update textures to match post 1.13 vanilla style
+* Fix including client side interface in common class (IChestLid.java), leading to possible startup crashes
+* Fix igniter texture being rotated incorrectly
+
 2.7.0 | 4th March 2020
 + Updated to MC 1.15.2
 + Added config options for fan range, speed and acceleration
