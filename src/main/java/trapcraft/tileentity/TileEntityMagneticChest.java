@@ -279,7 +279,7 @@ public class TileEntityMagneticChest extends TileEntityLockable implements ITick
 
     @Override
     public String getName() {
-        return (this.hasCustomName() ? this.customName : "container.magnetic_chest");
+        return (this.hasCustomName() ? this.customName : "container.trapcraft.magnetic_chest");
     }
 
     @Override
