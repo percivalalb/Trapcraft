@@ -1,21 +1,7 @@
 { 
    "homepage":"https://minecraft.curseforge.com/projects/trapcraft",
    "promos":{ 
-      "1.9.4-latest":"v3.0.0a",
-      "1.9.4-recommended":"v3.0.0a",
-      "1.12.2-latest":"2.4.4",
-      "1.12.2-recommended":"2.4.4",
-      "1.13.2-latest":"2.5.0",
-      "1.13.2-recommended":"2.5.0",
-      "1.14.2-latest":"2.6.0",
-      "1.14.2-recommended":"2.6.0",
-      "1.14.4-latest":"2.6.1",
-      "1.14.4-recommended":"2.6.1",
-      "1.15.2-latest":"2.7.0",
-      "1.15.2-recommended":"2.7.0"
-   },
-   "1.9.4":{ 
-      "v3.0.0a":"See https://raw.githubusercontent.com/percivalalb/Trapcraft/master/changelog.txt",
-      "v3.0.0a":"See https://raw.githubusercontent.com/percivalalb/Trapcraft/master/changelog.txt"
+      "1.15.2-latest":"2.7.1",
+      "1.15.2-recommended":"2.7.1"
    }
 }
