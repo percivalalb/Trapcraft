@@ -21,8 +21,6 @@ public class CommonProxy implements IGuiHandler {
     public void onModLoad() {}
     public void onModPost() {}
 
-    public void handleTileEntityPacket(BlockPos pos, EnumFacing facing, String owner, String customName, String state) {}
-
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         BlockPos pos = new BlockPos(x, y, z);

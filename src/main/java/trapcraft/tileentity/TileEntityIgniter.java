@@ -2,7 +2,6 @@ package trapcraft.tileentity;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -26,9 +25,9 @@ public class TileEntityIgniter extends TileEntity implements ITickable, IInvento
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
-        super.readFromNBT(par1NBTTagCompound);
-        NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Items", 10);
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        NBTTagList nbttaglist = compound.getTagList("Items", 10);
 
         for(int i = 0; i < nbttaglist.tagCount(); ++i) {
             NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
@@ -44,8 +43,8 @@ public class TileEntityIgniter extends TileEntity implements ITickable, IInvento
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound) {
-        super.writeToNBT(par1NBTTagCompound);
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
         NBTTagList nbttaglist = new NBTTagList();
 
         for(int i = 0; i < this.inventory.getSizeInventory(); ++i) {
@@ -57,9 +56,9 @@ public class TileEntityIgniter extends TileEntity implements ITickable, IInvento
             }
         }
 
-        par1NBTTagCompound.setTag("Items", nbttaglist);
+        compound.setTag("Items", nbttaglist);
 
-        return par1NBTTagCompound;
+        return compound;
     }
 
 

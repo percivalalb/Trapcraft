@@ -1,5 +1,6 @@
 package trapcraft;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -15,13 +16,12 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import trapcraft.entity.EntityDummy;
 import trapcraft.handler.ActionHandler;
 import trapcraft.lib.Reference;
-import trapcraft.network.PacketDispatcher;
 import trapcraft.proxy.CommonProxy;
 
 /**
  * @author ProPercivalalb
  **/
-@Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID)
+@Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, updateJSON = Reference.UPDATE_URL)
 public class TrapcraftMod {
 
      @SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
@@ -45,7 +45,6 @@ public class TrapcraftMod {
          //Event Buses
          MinecraftForge.EVENT_BUS.register(new ActionHandler());
          NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, PROXY);
-         PacketDispatcher.registerPackets();
      }
 
      @EventHandler
@@ -53,12 +52,12 @@ public class TrapcraftMod {
          PROXY.onModPost();
      }
 
-     public void registerCreature(Class var1, String var2, int var3) {
-         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, var2), var1, var2, var3, INSTANCE, 128, 1, true);
+     public void registerCreature(Class<? extends Entity> entityClass, String name, int id) {
+         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, name), entityClass, name, id, INSTANCE, 128, 1, true);
      }
 
-     public void loadConfig(Configuration var1) {
-         var1.load();
-         var1.save();
+     public void loadConfig(Configuration config) {
+         config.load();
+         config.save();
      }
 }
