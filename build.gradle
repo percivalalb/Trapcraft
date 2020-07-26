@@ -25,55 +25,59 @@ repositories {
 }
 
 sourceSets {
-	api
-	main {
-		compileClasspath += sourceSets.api.output
-		runtimeClasspath += sourceSets.api.output
-	}
-	test {
-		compileClasspath += sourceSets.api.output
-		runtimeClasspath += sourceSets.api.output
-	}
+    api
+    main {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
+        resources.srcDirs += 'src/generated/resources'
+    }
+    test {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
+    }
 }
 
 configurations {
-	apiCompile.extendsFrom(compile)
+    apiCompile.extendsFrom(compile)
 }
 
 minecraft {
     mappings channel: 'stable', version: project.mcp_mappings
-	
+    
     runs {
         client {
+            taskName 'trapcraft_client'
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
             mods {
                 trapcraft {
                     source sourceSets.main
-					source sourceSets.api
+                    source sourceSets.api
                 }
             }
         }
 
         server {
+            taskName 'trapcraft_server'
             workingDirectory project.file('run-server')
             property 'forge.logging.console.level', 'debug'
             mods {
                 trapcraft {
                     source sourceSets.main
-					source sourceSets.api
+                    source sourceSets.api
                 }
             }
         }
 
         data {
+            taskName 'trapcraft_data'
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
             args '--mod', 'trapcraft', '--all', '--output', file('src/generated/resources/')
             mods {
                 trapcraft {
                     source sourceSets.main
-					source sourceSets.api
+                    source sourceSets.api
                 }
             }
         }
@@ -83,20 +87,20 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-	compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
-	runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
 }
 
 task sourcesJar(type: Jar) {
-	classifier = "sources"
-	from sourceSets.main.allJava
-	from sourceSets.api.allJava
+    classifier = "sources"
+    from sourceSets.main.allJava
+    from sourceSets.api.allJava
 }
 
 task apiJar(type: Jar) {
-	classifier = "api"
-	from sourceSets.api.output
-	from sourceSets.api.allJava
+    classifier = "api"
+    from sourceSets.api.output
+    from sourceSets.api.allJava
 }
 
 artifacts {
