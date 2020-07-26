@@ -11,6 +11,10 @@ Update List Key
 MC 1.14.x
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+2.6.2 | 26th July 2020
+# Update textures to match post 1.13 vanilla style
+* Fix including client side interface in common class (IChestLid.java), leading to possible startup crashes
+
 2.6.1 | 7th August 2019
 + Updated to MC 1.14.4
 Initial release, parent version 2.6.0
