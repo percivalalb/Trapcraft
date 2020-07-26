@@ -33,7 +33,11 @@ Initial release, parent version v2.4.3a
 MC 1.12.2
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-2.4.4 | 20th June April 2019
+2.4.5 | 26th July 2020
+* Fix mismatching modid in mcmod.info and @Mod class
+* Fix magnetic chest translation key 
+
+2.4.4 | 20th June 2019
 + Readded dummy and improved back end
 # Player who are flying (i.e creative mode) are no longer affected by fans
 # Renamed Bear Trap to Trap
