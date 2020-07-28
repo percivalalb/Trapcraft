@@ -1,5 +1,6 @@
 modLoader="javafml"
 loaderVersion="[32,)"
+license="GNU GPLv3"
 issueTrackerURL="https://github.com/percivalalb/Trapcraft/issues"
 displayURL="https://minecraft.curseforge.com/projects/trapcraft/"
 logoFile="tc_logo.png"
