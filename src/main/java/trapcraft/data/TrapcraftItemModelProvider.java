@@ -17,12 +17,15 @@ import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
 import trapcraft.api.Constants;
 
+import javax.annotation.Nonnull;
+
 public class TrapcraftItemModelProvider extends ItemModelProvider {
 
     public TrapcraftItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, Constants.MOD_ID, existingFileHelper);
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "Trapcraft Item Models";
@@ -86,7 +89,7 @@ public class TrapcraftItemModelProvider extends ItemModelProvider {
         return withExistingParent(name(block), modLoc(ModelProvider.BLOCK_FOLDER + "/" + name(block) + suffix));
     }
 
-    private ResourceLocation extend(ResourceLocation rl, String suffix) {
+    private ResourceLocation extend(final ResourceLocation rl, final String suffix) {
         return new ResourceLocation(rl.getNamespace(), rl.getPath() + suffix);
     }
 }

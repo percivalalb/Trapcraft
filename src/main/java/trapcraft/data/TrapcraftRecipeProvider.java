@@ -19,12 +19,15 @@ import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftItems;
 import trapcraft.api.Constants;
 
+import javax.annotation.Nonnull;
+
 public class TrapcraftRecipeProvider extends RecipeProvider {
 
     public TrapcraftRecipeProvider(DataGenerator generatorIn) {
         super(generatorIn);
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "Trapcraft Recipes";

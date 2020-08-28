@@ -24,6 +24,8 @@ import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.api.ConfigValues;
 import trapcraft.block.FanBlock;
 
+import javax.annotation.Nonnull;
+
 public class FanTileEntity extends TileEntity implements ITickableTileEntity
 {
     public float speed = 1.0F;
@@ -39,13 +41,13 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         if(!this.world.getBlockState(this.pos).get(FanBlock.POWERED))
             return;
 
-        Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
+        final Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
 
         if(this.world.rand.nextInt(2) == 0)
         	spawnParticles(this.world, this.pos);
-        List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getDirection());
+        final List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getDirection());
 
-        for(Entity entity : list) {
+        for(final Entity entity : list) {
 
         	if(!this.isPathClear(entity, facing))
         		continue;
@@ -82,10 +84,10 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         }
     }
 
-    public boolean isPathClear(Entity entity, Direction facing) {
-    	int x = facing.getXOffset() * (MathHelper.floor(entity.getPosX()) - this.pos.getX());
-    	int y = facing.getYOffset() * (MathHelper.floor(entity.getPosY()) - this.pos.getY());
-    	int z = facing.getZOffset() * (MathHelper.floor(entity.getPosZ()) - this.pos.getZ());
+    public boolean isPathClear(final Entity entity, final Direction facing) {
+    	final int x = facing.getXOffset() * (MathHelper.floor(entity.getPosX()) - this.pos.getX());
+    	final int y = facing.getYOffset() * (MathHelper.floor(entity.getPosY()) - this.pos.getY());
+    	final int z = facing.getZOffset() * (MathHelper.floor(entity.getPosZ()) - this.pos.getZ());
     	boolean flag = true;
 
         for(int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
@@ -107,7 +109,7 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     public AxisAlignedBB getDirection() {
-    	Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
+    	final Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
 
         BlockPos endPos = this.pos.offset(facing, MathHelper.floor(ConfigValues.FAN_RANGE + this.extraRange));
         if(facing == Direction.WEST)
@@ -128,17 +130,17 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         return new AxisAlignedBB(this.pos, endPos);
     }
 
-    public static void spawnParticles(World world, BlockPos pos) {
-    	double x = pos.getX() + world.rand.nextFloat();
-        double y = pos.getY() + world.rand.nextFloat();
-        double z = pos.getZ() + world.rand.nextFloat();
+    public static void spawnParticles(final World world, final BlockPos pos) {
+    	final double x = pos.getX() + world.rand.nextFloat();
+        final double y = pos.getY() + world.rand.nextFloat();
+        final double z = pos.getZ() + world.rand.nextFloat();
 
-        Direction facing = world.getBlockState(pos).get(FanBlock.FACING);
-        double velocity = 0.2F + world.rand.nextFloat() * 0.4F;
+        final Direction facing = world.getBlockState(pos).get(FanBlock.FACING);
+        final double velocity = 0.2F + world.rand.nextFloat() * 0.4F;
 
-        double velX = facing.getXOffset() * velocity;
-        double velY = facing.getYOffset() * velocity;
-        double velZ = facing.getZOffset() * velocity;
+        final double velX = facing.getXOffset() * velocity;
+        final double velY = facing.getYOffset() * velocity;
+        final double velZ = facing.getZOffset() * velocity;
 
         world.addParticle(ParticleTypes.SMOKE, x, y, z, velX, velY, velZ);
     }
@@ -159,9 +161,10 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         return compound;
     }
 
+    @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = new CompoundNBT();
+        final CompoundNBT tag = new CompoundNBT();
         return this.write(tag);
     }
 

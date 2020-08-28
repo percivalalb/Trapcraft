@@ -20,7 +20,7 @@ import trapcraft.TrapcraftTileEntityTypes;
 
 public class BearTrapTileEntity extends TileEntity implements ITickableTileEntity {
 
-	private DamageSource damageSource = new DamageSource("trapcraft.bear_trap").setDamageBypassesArmor();
+	private final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").setDamageBypassesArmor();
 	@Nullable
 	private MobEntity entityliving;
 	private Goal doNothingGoal;
@@ -33,7 +33,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 
     @Override
     public void tick() {
-    	MobEntity trapped = this.getTrappedEntity();
+    	final MobEntity trapped = this.getTrappedEntity();
 
     	if(!this.world.isRemote) {
 	    	if(trapped != null) {
@@ -126,7 +126,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 		return this.getTrappedEntity() != null;
 	}
 
-    public boolean isEntityTrapped(MobEntity trappedEntity) {
+    public boolean isEntityTrapped(final MobEntity trappedEntity) {
 		return this.getTrappedEntity() == trappedEntity;
 	}
 }

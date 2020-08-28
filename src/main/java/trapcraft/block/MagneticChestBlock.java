@@ -28,16 +28,16 @@ import trapcraft.block.tileentity.MagneticChestTileEntity;
 public class MagneticChestBlock extends ChestBlock {
 
     public MagneticChestBlock() {
-    	super(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F, 2.0F).sound(SoundType.WOOD), () -> TrapcraftTileEntityTypes.MAGNETIC_CHEST.get());
+    	super(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F, 2.0F).sound(SoundType.WOOD), TrapcraftTileEntityTypes.MAGNETIC_CHEST::get);
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        Direction direction = context.getPlacementHorizontalFacing().getOpposite();
-        FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        final Direction direction = context.getPlacementHorizontalFacing().getOpposite();
+        final FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
 
-        return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+        return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
      }
 
     @Override

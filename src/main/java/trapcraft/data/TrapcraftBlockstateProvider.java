@@ -24,6 +24,8 @@ import trapcraft.api.Constants;
 import trapcraft.block.BearTrapBlock;
 import trapcraft.block.FanBlock;
 
+import javax.annotation.Nonnull;
+
 public class TrapcraftBlockstateProvider extends BlockStateProvider {
 
     public TrapcraftBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
@@ -34,6 +36,7 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
         return this.models().existingFileHelper;
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "Trapcraft Blockstates/Block Models";
@@ -160,10 +163,10 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
                 extend(blockTexture(blockIn), "_top"));
 
         this.getVariantBuilder(blockIn.get()).forAllStatesExcept(state -> {
-            Direction facing = state.get(FanBlock.FACING);
+            final Direction facing = state.get(FanBlock.FACING);
             int xRot = 0;
             int yRot = ((int) facing.getHorizontalAngle()) + 180;
-            boolean vertical = facing.getAxis().isVertical();
+            final boolean vertical = facing.getAxis().isVertical();
 
             if (vertical) {
                 xRot = facing.getAxisDirection() == AxisDirection.NEGATIVE ? 180 : 0;
@@ -178,13 +181,13 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
     }
 
     private void registerParticleOnly(Supplier<? extends Block> blockIn, Supplier<? extends Block> particle) {
-        ModelFile model = this.models().getBuilder(name(blockIn))
+        final ModelFile model = this.models().getBuilder(name(blockIn))
                 .texture("particle", blockTexture(particle));
         this.simpleBlock(blockIn.get(), model);
     }
 
     private void registerCross(Supplier<? extends Block> block) {
-        ModelFile model = this.models().cross(name(block), blockTexture(block));
+        final ModelFile model = this.models().cross(name(block), blockTexture(block));
         this.simpleBlock(block.get(), model);
     }
 
@@ -193,11 +196,11 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
     }
 
     private ResourceLocation blockTexture(Supplier<? extends Block> block) {
-        ResourceLocation base = block.get().getRegistryName();
+        final ResourceLocation base = block.get().getRegistryName();
         return this.prepend(base, ModelProvider.BLOCK_FOLDER + "/");
     }
 
-    private ResourceLocation prepend(ResourceLocation rl, String prefix) {
+    private ResourceLocation prepend(final ResourceLocation rl, final String prefix) {
         return new ResourceLocation(rl.getNamespace(), prefix + rl.getPath());
     }
 
@@ -205,7 +208,7 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
         return extend(forgeEntry.get().getRegistryName(), suffix).getPath();
     }
 
-    private ResourceLocation extend(ResourceLocation rl, String suffix) {
+    private ResourceLocation extend(final ResourceLocation rl, final String suffix) {
         return new ResourceLocation(rl.getNamespace(), rl.getPath() + suffix);
     }
 }

@@ -88,9 +88,9 @@ public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
             return;
         }
 
-        MobEntity livingEntity = (MobEntity)entity;
+		final MobEntity livingEntity = (MobEntity)entity;
         world.setBlockState(pos, state.with(TRIGGERED, true), 3);
-        BearTrapTileEntity bearTrap = (BearTrapTileEntity)world.getTileEntity(pos);
+		final BearTrapTileEntity bearTrap = (BearTrapTileEntity)world.getTileEntity(pos);
         bearTrap.setTrappedEntity(livingEntity);
     }
 
@@ -105,9 +105,9 @@ public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+		final FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
 
-		return this.getDefaultState().with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+		return this.getDefaultState().with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
 	}
 
 	@Override
