@@ -28,20 +28,20 @@ public class MagneticChestTileEntity extends ChestTileEntity implements ITickabl
     }
 
     public void pullItemsIn() {
-    	List<ItemEntity> entities = this.world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(this.getPos()).grow(50), item -> item.getDistanceSq(this.getPos().getX(),this.getPos().getY(),this.getPos().getZ()) < 10D);
+		final List<ItemEntity> entities = this.world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(this.getPos()).grow(50), item -> item.getDistanceSq(this.getPos().getX(),this.getPos().getY(),this.getPos().getZ()) < 10D);
 
-    	for(ItemEntity itemEntity : entities) {
-       		double centreX = this.pos.getX() + 0.5D;
-       		double centreY = this.pos.getY() + 0.5D;
-    		double centreZ = this.pos.getZ() + 0.5D;
-    		double diffX = -itemEntity.getPosX() + centreX;
-    		double diffY = -itemEntity.getPosY() + centreY;
-    		double diffZ = -itemEntity.getPosZ() + centreZ;
-    		double speedMultiper = 0.05D;
+    	for(final ItemEntity itemEntity : entities) {
+			final double centreX = this.pos.getX() + 0.5D;
+			final double centreY = this.pos.getY() + 0.5D;
+			final double centreZ = this.pos.getZ() + 0.5D;
+			final double diffX = -itemEntity.getPosX() + centreX;
+			final double diffY = -itemEntity.getPosY() + centreY;
+			final double diffZ = -itemEntity.getPosZ() + centreZ;
+			final double speedMultiper = 0.05D;
     		double d11 = itemEntity.getPosX() - centreX;
     		double d12 = itemEntity.getPosZ() - centreZ;
-    		double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
-    		double angle = Math.asin(diffX / horizDiffSq);
+			final double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
+			final double angle = Math.asin(diffX / horizDiffSq);
     		double d15 = Math.abs(MathHelper.sin((float)angle) * speedMultiper);
     		double d16 = Math.abs(MathHelper.cos((float)angle) * speedMultiper);
     		d15 = diffX <= 0.0D ? -d15 : d15;
@@ -54,14 +54,14 @@ public class MagneticChestTileEntity extends ChestTileEntity implements ITickabl
     }
 
 
-    public boolean insertStackFromEntity(ItemEntity entityItem) {
+    public boolean insertStackFromEntity(final ItemEntity entityItem) {
 	    boolean succesful = false;
 
 	    if (entityItem == null || !entityItem.isAlive())
 	        return false;
 	    else {
-	        ItemStack itemstack = entityItem.getItem().copy();
-	        ItemStack itemstack1 = this.addItem(itemstack);
+			final ItemStack itemstack = entityItem.getItem().copy();
+			final ItemStack itemstack1 = this.addItem(itemstack);
 
 	        if (!itemstack1.isEmpty())
 	        	entityItem.setItem(itemstack1);
@@ -74,8 +74,8 @@ public class MagneticChestTileEntity extends ChestTileEntity implements ITickabl
 	    }
 	}
 
-    public ItemStack addItem(ItemStack stack) {
-    	ItemStack itemstack = stack.copy();
+    public ItemStack addItem(final ItemStack stack) {
+		ItemStack itemstack = stack.copy();
 
     	for(int i = 0; i < this.getSizeInventory(); ++i) {
     		ItemStack itemstack1 = this.getStackInSlot(i);
@@ -86,8 +86,8 @@ public class MagneticChestTileEntity extends ChestTileEntity implements ITickabl
     		}
 
     		if(ItemStack.areItemsEqual(itemstack1, itemstack)) {
-    			int j = Math.min(this.getInventoryStackLimit(), itemstack1.getMaxStackSize());
-    			int k = Math.min(itemstack.getCount(), j - itemstack1.getCount());
+				final int j = Math.min(this.getInventoryStackLimit(), itemstack1.getMaxStackSize());
+				final int k = Math.min(itemstack.getCount(), j - itemstack1.getCount());
     			if(k > 0) {
     				itemstack1.grow(k);
     				itemstack.shrink(k);

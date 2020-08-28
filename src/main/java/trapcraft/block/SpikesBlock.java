@@ -37,7 +37,7 @@ public class SpikesBlock extends Block implements IWaterLoggable {
 
     public SpikesBlock() {
     	super(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL).tickRandomly());
-		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, Boolean.valueOf(false)));
+		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, Boolean.FALSE));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SpikesBlock extends Block implements IWaterLoggable {
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
 
-		return this.getDefaultState().with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+		return this.getDefaultState().with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class SpikesBlock extends Block implements IWaterLoggable {
             return;
         }
         else {
-            float damageTodo = (float)entity.getMotion().dotProduct(new Vector3d(1, 1, 1)) / 1.5F;
+            final float damageTodo = (float)entity.getMotion().dotProduct(new Vector3d(1, 1, 1)) / 1.5F;
             entity.attackEntityFrom(damageSource, 2F + damageTodo);
             return;
         }

@@ -15,11 +15,11 @@ public class ConfigHandler {
     private static ForgeConfigSpec CONFIG_SERVER_SPEC;
     private static ForgeConfigSpec CONFIG_CLIENT_SPEC;
 
-    public static void init(IEventBus eventBus) {
-        Pair<ServerConfig, ForgeConfigSpec> commonPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+    public static void init(final IEventBus eventBus) {
+        final Pair<ServerConfig, ForgeConfigSpec> commonPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
         CONFIG_SERVER_SPEC = commonPair.getRight();
         SERVER = commonPair.getLeft();
-        Pair<ClientConfig, ForgeConfigSpec> clientPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+        final Pair<ClientConfig, ForgeConfigSpec> clientPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
         CONFIG_CLIENT_SPEC = clientPair.getRight();
         CLIENT = clientPair.getLeft();
 
@@ -31,7 +31,7 @@ public class ConfigHandler {
     }
 
     public static void loadConfig(final ModConfig.Loading event) {
-        ModConfig config = event.getConfig();
+        final ModConfig config = event.getConfig();
         if(config.getSpec() == ConfigHandler.CONFIG_CLIENT_SPEC) {
             ConfigHandler.refreshClient();
         } else if(config.getSpec() == ConfigHandler.CONFIG_SERVER_SPEC) {
@@ -60,7 +60,7 @@ public class ConfigHandler {
 
     static class ClientConfig {
 
-        public ClientConfig(ForgeConfigSpec.Builder builder) {
+        public ClientConfig(final ForgeConfigSpec.Builder builder) {
 
         }
     }
@@ -71,7 +71,7 @@ public class ConfigHandler {
         public ForgeConfigSpec.DoubleValue FAN_ACCELERATION;
         public ForgeConfigSpec.DoubleValue FAN_MAX_SPEED;
 
-        public ServerConfig(ForgeConfigSpec.Builder builder) {
+        public ServerConfig(final ForgeConfigSpec.Builder builder) {
 
             FAN_RANGE = builder
                     .comment("The distance at which entities are pushed by the fan.")

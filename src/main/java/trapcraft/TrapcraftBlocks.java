@@ -53,7 +53,7 @@ public class TrapcraftBlocks {
         return makeBlockItem(blockSupplier, ItemGroup.REDSTONE);
     }
 
-    private static BlockItem makeBlockItem(Supplier<Block> block, ItemGroup group) {
+    private static BlockItem makeBlockItem(Supplier<Block> block, final ItemGroup group) {
         return new BlockItem(block.get(), new Item.Properties().group(group));
     }
 }
