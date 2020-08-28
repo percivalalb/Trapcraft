@@ -48,7 +48,7 @@ public class GrassCoveringBlock extends Block {
 		for(Direction facing : new Direction[] {Direction.EAST, Direction.WEST, Direction.SOUTH, Direction.NORTH}) {
     		BlockPos posOff = pos.offset(facing);
     		BlockState blockstate = worldIn.getBlockState(posOff);
-    		if(Block.hasSolidSide(blockstate, worldIn, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
+    		if(Block.shouldSideBeRendered(blockstate, worldIn, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
     			return true;
 
     	}
