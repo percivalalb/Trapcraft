@@ -75,7 +75,7 @@ public class DummyEntity extends LivingEntity {
         this.setVariant(compound.getByte("variant"));
     }
 
-    public void setVariant(byte index) {
+    public void setVariant(final byte index) {
     	this.dataManager.set(VARIANT, index);
     }
 

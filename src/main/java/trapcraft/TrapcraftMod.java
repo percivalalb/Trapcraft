@@ -44,7 +44,7 @@ import trapcraft.handler.ActionHandler;
 import trapcraft.network.PacketHandler;
 
 @Mod(Constants.MOD_ID)
-public class TrapcraftMod {
+public final class TrapcraftMod {
 
 	public static final Logger LOGGER = LogManager.getLogger(Constants.MOD_NAME);
 	private static final String PROTOCOL_VERSION = Integer.toString(1);
@@ -59,7 +59,7 @@ public class TrapcraftMod {
 	public TrapcraftMod() {
 		INSTANCE = this;
 
-	    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	    final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 	    TrapcraftBlocks.BLOCKS.register(modEventBus);
 	    TrapcraftTileEntityTypes.TILE_ENTITIES.register(modEventBus);
@@ -102,7 +102,7 @@ public class TrapcraftMod {
 
 	@OnlyIn(Dist.CLIENT)
 	private void registerBlockColors(final ColorHandlerEvent.Block event) {
-	    BlockColors blockColors = event.getBlockColors();
+	    final BlockColors blockColors = event.getBlockColors();
 	    blockColors.register((state, blockAccess, pos, tintIndex) -> {
             return blockAccess != null && pos != null ? BiomeColors.getGrassColor(blockAccess, pos) : -1;
         }, TrapcraftBlocks.GRASS_COVERING.get());
@@ -110,7 +110,7 @@ public class TrapcraftMod {
 
 	@OnlyIn(Dist.CLIENT)
 	private void registerItemColors(final ColorHandlerEvent.Item event) {
-	    ItemColors itemColors = event.getItemColors();
+	    final ItemColors itemColors = event.getItemColors();
         itemColors.register((stack, tintIndex) -> GrassColors.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
     }
 
@@ -126,10 +126,10 @@ public class TrapcraftMod {
     }
 
 	private void gatherData(final GatherDataEvent event) {
-        DataGenerator gen = event.getGenerator();
+        final DataGenerator gen = event.getGenerator();
 
         if (event.includeClient()) {
-            TrapcraftBlockstateProvider blockstates = new TrapcraftBlockstateProvider(gen, event.getExistingFileHelper());
+            final TrapcraftBlockstateProvider blockstates = new TrapcraftBlockstateProvider(gen, event.getExistingFileHelper());
             gen.addProvider(blockstates);
             gen.addProvider(new TrapcraftItemModelProvider(gen, blockstates.getExistingHelper()));
         }

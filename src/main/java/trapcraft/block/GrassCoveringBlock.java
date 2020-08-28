@@ -46,8 +46,8 @@ public class GrassCoveringBlock extends Block {
 	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		for(Direction facing : new Direction[] {Direction.EAST, Direction.WEST, Direction.SOUTH, Direction.NORTH}) {
-    		BlockPos posOff = pos.offset(facing);
-    		BlockState blockstate = worldIn.getBlockState(posOff);
+			final BlockPos posOff = pos.offset(facing);
+			final BlockState blockstate = worldIn.getBlockState(posOff);
     		if(Block.hasSolidSide(blockstate, worldIn, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
     			return true;
 

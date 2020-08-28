@@ -20,6 +20,8 @@ import trapcraft.block.IgniterBlock;
 import trapcraft.inventory.IgniterContainer;
 import trapcraft.inventory.IgniterInventory;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author ProPercivalalb
  **/
@@ -37,11 +39,11 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public void read(CompoundNBT compound) {
         super.read(compound);
-        ListNBT nbttaglist = compound.getList("Items", 10);
+		final ListNBT nbttaglist = compound.getList("Items", 10);
 
         for(int i = 0; i < nbttaglist.size(); ++i) {
-        	CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);
-            byte b0 = nbttagcompound1.getByte("Slot");
+			final CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);
+			final byte b0 = nbttagcompound1.getByte("Slot");
 
             if (b0 >= 0 && b0 < this.inventory.getSizeInventory()) {
                 this.inventory.setInventorySlotContents(b0, ItemStack.read(nbttagcompound1));
@@ -74,7 +76,7 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     public int getRangeUpgrades() {
     	int upgrades = 0;
         for(int i = 0; i < this.inventory.getSizeInventory(); ++i) {
-    		ItemStack stack = this.inventory.getStackInSlot(i);
+			final ItemStack stack = this.inventory.getStackInSlot(i);
     		if(stack.getItem() == TrapcraftItems.IGNITER_RANGE.get()) {
     			upgrades += stack.getCount();
     		}
@@ -93,7 +95,7 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
 	@Override
 	public void onInventoryChanged(IInventory invBasic) {
 		if(!this.world.isRemote) {
-			int newUpgrades = this.getRangeUpgrades();
+			final int newUpgrades = this.getRangeUpgrades();
 			if(newUpgrades != this.lastUpgrades) {
 				((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
 			}
@@ -105,6 +107,7 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
 		return new IgniterContainer(windowId, playerInventory, this.inventory);
 	}
 
+	@Nonnull
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("container.trapcraft.igniter");

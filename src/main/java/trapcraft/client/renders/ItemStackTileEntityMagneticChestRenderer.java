@@ -16,7 +16,7 @@ public class ItemStackTileEntityMagneticChestRenderer extends ItemStackTileEntit
 
 	@Override
 	public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-		Item item = itemStackIn.getItem();
+		final Item item = itemStackIn.getItem();
 
 		if (item == TrapcraftBlocks.MAGNETIC_CHEST_ITEM.get()) {
 		    TileEntityRendererDispatcher.instance.renderItem(chestBasic, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);

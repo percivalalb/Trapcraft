@@ -50,11 +50,11 @@ public class IgniterBlock extends ContainerBlock {
         if(worldIn.isRemote) {
             return ActionResultType.SUCCESS;
         } else {
-            IgniterTileEntity tileentityigniter = (IgniterTileEntity)worldIn.getTileEntity(pos);
+            final IgniterTileEntity tileentityigniter = (IgniterTileEntity)worldIn.getTileEntity(pos);
 
             if (tileentityigniter != null) {
             	if(player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-                    ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
+                    final ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
 
                     NetworkHooks.openGui(entityPlayerMP, tileentityigniter, pos);
                 }
@@ -118,12 +118,12 @@ public class IgniterBlock extends ContainerBlock {
 	}
 
     public void updateIgniterState(World world, BlockPos pos) {
-       Direction facing = world.getBlockState(pos).get(FACING);
+       final Direction facing = world.getBlockState(pos).get(FACING);
 
        int distance = 1, oldDistance = 1;
        TileEntity tileEntity = world.getTileEntity(pos);
        if(tileEntity instanceof IgniterTileEntity) {
-    	   IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
+           final IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
     	   distance = igniter.getRangeUpgrades() + 1;
     	   oldDistance = igniter.lastUpgrades + 1;
        }
@@ -131,19 +131,19 @@ public class IgniterBlock extends ContainerBlock {
        updateIgniterState(world, pos, world.isBlockPowered(pos), facing, distance, oldDistance);
 
        if(tileEntity instanceof IgniterTileEntity) {
-    	   IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
+           final IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
     	   igniter.lastUpgrades = distance - 1;
        }
     }
 
-    private void updateIgniterState(World world, BlockPos pos, boolean powered, Direction direction, int newDistance, int previousDistance) {
+    private void updateIgniterState(final World world, final BlockPos pos, final boolean powered, final Direction direction, final int newDistance, final int previousDistance) {
     	// If distance has changed remove old fire
         if(newDistance != previousDistance) {
-        	 BlockPos oldPos = pos.offset(direction, previousDistance);
+        	 final BlockPos oldPos = pos.offset(direction, previousDistance);
         	 removePossibleFire(world, oldPos);
         }
 
-        BlockPos firePos = pos.offset(direction, newDistance);
+        final BlockPos firePos = pos.offset(direction, newDistance);
 
         if(powered) {
      	   if(world.isAirBlock(firePos)) {
@@ -155,7 +155,7 @@ public class IgniterBlock extends ContainerBlock {
         }
      }
 
-    public void removePossibleFire(World world, BlockPos pos) {
+    public void removePossibleFire(final World world, final BlockPos pos) {
     	if(world.getBlockState(pos).getBlock() == Blocks.FIRE) {
     		world.setBlockState(pos, Blocks.AIR.getDefaultState());
     		world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
@@ -170,9 +170,9 @@ public class IgniterBlock extends ContainerBlock {
 	@Override
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if(state.getBlock() != newState.getBlock()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
+			final TileEntity tileentity = worldIn.getTileEntity(pos);
 			if(tileentity instanceof IgniterTileEntity) {
-				int upgrades = ((IgniterTileEntity) tileentity).getRangeUpgrades() + 1;
+				final int upgrades = ((IgniterTileEntity) tileentity).getRangeUpgrades() + 1;
 				updateIgniterState(worldIn, pos, false, state.get(FACING), upgrades, upgrades);
 
 				InventoryHelper.dropInventoryItems(worldIn, pos, ((IgniterTileEntity)tileentity).inventory);

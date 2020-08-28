@@ -33,12 +33,15 @@ import net.minecraft.world.storage.loot.conditions.RandomChanceWithLooting;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftEntityTypes;
 
+import javax.annotation.Nonnull;
+
 public class TrapcraftLootTableProvider extends LootTableProvider {
 
     public TrapcraftLootTableProvider(DataGenerator dataGeneratorIn) {
         super(dataGeneratorIn);
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "Trapcraft LootTables";
@@ -90,7 +93,7 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
             this.registerLootTable(TrapcraftEntityTypes.DUMMY, LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(Items.SHULKER_SHELL)).acceptCondition(RandomChanceWithLooting.builder(0.5F, 0.0625F))));
         }
 
-        protected void registerLootTable(Supplier<? extends EntityType<?>> type, LootTable.Builder table) {
+        protected void registerLootTable(Supplier<? extends EntityType<?>> type, final LootTable.Builder table) {
            this.registerLootTable(type.get().getLootTable(), table);
         }
 

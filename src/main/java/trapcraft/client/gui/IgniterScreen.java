@@ -33,8 +33,8 @@ public class IgniterScreen extends ContainerScreen<IgniterContainer> {
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(Constants.RES_GUI_IGNITER);
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
+        final int k = (this.width - this.xSize) / 2;
+        final int l = (this.height - this.ySize) / 2;
         this.blit(k, l, 0, 0, this.xSize, this.ySize);
     }
 

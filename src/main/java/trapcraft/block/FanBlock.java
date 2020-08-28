@@ -42,8 +42,8 @@ public class FanBlock extends ContainerBlock {
 
     @Override
    	public BlockState getStateForPlacement(BlockItemUseContext context) {
-    	BlockPos blockpos = context.getPos();
-        World world = context.getWorld();
+		final BlockPos blockpos = context.getPos();
+		final World world = context.getWorld();
     	boolean flag = world.isBlockPowered(blockpos) || world.isBlockPowered(blockpos.up());
    		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite()).with(POWERED, flag);
    	}
@@ -92,9 +92,9 @@ public class FanBlock extends ContainerBlock {
     }
 
     private void updateFanState(BlockState state, World worldIn, BlockPos pos) {
-    	boolean flag = worldIn.isBlockPowered(pos);
+		final boolean flag = worldIn.isBlockPowered(pos);
         if(flag != state.get(POWERED)) {
-        	worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(flag)), 2);
+        	worldIn.setBlockState(pos, state.with(POWERED, flag), 2);
         }
 
 	}
