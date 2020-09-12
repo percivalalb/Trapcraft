@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[33,)"
+loaderVersion="[34,)"
 license="GNU GPLv3"
 issueTrackerURL="https://github.com/percivalalb/Trapcraft/issues"
 displayURL="https://minecraft.curseforge.com/projects/trapcraft/"
@@ -19,6 +19,6 @@ logoFile="tc_logo.png"
 [[dependencies.trapcraft]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[33.0.34,)" #mandatory
+    versionRange="[34.0.1,)" #mandatory
     ordering="NONE"
     side="BOTH"
