@@ -5,19 +5,19 @@ import static trapcraft.TrapcraftItems.*;
 
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
+import net.minecraftforge.client.model.generators.ModelProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import trapcraft.api.Constants;
-
-import javax.annotation.Nonnull;
 
 public class TrapcraftItemModelProvider extends ItemModelProvider {
 
