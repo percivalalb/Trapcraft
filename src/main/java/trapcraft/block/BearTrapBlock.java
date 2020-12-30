@@ -46,9 +46,9 @@ public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
 
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if(!worldIn.isRemote) {
+		if (!worldIn.isRemote) {
 			BearTrapTileEntity bearTrap = (BearTrapTileEntity)worldIn.getTileEntity(pos);
-			if(state.get(TRIGGERED) && !bearTrap.hasTrappedEntity()) {
+			if (state.get(TRIGGERED) && !bearTrap.hasTrappedEntity()) {
 				worldIn.setBlockState(pos, state.with(TRIGGERED, false), 3);
 		    	return ActionResultType.SUCCESS;
 			}
@@ -79,7 +79,7 @@ public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
 
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-		if(state.get(TRIGGERED)) {
+		if (state.get(TRIGGERED)) {
 			return;
 		}
 
@@ -96,7 +96,7 @@ public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
 
 	@Override
 	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		if(stateIn.get(WATERLOGGED)) {
+		if (stateIn.get(WATERLOGGED)) {
 			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
 		}
 

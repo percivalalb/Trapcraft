@@ -47,13 +47,13 @@ public class IgniterBlock extends ContainerBlock {
 
     @Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(worldIn.isRemote) {
+        if (worldIn.isRemote) {
             return ActionResultType.SUCCESS;
         } else {
             final IgniterTileEntity tileentityigniter = (IgniterTileEntity)worldIn.getTileEntity(pos);
 
             if (tileentityigniter != null) {
-            	if(player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+            	if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
                     final ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
 
                     NetworkHooks.openGui(entityPlayerMP, tileentityigniter, pos);
@@ -122,7 +122,7 @@ public class IgniterBlock extends ContainerBlock {
 
        int distance = 1, oldDistance = 1;
        TileEntity tileEntity = world.getTileEntity(pos);
-       if(tileEntity instanceof IgniterTileEntity) {
+       if (tileEntity instanceof IgniterTileEntity) {
            final IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
     	   distance = igniter.getRangeUpgrades() + 1;
     	   oldDistance = igniter.lastUpgrades + 1;
@@ -130,7 +130,7 @@ public class IgniterBlock extends ContainerBlock {
 
        updateIgniterState(world, pos, world.isBlockPowered(pos), facing, distance, oldDistance);
 
-       if(tileEntity instanceof IgniterTileEntity) {
+       if (tileEntity instanceof IgniterTileEntity) {
            final IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
     	   igniter.lastUpgrades = distance - 1;
        }
@@ -138,25 +138,25 @@ public class IgniterBlock extends ContainerBlock {
 
     private void updateIgniterState(final World world, final BlockPos pos, final boolean powered, final Direction direction, final int newDistance, final int previousDistance) {
     	// If distance has changed remove old fire
-        if(newDistance != previousDistance) {
+        if (newDistance != previousDistance) {
         	 final BlockPos oldPos = pos.offset(direction, previousDistance);
         	 removePossibleFire(world, oldPos);
         }
 
         final BlockPos firePos = pos.offset(direction, newDistance);
 
-        if(powered) {
-     	   if(world.isAirBlock(firePos)) {
+        if (powered) {
+     	   if (world.isAirBlock(firePos)) {
      		   world.setBlockState(firePos, Blocks.FIRE.getDefaultState());
      	   }
         }
-        else if(!powered) {
+        else if (!powered) {
         	removePossibleFire(world, firePos);
         }
      }
 
     public void removePossibleFire(final World world, final BlockPos pos) {
-    	if(world.getBlockState(pos).getBlock() == Blocks.FIRE) {
+    	if (world.getBlockState(pos).getBlock() == Blocks.FIRE) {
     		world.setBlockState(pos, Blocks.AIR.getDefaultState());
     		world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
     	}
@@ -169,9 +169,9 @@ public class IgniterBlock extends ContainerBlock {
 
 	@Override
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		if(state.getBlock() != newState.getBlock()) {
+		if (state.getBlock() != newState.getBlock()) {
 			final TileEntity tileentity = worldIn.getTileEntity(pos);
-			if(tileentity instanceof IgniterTileEntity) {
+			if (tileentity instanceof IgniterTileEntity) {
 				final int upgrades = ((IgniterTileEntity) tileentity).getRangeUpgrades() + 1;
 				updateIgniterState(worldIn, pos, false, state.get(FACING), upgrades, upgrades);
 

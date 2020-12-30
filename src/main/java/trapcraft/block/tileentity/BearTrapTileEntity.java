@@ -35,19 +35,19 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
     public void tick() {
     	final MobEntity trapped = this.getTrappedEntity();
 
-    	if(!this.world.isRemote) {
-	    	if(trapped != null) {
+    	if (!this.world.isRemote) {
+	    	if (trapped != null) {
 	    		// Has escaped
-	    		if(!trapped.getBoundingBox().intersects(new AxisAlignedBB(this.pos)) || !trapped.isAlive()) {
+	    		if (!trapped.getBoundingBox().intersects(new AxisAlignedBB(this.pos)) || !trapped.isAlive()) {
 	    			this.setTrappedEntity(null);
 
 	    		} else  {
-	    			if(this.nextDamageTick == 0) {
+	    			if (this.nextDamageTick == 0) {
 	    				trapped.attackEntityFrom(damageSource, 1);
 	    				this.nextDamageTick = 15 + this.world.rand.nextInt(20);
 	    			}
 
-	    			if(this.nextDamageTick > 0) {
+	    			if (this.nextDamageTick > 0) {
 	    				this.nextDamageTick--;
 	    			}
 	    		}
@@ -75,7 +75,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
     	super.read(state, nbt);
-    	if(nbt.hasUniqueId("trapped_entity")) {
+    	if (nbt.hasUniqueId("trapped_entity")) {
     		this.id = nbt.getUniqueId("trapped_entity");
     	}
     }
@@ -84,19 +84,19 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 	@Override
     public CompoundNBT write(CompoundNBT compound) {
     	super.write(compound);
-    	if(this.entityliving != null && this.entityliving.isAlive()) {
+    	if (this.entityliving != null && this.entityliving.isAlive()) {
     		compound.putUniqueId("trapped_entity", this.entityliving.getUniqueID());
     	}
     	return compound;
     }
 
     public boolean setTrappedEntity(@Nullable MobEntity livingEntity) {
-    	if(this.hasTrappedEntity() && livingEntity != null) {
+    	if (this.hasTrappedEntity() && livingEntity != null) {
     		return false;
     	} else {
 
-	    	if(livingEntity == null) {
-	        	if(this.entityliving != null) {
+	    	if (livingEntity == null) {
+	        	if (this.entityliving != null) {
 	    			this.entityliving.goalSelector.removeGoal(this.doNothingGoal);
 	    		}
 	    		this.id = null;
@@ -113,10 +113,10 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
     }
 
     public MobEntity getTrappedEntity() {
-    	if(this.id != null && this.world instanceof ServerWorld) {
+    	if (this.id != null && this.world instanceof ServerWorld) {
     		Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.id);
     		this.id = null;
-    		if(entity instanceof MobEntity)
+    		if (entity instanceof MobEntity)
     			this.setTrappedEntity((MobEntity)entity);
     	}
     	return this.entityliving;

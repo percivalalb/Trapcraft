@@ -45,10 +45,10 @@ public class GrassCoveringBlock extends Block {
 
 	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		for(Direction facing : new Direction[] {Direction.EAST, Direction.WEST, Direction.SOUTH, Direction.NORTH}) {
+		for (Direction facing : new Direction[] {Direction.EAST, Direction.WEST, Direction.SOUTH, Direction.NORTH}) {
 			final BlockPos posOff = pos.offset(facing);
 			final BlockState blockstate = worldIn.getBlockState(posOff);
-    		if(Block.hasEnoughSolidSide(worldIn, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
+    		if (Block.hasEnoughSolidSide(worldIn, posOff, facing.getOpposite()) || blockstate.getBlock() == this)
     			return true;
 
     	}
@@ -63,7 +63,7 @@ public class GrassCoveringBlock extends Block {
 
     @Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-    	if(entity instanceof LivingEntity && !world.isRemote) {
+    	if (entity instanceof LivingEntity && !world.isRemote) {
     		world.destroyBlock(pos, true);
         }
     }
