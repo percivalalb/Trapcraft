@@ -1,7 +1,7 @@
-{ 
+{
    "homepage":"https://minecraft.curseforge.com/projects/trapcraft",
-   "promos":{ 
-      "1.15.2-latest":"2.7.1",
-      "1.15.2-recommended":"2.7.1"
+   "promos":{
+      "1.15.2-latest":"2.7.2",
+      "1.15.2-recommended":"2.7.2"
    }
 }
