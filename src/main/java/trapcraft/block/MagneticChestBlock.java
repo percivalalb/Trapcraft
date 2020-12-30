@@ -28,7 +28,7 @@ import trapcraft.block.tileentity.MagneticChestTileEntity;
 public class MagneticChestBlock extends ChestBlock {
 
     public MagneticChestBlock() {
-    	super(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F, 2.0F).sound(SoundType.WOOD), TrapcraftTileEntityTypes.MAGNETIC_CHEST::get);
+        super(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F, 2.0F).sound(SoundType.WOOD), TrapcraftTileEntityTypes.MAGNETIC_CHEST::get);
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
     }
 
@@ -42,17 +42,17 @@ public class MagneticChestBlock extends ChestBlock {
 
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-    	return new MagneticChestTileEntity();
-	}
+        return new MagneticChestTileEntity();
+    }
 
     @Override
     protected Stat<ResourceLocation> getOpenStat() {
-    	return Stats.CUSTOM.get(Stats.TRIGGER_TRAPPED_CHEST); //TODO
-	}
+        return Stats.CUSTOM.get(Stats.TRIGGER_TRAPPED_CHEST); //TODO
+    }
 
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-    	if (!worldIn.isRemote && entityIn.isAlive()) {
+        if (!worldIn.isRemote && entityIn.isAlive()) {
             if (entityIn instanceof ItemEntity) {
                 MagneticChestTileEntity tileEntityMagneticChest = (MagneticChestTileEntity)worldIn.getTileEntity(pos);
                 tileEntityMagneticChest.insertStackFromEntity((ItemEntity)entityIn);

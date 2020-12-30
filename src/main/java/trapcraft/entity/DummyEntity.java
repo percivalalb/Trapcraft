@@ -28,11 +28,11 @@ import trapcraft.TrapcraftEntityTypes;
  **/
 public class DummyEntity extends LivingEntity {
 
-	private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(DummyEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(DummyEntity.class, DataSerializers.BYTE);
 
-	public DummyEntity(SpawnEntity packet, World world) {
-		this(world);
-	}
+    public DummyEntity(SpawnEntity packet, World world) {
+        this(world);
+    }
 
     public DummyEntity(World world) {
         this(TrapcraftEntityTypes.DUMMY.get(), world);
@@ -74,11 +74,11 @@ public class DummyEntity extends LivingEntity {
     }
 
     public void setVariant(final byte index) {
-    	this.dataManager.set(VARIANT, index);
+        this.dataManager.set(VARIANT, index);
     }
 
     public byte getVariant() {
-    	return this.dataManager.get(VARIANT);
+        return this.dataManager.get(VARIANT);
     }
 
     @Override
@@ -87,28 +87,28 @@ public class DummyEntity extends LivingEntity {
        return false;
     }
 
-	@Override
-	public Iterable<ItemStack> getArmorInventoryList() {
-		return Collections.emptyList();
-	}
+    @Override
+    public Iterable<ItemStack> getArmorInventoryList() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+        return ItemStack.EMPTY;
+    }
 
-	@Override
-	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    @Override
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
 
-	}
+    }
 
-	@Override
-	public HandSide getPrimaryHand() {
-		return HandSide.RIGHT;
-	}
+    @Override
+    public HandSide getPrimaryHand() {
+        return HandSide.RIGHT;
+    }
 
-	@Override
-	public IPacket<?> createSpawnPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 }

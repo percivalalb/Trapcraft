@@ -12,21 +12,21 @@ import trapcraft.inventory.IgniterContainer;
 
 public class IgniterScreen extends ContainerScreen<IgniterContainer> {
 
-	public IgniterScreen(IgniterContainer container, PlayerInventory playerInventory, ITextComponent title) {
-		super(container, playerInventory, title);
-		this.xSize = 238;
-		this.ySize = 89;
-	}
+    public IgniterScreen(IgniterContainer container, PlayerInventory playerInventory, ITextComponent title) {
+        super(container, playerInventory, title);
+        this.xSize = 238;
+        this.ySize = 89;
+    }
 
-	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    @Override
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
-	@Override
+    @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
-	    // TODO 93 + this.xSize / 2 - this.font.getStringWidth(this.getTitle()) / 2
+        // TODO 93 + this.xSize / 2 - this.font.getStringWidth(this.getTitle()) / 2
         this.font.func_243248_b(matrixStack, this.title, 93 + this.xSize / 2F - 18, 10, 4210752);
     }
 

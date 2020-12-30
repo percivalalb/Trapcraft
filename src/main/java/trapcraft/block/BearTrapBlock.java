@@ -34,91 +34,91 @@ import trapcraft.block.tileentity.BearTrapTileEntity;
 
 public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
 
-	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
-	public static final BooleanProperty TRIGGERED = BooleanProperty.create("triggered");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+    public static final BooleanProperty TRIGGERED = BooleanProperty.create("triggered");
 
-	public BearTrapBlock() {
-		super(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL));
-		this.setDefaultState(this.stateContainer.getBaseState().with(TRIGGERED, Boolean.valueOf(false)).with(WATERLOGGED, Boolean.valueOf(false)));
+    public BearTrapBlock() {
+        super(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL));
+        this.setDefaultState(this.stateContainer.getBaseState().with(TRIGGERED, Boolean.valueOf(false)).with(WATERLOGGED, Boolean.valueOf(false)));
 
-	}
-
-	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if (!worldIn.isRemote) {
-			BearTrapTileEntity bearTrap = (BearTrapTileEntity)worldIn.getTileEntity(pos);
-			if (state.get(TRIGGERED) && !bearTrap.hasTrappedEntity()) {
-				worldIn.setBlockState(pos, state.with(TRIGGERED, false), 3);
-		    	return ActionResultType.SUCCESS;
-			}
-		}
-
-    	return ActionResultType.PASS;
     }
 
-	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
-		return SHAPE;
-	}
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!worldIn.isRemote) {
+            BearTrapTileEntity bearTrap = (BearTrapTileEntity)worldIn.getTileEntity(pos);
+            if (state.get(TRIGGERED) && !bearTrap.hasTrappedEntity()) {
+                worldIn.setBlockState(pos, state.with(TRIGGERED, false), 3);
+                return ActionResultType.SUCCESS;
+            }
+        }
 
-	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
-		return VoxelShapes.empty();
-	}
+        return ActionResultType.PASS;
+    }
 
-	@Override
-	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
+        return SHAPE;
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(IBlockReader world) {
-		return new BearTrapTileEntity();
-	}
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
+        return VoxelShapes.empty();
+    }
 
-	@Override
-	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-		if (state.get(TRIGGERED)) {
-			return;
-		}
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader world) {
+        return new BearTrapTileEntity();
+    }
+
+    @Override
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        if (state.get(TRIGGERED)) {
+            return;
+        }
 
 
         if ((entity instanceof PlayerEntity) || !(entity instanceof MobEntity)) {
             return;
         }
 
-		final MobEntity livingEntity = (MobEntity)entity;
+        final MobEntity livingEntity = (MobEntity)entity;
         world.setBlockState(pos, state.with(TRIGGERED, true), 3);
-		final BearTrapTileEntity bearTrap = (BearTrapTileEntity)world.getTileEntity(pos);
+        final BearTrapTileEntity bearTrap = (BearTrapTileEntity)world.getTileEntity(pos);
         bearTrap.setTrappedEntity(livingEntity);
     }
 
-	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		if (stateIn.get(WATERLOGGED)) {
-			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
-		}
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.get(WATERLOGGED)) {
+            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        }
 
-		return facing == Direction.DOWN && !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-	}
+        return facing == Direction.DOWN && !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
 
-	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		final FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        final FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
 
-		return this.getDefaultState().with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
-	}
+        return this.getDefaultState().with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
+    }
 
-	@Override
-	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
-	}
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    }
 
-	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		return Block.hasEnoughSolidSide(worldIn, pos.down(), Direction.UP);
-	}
+    @Override
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        return Block.hasEnoughSolidSide(worldIn, pos.down(), Direction.UP);
+    }
 
     @Override
     public boolean hasComparatorInputOverride(BlockState state) {
@@ -132,9 +132,9 @@ public class BearTrapBlock extends ContainerBlock implements IWaterLoggable {
     }
 
     @Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(TRIGGERED, WATERLOGGED);
-	}
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(TRIGGERED, WATERLOGGED);
+    }
 
     @Override
     public boolean canProvidePower(BlockState state) {

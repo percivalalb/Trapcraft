@@ -10,11 +10,11 @@
     "block.trapcraft.igniter": "Igniter",
 
     "item.trapcraft.igniter_range": "Igniter Range Upgrade",
-    
+
     "entity.trapcraft.dummy": "Dummy",
-	
-	"death.attack.trapcraft.spikes" : "%s was impaled by spikes",
-	"death.attack.trapcraft.spikes.player" : "%s caused %s to be impaled by spikes",
-	"death.attack.trapcraft.bear_trap" : "%s was suffocated in a trap",
-	"death.attack.trapcraft.bear_trap.player" : "%s watched while %s suffocated in a trap"
+
+    "death.attack.trapcraft.spikes" : "%s was impaled by spikes",
+    "death.attack.trapcraft.spikes.player" : "%s caused %s to be impaled by spikes",
+    "death.attack.trapcraft.bear_trap" : "%s was suffocated in a trap",
+    "death.attack.trapcraft.bear_trap.player" : "%s watched while %s suffocated in a trap"
 }

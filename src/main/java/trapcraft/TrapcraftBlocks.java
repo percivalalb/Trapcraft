@@ -26,7 +26,7 @@ public class TrapcraftBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = TrapcraftItems.ITEMS;
 
-	public static final RegistryObject<Block> FAN = makeBlockWithItem("fan", FanBlock::new);
+    public static final RegistryObject<Block> FAN = makeBlockWithItem("fan", FanBlock::new);
     private static final Pair<RegistryObject<Block>, RegistryObject<Item>> MAGNETIC_CHEST_PAIR = makeBlockWithItemCustom("magnetic_chest", () -> new MagneticChestBlock(), (blockObj) -> makeMagneticChestItem(blockObj));
     public static final RegistryObject<Block> MAGNETIC_CHEST = MAGNETIC_CHEST_PAIR.getLeft();
     public static final RegistryObject<Item> MAGNETIC_CHEST_ITEM = MAGNETIC_CHEST_PAIR.getRight();

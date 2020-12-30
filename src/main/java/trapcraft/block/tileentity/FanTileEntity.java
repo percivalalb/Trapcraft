@@ -32,8 +32,8 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     public double extraRange = 0.0D;
 
     public FanTileEntity() {
-  		super(TrapcraftTileEntityTypes.FAN.get());
-  	}
+          super(TrapcraftTileEntityTypes.FAN.get());
+      }
 
     @Override
     public void tick() {
@@ -44,51 +44,51 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         final Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
 
         if (this.world.rand.nextInt(2) == 0)
-        	spawnParticles(this.world, this.pos);
+            spawnParticles(this.world, this.pos);
         final List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getDirection());
 
         for (final Entity entity : list) {
 
-        	if (!this.isPathClear(entity, facing))
-        		continue;
+            if (!this.isPathClear(entity, facing))
+                continue;
 
 
-        	double velocity = ConfigValues.FAN_ACCELERATION; // Affects acceleration
-        	double threshholdVelocity = ConfigValues.FAN_MAX_SPEED; // Affects max speed
-        	velocity *= this.speed;
+            double velocity = ConfigValues.FAN_ACCELERATION; // Affects acceleration
+            double threshholdVelocity = ConfigValues.FAN_MAX_SPEED; // Affects max speed
+            velocity *= this.speed;
 
-        	if (entity instanceof ItemEntity) {
-        		threshholdVelocity *= 1.8D;
-        		velocity *= 1.3D;
-        	}
+            if (entity instanceof ItemEntity) {
+                threshholdVelocity *= 1.8D;
+                velocity *= 1.3D;
+            }
 
-        	if (entity instanceof PlayerEntity) {
-        		if (((PlayerEntity)entity).abilities.isFlying)
-        			continue;
-        	}
+            if (entity instanceof PlayerEntity) {
+                if (((PlayerEntity)entity).abilities.isFlying)
+                    continue;
+            }
 
-        	if (entity instanceof MinecartEntity)
-        		velocity *= 0.5D;
+            if (entity instanceof MinecartEntity)
+                velocity *= 0.5D;
 
-        	if ((entity instanceof FallingBlockEntity) && facing == Direction.UP)
-        		velocity = 0.0D;
+            if ((entity instanceof FallingBlockEntity) && facing == Direction.UP)
+                velocity = 0.0D;
 
 
-        	if (facing == Direction.UP) {
-        		threshholdVelocity *= 0.5D;
-        	}
+            if (facing == Direction.UP) {
+                threshholdVelocity *= 0.5D;
+            }
 
-        	if (Math.abs(entity.getMotion().getCoordinate(facing.getAxis())) < threshholdVelocity)
-        		entity.setMotion(entity.getMotion().add(facing.getXOffset() * velocity, facing.getYOffset() * velocity, facing.getZOffset() * velocity));
+            if (Math.abs(entity.getMotion().getCoordinate(facing.getAxis())) < threshholdVelocity)
+                entity.setMotion(entity.getMotion().add(facing.getXOffset() * velocity, facing.getYOffset() * velocity, facing.getZOffset() * velocity));
 
         }
     }
 
     public boolean isPathClear(final Entity entity, final Direction facing) {
-    	final int x = facing.getXOffset() * (MathHelper.floor(entity.getPosX()) - this.pos.getX());
-    	final int y = facing.getYOffset() * (MathHelper.floor(entity.getPosY()) - this.pos.getY());
-    	final int z = facing.getZOffset() * (MathHelper.floor(entity.getPosZ()) - this.pos.getZ());
-    	boolean flag = true;
+        final int x = facing.getXOffset() * (MathHelper.floor(entity.getPosX()) - this.pos.getX());
+        final int y = facing.getYOffset() * (MathHelper.floor(entity.getPosY()) - this.pos.getY());
+        final int z = facing.getZOffset() * (MathHelper.floor(entity.getPosZ()) - this.pos.getZ());
+        boolean flag = true;
 
         for (int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
 
@@ -109,29 +109,29 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     public AxisAlignedBB getDirection() {
-    	final Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
+        final Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
 
         BlockPos endPos = this.pos.offset(facing, MathHelper.floor(ConfigValues.FAN_RANGE + this.extraRange));
         if (facing == Direction.WEST)
-        	endPos = endPos.add(0, 1, 1);
+            endPos = endPos.add(0, 1, 1);
         else if (facing == Direction.NORTH)
-        	endPos = endPos.add(1, 1, 0);
+            endPos = endPos.add(1, 1, 0);
 
         if (facing == Direction.EAST)
-        	endPos = endPos.add(1, 1, 1);
+            endPos = endPos.add(1, 1, 1);
         else if (facing == Direction.SOUTH)
-        	endPos = endPos.add(1, 1, 1);
+            endPos = endPos.add(1, 1, 1);
 
         if (facing == Direction.UP)
-        	endPos = endPos.add(1, 1, 1);
+            endPos = endPos.add(1, 1, 1);
         else if (facing == Direction.DOWN)
-        	endPos = endPos.add(1, 0, 1);
+            endPos = endPos.add(1, 0, 1);
 
         return new AxisAlignedBB(this.pos, endPos);
     }
 
     public static void spawnParticles(final World world, final BlockPos pos) {
-    	final double x = pos.getX() + world.rand.nextFloat();
+        final double x = pos.getX() + world.rand.nextFloat();
         final double y = pos.getY() + world.rand.nextFloat();
         final double z = pos.getZ() + world.rand.nextFloat();
 
@@ -147,16 +147,16 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
-    	super.read(state, nbt);
-    	this.speed = nbt.getFloat("speed");
-    	this.extraRange = nbt.getDouble("extraRange");
+        super.read(state, nbt);
+        this.speed = nbt.getFloat("speed");
+        this.extraRange = nbt.getDouble("extraRange");
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-    	super.write(compound);
-    	compound.putFloat("speed", this.speed);
-    	compound.putDouble("extraRange", this.extraRange);
+        super.write(compound);
+        compound.putFloat("speed", this.speed);
+        compound.putDouble("extraRange", this.extraRange);
 
         return compound;
     }
@@ -168,18 +168,18 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         return this.write(tag);
     }
 
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getPos(), 0, this.write(new CompoundNBT()));
-	}
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(getPos(), 0, this.write(new CompoundNBT()));
+    }
 
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-		super.onDataPacket(net, packet);
-		this.read(null, packet.getNbtCompound()); // TODO Pass blockstate
-		if (!this.world.isRemote)
-			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
-		return;
-	}
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        super.onDataPacket(net, packet);
+        this.read(null, packet.getNbtCompound()); // TODO Pass blockstate
+        if (!this.world.isRemote)
+            this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+        return;
+    }
 
 }

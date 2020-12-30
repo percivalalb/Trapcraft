@@ -6,16 +6,16 @@ displayURL="https://minecraft.curseforge.com/projects/trapcraft/"
 logoFile="tc_logo.png"
 
 [[mods]] #mandatory
-	modId="trapcraft"
-	version="${file.jarVersion}"
-	updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/1.16.x/version.json"
-	displayName="Trapcraft"
-	credits="Authored By ProPercivalalb"
-	authors="ProPercivalalb, Stewiecraft"
-	description='''
+    modId="trapcraft"
+    version="${file.jarVersion}"
+    updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/1.16.x/version.json"
+    displayName="Trapcraft"
+    credits="Authored By ProPercivalalb"
+    authors="ProPercivalalb, Stewiecraft"
+    description='''
     Addeds new blocks to create traps with, (Fan, Bear Trap, Igniter, Magnetic Chest and Grass Coverings), also a dummy. Plus upgrade your traps with special upgrades!
     '''
-	
+
 [[dependencies.trapcraft]] #optional
     modId="forge"
     mandatory=true

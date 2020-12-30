@@ -12,34 +12,34 @@ import trapcraft.TrapcraftItems;
 
 public class IgniterContainer extends Container {
 
-	private IInventory igniter;
+    private IInventory igniter;
 
-	public IgniterContainer(int windowId, PlayerInventory playerInventory) {
-		this(windowId, playerInventory, new Inventory(6));
-	}
+    public IgniterContainer(int windowId, PlayerInventory playerInventory) {
+        this(windowId, playerInventory, new Inventory(6));
+    }
 
 
-	public IgniterContainer(int windowId, PlayerInventory playerInventory, IInventory igniter) {
-		super(TrapcraftContainerTypes.IGNITER.get(), windowId);
-		this.igniter = igniter;
-		Container.assertInventorySize(igniter, 6);
+    public IgniterContainer(int windowId, PlayerInventory playerInventory, IInventory igniter) {
+        super(TrapcraftContainerTypes.IGNITER.get(), windowId);
+        this.igniter = igniter;
+        Container.assertInventorySize(igniter, 6);
 
-		int i;
-		for (i = 0; i < 3; ++i) {
+        int i;
+        for (i = 0; i < 3; ++i) {
             this.addSlot(new Slot(igniter, i, 196, 26 + i * 18) {
-            	@Override
-            	public boolean isItemValid(ItemStack stack) {
-            	    return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
-            	}
+                @Override
+                public boolean isItemValid(ItemStack stack) {
+                    return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
+                }
             });
             this.addSlot(new Slot(igniter, i + 3, 214, 26 + i * 18) {
-            	@Override
-            	public boolean isItemValid(ItemStack stack) {
-            	    return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
-            	}
+                @Override
+                public boolean isItemValid(ItemStack stack) {
+                    return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
+                }
             });
         }
-		for (i = 0; i < 3; ++i) {
+        for (i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 8 + i * 18));
             }
@@ -48,15 +48,15 @@ public class IgniterContainer extends Container {
         for (i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 66));
         }
-	}
+    }
 
-	@Override
-	public boolean canInteractWith(PlayerEntity entityplayer) {
-		return this.igniter.isUsableByPlayer(entityplayer);
-	}
+    @Override
+    public boolean canInteractWith(PlayerEntity entityplayer) {
+        return this.igniter.isUsableByPlayer(entityplayer);
+    }
 
-	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         final Slot slot = this.inventorySlots.get(index);
 

@@ -2,7 +2,7 @@
   "type": "minecraft:block",
   "pools": [
     {
-	  "name": "trapcraft:spikes",
+      "name": "trapcraft:spikes",
       "rolls": 1,
       "entries": [
         {

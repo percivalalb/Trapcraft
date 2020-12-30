@@ -7,11 +7,11 @@ import net.minecraft.util.ResourceLocation;
  */
 public class Constants {
 
-	// Mod Related Constants
-	public static final String 		 MOD_ID 	      = "trapcraft";
-	public static final String		 MOD_NAME         = "Trapcraft";
+    // Mod Related Constants
+    public static final String         MOD_ID           = "trapcraft";
+    public static final String         MOD_NAME         = "Trapcraft";
 
-	// ResourceLocations
+    // ResourceLocations
     public static final ResourceLocation RES_BLOCK_MAGNETIC_CHEST = new ResourceLocation(MOD_ID, "entity/chest/magnetic_chest");
     public static final ResourceLocation RES_GUI_IGNITER          = new ResourceLocation(MOD_ID, "gui/igniter.png");
     public static final ResourceLocation RES_MOB_DUMMY_OAK        = new ResourceLocation(MOD_ID, "textures/entity/dummy/dummy_oak.png");

@@ -96,7 +96,7 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
            this.registerLootTable(type.get().getLootTable(), table);
         }
 
-		@Override
+        @Override
         protected Iterable<EntityType<?>> getKnownEntities() {
             return TrapcraftEntityTypes.ENTITIES.getEntries().stream().map(Supplier::get).collect(Collectors.toList());
         }

@@ -46,53 +46,53 @@ import trapcraft.network.PacketHandler;
 @Mod(Constants.MOD_ID)
 public final class TrapcraftMod {
 
-	public static final Logger LOGGER = LogManager.getLogger(Constants.MOD_NAME);
-	private static final String PROTOCOL_VERSION = Integer.toString(1);
-	public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, "channel"))
+    public static final Logger LOGGER = LogManager.getLogger(Constants.MOD_NAME);
+    private static final String PROTOCOL_VERSION = Integer.toString(1);
+    public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, "channel"))
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
             .simpleChannel();
 
-	public static TrapcraftMod INSTANCE;
+    public static TrapcraftMod INSTANCE;
 
-	public TrapcraftMod() {
-		INSTANCE = this;
+    public TrapcraftMod() {
+        INSTANCE = this;
 
-	    final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-	    TrapcraftBlocks.BLOCKS.register(modEventBus);
-	    TrapcraftTileEntityTypes.TILE_ENTITIES.register(modEventBus);
-	    TrapcraftItems.ITEMS.register(modEventBus);
-	    TrapcraftEntityTypes.ENTITIES.register(modEventBus);
-	    TrapcraftContainerTypes.CONTAINERS.register(modEventBus);
+        TrapcraftBlocks.BLOCKS.register(modEventBus);
+        TrapcraftTileEntityTypes.TILE_ENTITIES.register(modEventBus);
+        TrapcraftItems.ITEMS.register(modEventBus);
+        TrapcraftEntityTypes.ENTITIES.register(modEventBus);
+        TrapcraftContainerTypes.CONTAINERS.register(modEventBus);
 
-	    modEventBus.addListener(this::gatherData);
-	    modEventBus.addListener(this::commonSetup);
-	    modEventBus.addListener(this::interModProcess);
+        modEventBus.addListener(this::gatherData);
+        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::interModProcess);
 
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-		    modEventBus.addListener(this::clientSetup);
-	        modEventBus.addListener(this::registerBlockColors);
-	        modEventBus.addListener(this::registerItemColors);
-	        modEventBus.addListener(this::addTexturesToAtlas);
-		});
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+            modEventBus.addListener(this::clientSetup);
+            modEventBus.addListener(this::registerBlockColors);
+            modEventBus.addListener(this::registerItemColors);
+            modEventBus.addListener(this::addTexturesToAtlas);
+        });
 
-		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-		forgeEventBus.register(new ActionHandler());
+        forgeEventBus.register(new ActionHandler());
 
-	    ConfigHandler.init(modEventBus);
-	}
-
-	private void commonSetup(final FMLCommonSetupEvent event) {
-	    PacketHandler.register();
-	    TrapcraftEntityTypes.addEntityAttributes();
+        ConfigHandler.init(modEventBus);
     }
 
-	@OnlyIn(Dist.CLIENT)
-	private void clientSetup(final FMLClientSetupEvent event) {
-	    RenderingRegistry.registerEntityRenderingHandler(TrapcraftEntityTypes.DUMMY.get(), DummyRenderer::new);
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        PacketHandler.register();
+        TrapcraftEntityTypes.addEntityAttributes();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void clientSetup(final FMLClientSetupEvent event) {
+        RenderingRegistry.registerEntityRenderingHandler(TrapcraftEntityTypes.DUMMY.get(), DummyRenderer::new);
         ScreenManager.registerFactory(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
         ClientRegistry.bindTileEntityRenderer(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), TileEntityMagneticChestRenderer::new);
 
@@ -101,32 +101,32 @@ public final class TrapcraftMod {
         ItemStackTileEntityMagneticChestRenderer.setDummyTE();
     }
 
-	@OnlyIn(Dist.CLIENT)
-	private void registerBlockColors(final ColorHandlerEvent.Block event) {
-	    final BlockColors blockColors = event.getBlockColors();
-	    blockColors.register((state, blockAccess, pos, tintIndex) -> {
+    @OnlyIn(Dist.CLIENT)
+    private void registerBlockColors(final ColorHandlerEvent.Block event) {
+        final BlockColors blockColors = event.getBlockColors();
+        blockColors.register((state, blockAccess, pos, tintIndex) -> {
             return blockAccess != null && pos != null ? BiomeColors.getGrassColor(blockAccess, pos) : -1;
         }, TrapcraftBlocks.GRASS_COVERING.get());
-	}
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	private void registerItemColors(final ColorHandlerEvent.Item event) {
-	    final ItemColors itemColors = event.getItemColors();
+    @OnlyIn(Dist.CLIENT)
+    private void registerItemColors(final ColorHandlerEvent.Item event) {
+        final ItemColors itemColors = event.getItemColors();
         itemColors.register((stack, tintIndex) -> GrassColors.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
     }
 
-	@OnlyIn(Dist.CLIENT)
-	private void addTexturesToAtlas(final TextureStitchEvent.Pre event) {
-	    if (event.getMap().getTextureLocation().equals(Atlases.CHEST_ATLAS)) {
-    	    event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
-	    }
-	}
+    @OnlyIn(Dist.CLIENT)
+    private void addTexturesToAtlas(final TextureStitchEvent.Pre event) {
+        if (event.getMap().getTextureLocation().equals(Atlases.CHEST_ATLAS)) {
+            event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
+        }
+    }
 
     private void interModProcess(final InterModProcessEvent event) {
 
     }
 
-	private void gatherData(final GatherDataEvent event) {
+    private void gatherData(final GatherDataEvent event) {
         final DataGenerator gen = event.getGenerator();
 
         if (event.includeClient()) {

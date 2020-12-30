@@ -13,17 +13,17 @@ import trapcraft.block.tileentity.MagneticChestTileEntity;
 
 public class ItemStackTileEntityMagneticChestRenderer extends ItemStackTileEntityRenderer {
 
-	private static MagneticChestTileEntity chestBasic;
+    private static MagneticChestTileEntity chestBasic;
 
-	@Override
-	//public void render(ItemStack stack, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-	public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-		if (stack.getItem() == TrapcraftBlocks.MAGNETIC_CHEST_ITEM.get()) {
-		    TileEntityRendererDispatcher.instance.renderItem(chestBasic, matrixStack, buffer, combinedLight, combinedOverlay);
-		}
-	}
+    @Override
+    //public void render(ItemStack stack, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+        if (stack.getItem() == TrapcraftBlocks.MAGNETIC_CHEST_ITEM.get()) {
+            TileEntityRendererDispatcher.instance.renderItem(chestBasic, matrixStack, buffer, combinedLight, combinedOverlay);
+        }
+    }
 
-	public static void setDummyTE() {
-	    ItemStackTileEntityMagneticChestRenderer.chestBasic = new MagneticChestTileEntity();
-	}
+    public static void setDummyTE() {
+        ItemStackTileEntityMagneticChestRenderer.chestBasic = new MagneticChestTileEntity();
+    }
 }

@@ -11,5 +11,5 @@ public class TrapcraftContainerTypes {
 
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
 
-	public static final RegistryObject<ContainerType<IgniterContainer>> IGNITER = CONTAINERS.register("igniter", () -> new ContainerType<IgniterContainer>(IgniterContainer::new));
+    public static final RegistryObject<ContainerType<IgniterContainer>> IGNITER = CONTAINERS.register("igniter", () -> new ContainerType<IgniterContainer>(IgniterContainer::new));
 }

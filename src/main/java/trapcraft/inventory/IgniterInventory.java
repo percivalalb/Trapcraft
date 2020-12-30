@@ -9,23 +9,23 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class IgniterInventory extends Inventory implements INamedContainerProvider {
-	
-	public IgniterInventory(int slotCount) {
-		super(slotCount);
-	}
-	
-	@Override
-	public int getInventoryStackLimit() {
-		return 8;
-	}
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new IgniterContainer(windowId, playerInventory, this);
-	}
+    public IgniterInventory(int slotCount) {
+        super(slotCount);
+    }
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent("container.trapcraft.igniter");
-	}
+    @Override
+    public int getInventoryStackLimit() {
+        return 8;
+    }
+
+    @Override
+    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+        return new IgniterContainer(windowId, playerInventory, this);
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("container.trapcraft.igniter");
+    }
 }

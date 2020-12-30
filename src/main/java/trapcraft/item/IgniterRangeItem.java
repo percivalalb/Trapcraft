@@ -19,13 +19,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  **/
 public class IgniterRangeItem extends Item {
 
-	public IgniterRangeItem() {
-		super(new Item.Properties().group(ItemGroup.REDSTONE).maxStackSize(8));
-	}
+    public IgniterRangeItem() {
+        super(new Item.Properties().group(ItemGroup.REDSTONE).maxStackSize(8));
+    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    	tooltip.add(new TranslationTextComponent("+1 to Block range"));
+        tooltip.add(new TranslationTextComponent("+1 to Block range"));
     }
 }

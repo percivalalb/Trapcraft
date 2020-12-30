@@ -16,28 +16,28 @@ public class DummyRenderer extends LivingRenderer<DummyEntity, BipedModel<DummyE
         super(renderManagerIn, new BipedModel<DummyEntity>(0.0F), 0.5F);
     }
 
-	@Override
+    @Override
     public ResourceLocation getEntityTexture(DummyEntity dummy) {
-		switch(dummy.getVariant()) {
-		case 0:
-			return Constants.RES_MOB_DUMMY_OAK;
-		case 1:
-			return Constants.RES_MOB_DUMMY_SPRUCE;
-		case 2:
-			return Constants.RES_MOB_DUMMY_BIRCH;
-		case 3:
-			return Constants.RES_MOB_DUMMY_JUNGLE;
-		case 4:
-			return Constants.RES_MOB_DUMMY_ACACIA;
-		case 5:
-			return Constants.RES_MOB_DUMMY_DARK_OAK;
-		default:
-			return Constants.RES_MOB_DUMMY_OAK;
-		}
-	}
+        switch(dummy.getVariant()) {
+        case 0:
+            return Constants.RES_MOB_DUMMY_OAK;
+        case 1:
+            return Constants.RES_MOB_DUMMY_SPRUCE;
+        case 2:
+            return Constants.RES_MOB_DUMMY_BIRCH;
+        case 3:
+            return Constants.RES_MOB_DUMMY_JUNGLE;
+        case 4:
+            return Constants.RES_MOB_DUMMY_ACACIA;
+        case 5:
+            return Constants.RES_MOB_DUMMY_DARK_OAK;
+        default:
+            return Constants.RES_MOB_DUMMY_OAK;
+        }
+    }
 
-	@Override
-	protected boolean canRenderName(DummyEntity entity) {
-		return false;
-	}
+    @Override
+    protected boolean canRenderName(DummyEntity entity) {
+        return false;
+    }
 }

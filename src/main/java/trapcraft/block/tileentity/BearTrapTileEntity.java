@@ -20,53 +20,53 @@ import trapcraft.TrapcraftTileEntityTypes;
 
 public class BearTrapTileEntity extends TileEntity implements ITickableTileEntity {
 
-	private final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").setDamageBypassesArmor();
-	@Nullable
-	private MobEntity entityliving;
-	private Goal doNothingGoal;
-	private UUID id;
-	private int nextDamageTick;
+    private final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").setDamageBypassesArmor();
+    @Nullable
+    private MobEntity entityliving;
+    private Goal doNothingGoal;
+    private UUID id;
+    private int nextDamageTick;
 
     public BearTrapTileEntity() {
-		super(TrapcraftTileEntityTypes.BEAR_TRAP.get());
-	}
+        super(TrapcraftTileEntityTypes.BEAR_TRAP.get());
+    }
 
     @Override
     public void tick() {
-    	final MobEntity trapped = this.getTrappedEntity();
+        final MobEntity trapped = this.getTrappedEntity();
 
-    	if (!this.world.isRemote) {
-	    	if (trapped != null) {
-	    		// Has escaped
-	    		if (!trapped.getBoundingBox().intersects(new AxisAlignedBB(this.pos)) || !trapped.isAlive()) {
-	    			this.setTrappedEntity(null);
+        if (!this.world.isRemote) {
+            if (trapped != null) {
+                // Has escaped
+                if (!trapped.getBoundingBox().intersects(new AxisAlignedBB(this.pos)) || !trapped.isAlive()) {
+                    this.setTrappedEntity(null);
 
-	    		} else  {
-	    			if (this.nextDamageTick == 0) {
-	    				trapped.attackEntityFrom(damageSource, 1);
-	    				this.nextDamageTick = 15 + this.world.rand.nextInt(20);
-	    			}
+                } else  {
+                    if (this.nextDamageTick == 0) {
+                        trapped.attackEntityFrom(damageSource, 1);
+                        this.nextDamageTick = 15 + this.world.rand.nextInt(20);
+                    }
 
-	    			if (this.nextDamageTick > 0) {
-	    				this.nextDamageTick--;
-	    			}
-	    		}
-	    	}
-    	}
+                    if (this.nextDamageTick > 0) {
+                        this.nextDamageTick--;
+                    }
+                }
+            }
+        }
     }
 
     class DoNothingGoal extends Goal {
-    	private MobEntity trappedEntity;
-    	private BearTrapTileEntity trap;
+        private MobEntity trappedEntity;
+        private BearTrapTileEntity trap;
         public DoNothingGoal(MobEntity trappedEntity, BearTrapTileEntity trap) {
-        	this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
-        	this.trappedEntity = trappedEntity;
-        	this.trap = trap;
+            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
+            this.trappedEntity = trappedEntity;
+            this.trap = trap;
         }
 
         @Override
         public boolean shouldExecute() {
-        	return this.trap.isEntityTrapped(this.trappedEntity);
+            return this.trap.isEntityTrapped(this.trappedEntity);
         }
      }
 
@@ -74,59 +74,59 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
-    	super.read(state, nbt);
-    	if (nbt.hasUniqueId("trapped_entity")) {
-    		this.id = nbt.getUniqueId("trapped_entity");
-    	}
+        super.read(state, nbt);
+        if (nbt.hasUniqueId("trapped_entity")) {
+            this.id = nbt.getUniqueId("trapped_entity");
+        }
     }
 
 
-	@Override
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
-    	super.write(compound);
-    	if (this.entityliving != null && this.entityliving.isAlive()) {
-    		compound.putUniqueId("trapped_entity", this.entityliving.getUniqueID());
-    	}
-    	return compound;
+        super.write(compound);
+        if (this.entityliving != null && this.entityliving.isAlive()) {
+            compound.putUniqueId("trapped_entity", this.entityliving.getUniqueID());
+        }
+        return compound;
     }
 
     public boolean setTrappedEntity(@Nullable MobEntity livingEntity) {
-    	if (this.hasTrappedEntity() && livingEntity != null) {
-    		return false;
-    	} else {
+        if (this.hasTrappedEntity() && livingEntity != null) {
+            return false;
+        } else {
 
-	    	if (livingEntity == null) {
-	        	if (this.entityliving != null) {
-	    			this.entityliving.goalSelector.removeGoal(this.doNothingGoal);
-	    		}
-	    		this.id = null;
-	    		this.doNothingGoal = null;
-	    		this.nextDamageTick = 0;
-	    	} else {
-	    		livingEntity.goalSelector.getRunningGoals().filter(PrioritizedGoal::isRunning).forEach(PrioritizedGoal::resetTask);
-	    		livingEntity.goalSelector.addGoal(0, this.doNothingGoal = new DoNothingGoal(livingEntity, this));
-	    	}
+            if (livingEntity == null) {
+                if (this.entityliving != null) {
+                    this.entityliving.goalSelector.removeGoal(this.doNothingGoal);
+                }
+                this.id = null;
+                this.doNothingGoal = null;
+                this.nextDamageTick = 0;
+            } else {
+                livingEntity.goalSelector.getRunningGoals().filter(PrioritizedGoal::isRunning).forEach(PrioritizedGoal::resetTask);
+                livingEntity.goalSelector.addGoal(0, this.doNothingGoal = new DoNothingGoal(livingEntity, this));
+            }
 
-	    	this.entityliving = livingEntity;
-	    	return true;
-    	}
+            this.entityliving = livingEntity;
+            return true;
+        }
     }
 
     public MobEntity getTrappedEntity() {
-    	if (this.id != null && this.world instanceof ServerWorld) {
-    		Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.id);
-    		this.id = null;
-    		if (entity instanceof MobEntity)
-    			this.setTrappedEntity((MobEntity)entity);
-    	}
-    	return this.entityliving;
+        if (this.id != null && this.world instanceof ServerWorld) {
+            Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.id);
+            this.id = null;
+            if (entity instanceof MobEntity)
+                this.setTrappedEntity((MobEntity)entity);
+        }
+        return this.entityliving;
     }
 
     public boolean hasTrappedEntity() {
-		return this.getTrappedEntity() != null;
-	}
+        return this.getTrappedEntity() != null;
+    }
 
     public boolean isEntityTrapped(final MobEntity trappedEntity) {
-		return this.getTrappedEntity() == trappedEntity;
-	}
+        return this.getTrappedEntity() == trappedEntity;
+    }
 }
