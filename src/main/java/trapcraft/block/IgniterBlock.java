@@ -145,10 +145,11 @@ public class IgniterBlock extends ContainerBlock {
 
         final BlockPos firePos = pos.offset(direction, newDistance);
 
-        if(powered) {
-     	   if(world.isAirBlock(firePos)) {
-     		   world.setBlockState(firePos, Blocks.FIRE.getDefaultState());
-     	   }
+        if (powered) {
+            BlockState fire = Blocks.FIRE.getDefaultState();
+     	    if (world.getBlockState(firePos).getBlock() != Blocks.FIRE && world.isAirBlock(firePos) && fire.isValidPosition(world, firePos)) {
+     		   world.setBlockState(firePos, fire);
+     	    }
         }
         else if(!powered) {
         	removePossibleFire(world, firePos);
