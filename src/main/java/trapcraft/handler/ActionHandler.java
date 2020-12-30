@@ -31,15 +31,15 @@ public class ActionHandler {
 		final BlockState state = event.getPlacedBlock();
 		final BlockPos tPos = event.getBlockSnapshot().getPos();
 
-		if(state.getBlock() == Blocks.PLAYER_HEAD) {
+		if (state.getBlock() == Blocks.PLAYER_HEAD) {
 			final Block top = world.getBlockState(tPos.down()).getBlock();
 			final Block bottom = world.getBlockState(tPos.down(2)).getBlock();
-			if(top == bottom && PLANKS.contains(top)) {
+			if (top == bottom && PLANKS.contains(top)) {
 				world.setBlockState(tPos, Blocks.AIR.getDefaultState());
 				world.setBlockState(tPos.down(), Blocks.AIR.getDefaultState());
 				world.setBlockState(tPos.down(2), Blocks.AIR.getDefaultState());
 
-				if(!world.isRemote) {
+				if (!world.isRemote) {
 					final float rotation = event.getEntity().rotationYaw + 180F;
 					this.spawnDummy(world, tPos, rotation, (byte)PLANKS.indexOf(top));
 				}
@@ -51,7 +51,7 @@ public class ActionHandler {
 	@SubscribeEvent
 	public void onEntitySpawn(final EntityJoinWorldEvent event) {
 		final Entity entity = event.getEntity();
-		if(entity instanceof MobEntity) {
+		if (entity instanceof MobEntity) {
 			final MobEntity mob = (MobEntity)entity;
 			mob.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, DummyEntity.class, 10, true, false, (dummy) -> {
 	          return Math.abs(dummy.getPosY() - mob.getPosY()) <= 6.0D;

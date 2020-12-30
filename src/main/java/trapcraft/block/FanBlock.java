@@ -93,7 +93,7 @@ public class FanBlock extends ContainerBlock {
 
     private void updateFanState(BlockState state, World worldIn, BlockPos pos) {
 		final boolean flag = worldIn.isBlockPowered(pos);
-        if(flag != state.get(POWERED)) {
+        if (flag != state.get(POWERED)) {
         	worldIn.setBlockState(pos, state.with(POWERED, flag), 2);
         }
 

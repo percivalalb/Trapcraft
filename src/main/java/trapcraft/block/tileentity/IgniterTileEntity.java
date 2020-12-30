@@ -41,7 +41,7 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
         super.read(compound);
 		final ListNBT nbttaglist = compound.getList("Items", 10);
 
-        for(int i = 0; i < nbttaglist.size(); ++i) {
+        for (int i = 0; i < nbttaglist.size(); ++i) {
 			final CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);
 			final byte b0 = nbttagcompound1.getByte("Slot");
 
@@ -58,8 +58,8 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
         super.write(compound);
         ListNBT nbttaglist = new ListNBT();
 
-        for(int i = 0; i < this.inventory.getSizeInventory(); ++i) {
-            if(this.inventory.getStackInSlot(i) != null) {
+        for (int i = 0; i < this.inventory.getSizeInventory(); ++i) {
+            if (this.inventory.getStackInSlot(i) != null) {
             	CompoundNBT nbttagcompound1 = new CompoundNBT();
                 nbttagcompound1.putByte("Slot", (byte)i);
                 this.inventory.getStackInSlot(i).write(nbttagcompound1);
@@ -75,9 +75,9 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
 
     public int getRangeUpgrades() {
     	int upgrades = 0;
-        for(int i = 0; i < this.inventory.getSizeInventory(); ++i) {
+        for (int i = 0; i < this.inventory.getSizeInventory(); ++i) {
 			final ItemStack stack = this.inventory.getStackInSlot(i);
-    		if(stack.getItem() == TrapcraftItems.IGNITER_RANGE.get()) {
+    		if (stack.getItem() == TrapcraftItems.IGNITER_RANGE.get()) {
     			upgrades += stack.getCount();
     		}
     	}
@@ -87,16 +87,16 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void tick() {
-    	if(!this.world.isRemote) {
+    	if (!this.world.isRemote) {
     		((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
     	}
     }
 
 	@Override
 	public void onInventoryChanged(IInventory invBasic) {
-		if(!this.world.isRemote) {
+		if (!this.world.isRemote) {
 			final int newUpgrades = this.getRangeUpgrades();
-			if(newUpgrades != this.lastUpgrades) {
+			if (newUpgrades != this.lastUpgrades) {
 				((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
 			}
 		}

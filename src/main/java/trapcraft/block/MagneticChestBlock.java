@@ -52,7 +52,7 @@ public class MagneticChestBlock extends ChestBlock {
 
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-    	if(!worldIn.isRemote && entityIn.isAlive()) {
+    	if (!worldIn.isRemote && entityIn.isAlive()) {
             if (entityIn instanceof ItemEntity) {
                 MagneticChestTileEntity tileEntityMagneticChest = (MagneticChestTileEntity)worldIn.getTileEntity(pos);
                 tileEntityMagneticChest.insertStackFromEntity((ItemEntity)entityIn);

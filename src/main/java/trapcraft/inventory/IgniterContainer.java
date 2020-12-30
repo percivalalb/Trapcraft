@@ -60,20 +60,20 @@ public class IgniterContainer extends Container {
         ItemStack itemstack = ItemStack.EMPTY;
         final Slot slot = this.inventorySlots.get(index);
 
-        if(slot != null && slot.getHasStack()) {
+        if (slot != null && slot.getHasStack()) {
             final ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if(index < this.igniter.getSizeInventory()) {
-                if(!this.mergeItemStack(itemstack1, this.igniter.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (index < this.igniter.getSizeInventory()) {
+                if (!this.mergeItemStack(itemstack1, this.igniter.getSizeInventory(), this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
-            else if(!this.mergeItemStack(itemstack1, 0, this.igniter.getSizeInventory(), false)) {
+            else if (!this.mergeItemStack(itemstack1, 0, this.igniter.getSizeInventory(), false)) {
                 return ItemStack.EMPTY;
             }
 
-            if(itemstack1.isEmpty())
+            if (itemstack1.isEmpty())
                 slot.putStack(ItemStack.EMPTY);
             else
                 slot.onSlotChanged();
