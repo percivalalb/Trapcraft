@@ -146,7 +146,7 @@ import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
 task makeChangelog(type: GitChangelogTask) {
     file = new File("build/changelog.html")
     untaggedName = "Current release ${project.version}"
-    fromCommit = 'c870974043c392fc45a6b9b775f7489ab03f83c0'
+    fromCommit = '3a162ee7d39b89d2ba182f0f8f9f3e744e893c92'
     toRef = 'HEAD'
 
     templateContent = file('changelog.mustache').getText('UTF-8')
@@ -158,7 +158,7 @@ curseforge {
         id = project.curseforge_project_id
         changelog = file("build/changelog.html")
         changelogType = 'html'
-        releaseType = findProperty("release_type") ?: 'alpha'
+        releaseType = findProperty("curseforge_release_type") ?: 'alpha'
         addArtifact apiJar
     }
 }
