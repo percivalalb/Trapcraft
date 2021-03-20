@@ -23,5 +23,5 @@ Thanks to Stewiecraft for creating the original mod back and letting me continue
 
 ### License
 Trapcraft
- - 2013 - 2020
+ - 2013 - 2021
  - [![License](https://img.shields.io/badge/License-GNU-blue.svg?style=flat-square)](https://opensource.org/licenses/GPL-3.0)

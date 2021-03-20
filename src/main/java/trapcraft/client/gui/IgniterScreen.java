@@ -27,7 +27,7 @@ public class IgniterScreen extends ContainerScreen<IgniterContainer> {
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
         // TODO 93 + this.xSize / 2 - this.font.getStringWidth(this.getTitle()) / 2
-        this.font.func_243248_b(matrixStack, this.title, 93 + this.xSize / 2F - 18, 10, 4210752);
+        this.font.drawText(matrixStack, this.title, 93 + this.xSize / 2F - 18, 10, 4210752);
     }
 
     @Override
