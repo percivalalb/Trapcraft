@@ -22,19 +22,19 @@ public class IgniterContainer extends Container {
     public IgniterContainer(int windowId, PlayerInventory playerInventory, IInventory igniter) {
         super(TrapcraftContainerTypes.IGNITER.get(), windowId);
         this.igniter = igniter;
-        Container.assertInventorySize(igniter, 6);
+        Container.checkContainerSize(igniter, 6);
 
         int i;
         for (i = 0; i < 3; ++i) {
             this.addSlot(new Slot(igniter, i, 196, 26 + i * 18) {
                 @Override
-                public boolean isItemValid(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
                 }
             });
             this.addSlot(new Slot(igniter, i + 3, 214, 26 + i * 18) {
                 @Override
-                public boolean isItemValid(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return stack.getItem() == TrapcraftItems.IGNITER_RANGE.get();
                 }
             });
@@ -51,32 +51,32 @@ public class IgniterContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity entityplayer) {
-        return this.igniter.isUsableByPlayer(entityplayer);
+    public boolean stillValid(PlayerEntity entityplayer) {
+        return this.igniter.stillValid(entityplayer);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        final Slot slot = this.inventorySlots.get(index);
+        final Slot slot = this.slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            final ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            final ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            if (index < this.igniter.getSizeInventory()) {
-                if (!this.mergeItemStack(itemstack1, this.igniter.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (index < this.igniter.getContainerSize()) {
+                if (!this.moveItemStackTo(itemstack1, this.igniter.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 0, this.igniter.getSizeInventory(), false)) {
+            else if (!this.moveItemStackTo(itemstack1, 0, this.igniter.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty())
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             else
-                slot.onSlotChanged();
+                slot.setChanged();
         }
 
         return itemstack;

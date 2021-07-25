@@ -93,10 +93,10 @@ public final class TrapcraftMod {
     @OnlyIn(Dist.CLIENT)
     private void clientSetup(final FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(TrapcraftEntityTypes.DUMMY.get(), DummyRenderer::new);
-        ScreenManager.registerFactory(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
+        ScreenManager.register(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
         ClientRegistry.bindTileEntityRenderer(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), TileEntityMagneticChestRenderer::new);
 
-        RenderTypeLookup.setRenderLayer(TrapcraftBlocks.SPIKES.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(TrapcraftBlocks.SPIKES.get(), RenderType.cutout());
         // Must be set here to avoid registry object missing error
         ItemStackTileEntityMagneticChestRenderer.setDummyTE();
     }
@@ -105,7 +105,7 @@ public final class TrapcraftMod {
     private void registerBlockColors(final ColorHandlerEvent.Block event) {
         final BlockColors blockColors = event.getBlockColors();
         blockColors.register((state, blockAccess, pos, tintIndex) -> {
-            return blockAccess != null && pos != null ? BiomeColors.getGrassColor(blockAccess, pos) : -1;
+            return blockAccess != null && pos != null ? BiomeColors.getAverageGrassColor(blockAccess, pos) : -1;
         }, TrapcraftBlocks.GRASS_COVERING.get());
     }
 
@@ -117,7 +117,7 @@ public final class TrapcraftMod {
 
     @OnlyIn(Dist.CLIENT)
     private void addTexturesToAtlas(final TextureStitchEvent.Pre event) {
-        if (event.getMap().getTextureLocation().equals(Atlases.CHEST_ATLAS)) {
+        if (event.getMap().location().equals(Atlases.CHEST_SHEET)) {
             event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
         }
     }

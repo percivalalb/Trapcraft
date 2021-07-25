@@ -15,7 +15,7 @@ public class IgniterInventory extends Inventory implements INamedContainerProvid
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
         return 8;
     }
 

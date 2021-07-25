@@ -38,16 +38,16 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         final ListNBT nbttaglist = nbt.getList("Items", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             final CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);
             final byte b0 = nbttagcompound1.getByte("Slot");
 
-            if (b0 >= 0 && b0 < this.inventory.getSizeInventory()) {
-                this.inventory.setInventorySlotContents(b0, ItemStack.read(nbttagcompound1));
+            if (b0 >= 0 && b0 < this.inventory.getContainerSize()) {
+                this.inventory.setItem(b0, ItemStack.of(nbttagcompound1));
             }
         }
         this.inventory.addListener(this);
@@ -55,15 +55,15 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         ListNBT nbttaglist = new ListNBT();
 
-        for (int i = 0; i < this.inventory.getSizeInventory(); ++i) {
-            if (this.inventory.getStackInSlot(i) != null) {
+        for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
+            if (this.inventory.getItem(i) != null) {
                 CompoundNBT nbttagcompound1 = new CompoundNBT();
                 nbttagcompound1.putByte("Slot", (byte)i);
-                this.inventory.getStackInSlot(i).write(nbttagcompound1);
+                this.inventory.getItem(i).save(nbttagcompound1);
                 nbttaglist.add(nbttagcompound1);
             }
         }
@@ -76,8 +76,8 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
 
     public int getRangeUpgrades() {
         int upgrades = 0;
-        for (int i = 0; i < this.inventory.getSizeInventory(); ++i) {
-            final ItemStack stack = this.inventory.getStackInSlot(i);
+        for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
+            final ItemStack stack = this.inventory.getItem(i);
             if (stack.getItem() == TrapcraftItems.IGNITER_RANGE.get()) {
                 upgrades += stack.getCount();
             }
@@ -88,17 +88,17 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
-            ((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
+        if (!this.level.isClientSide) {
+            ((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.level, this.worldPosition);
         }
     }
 
     @Override
-    public void onInventoryChanged(IInventory invBasic) {
-        if (!this.world.isRemote) {
+    public void containerChanged(IInventory invBasic) {
+        if (!this.level.isClientSide) {
             final int newUpgrades = this.getRangeUpgrades();
             if (newUpgrades != this.lastUpgrades) {
-                ((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.world, this.pos);
+                ((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.level, this.worldPosition);
             }
         }
     }

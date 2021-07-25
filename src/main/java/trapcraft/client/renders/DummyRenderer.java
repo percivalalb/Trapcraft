@@ -17,7 +17,7 @@ public class DummyRenderer extends LivingRenderer<DummyEntity, BipedModel<DummyE
     }
 
     @Override
-    public ResourceLocation getEntityTexture(DummyEntity dummy) {
+    public ResourceLocation getTextureLocation(DummyEntity dummy) {
         switch(dummy.getVariant()) {
         case 0:
             return Constants.RES_MOB_DUMMY_OAK;
@@ -37,7 +37,7 @@ public class DummyRenderer extends LivingRenderer<DummyEntity, BipedModel<DummyE
     }
 
     @Override
-    protected boolean canRenderName(DummyEntity entity) {
+    protected boolean shouldShowName(DummyEntity entity) {
         return false;
     }
 }

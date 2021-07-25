@@ -66,16 +66,16 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
             dropsSelf(TrapcraftBlocks.BEAR_TRAP);
             dropsSelf(TrapcraftBlocks.SPIKES);
             dropsSelf(TrapcraftBlocks.IGNITER);
-            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, Items.STICK.delegate, RandomValueRange.of(1.0F, 3.0F));
+            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, Items.STICK.delegate, RandomValueRange.between(1.0F, 3.0F));
         }
 
         private void dropsSelf(Supplier<? extends Block> block) {
-            registerDropSelfLootTable(block.get());
+            dropSelf(block.get());
         }
 
         private void droppingWithSilkTouchOrItemInRange(Supplier<? extends Block> block, Supplier<? extends IItemProvider> dropItem, IRandomRange range) {
-            registerLootTable(block.get(), (b) -> {
-                return droppingWithSilkTouchOrRandomly(b, dropItem.get(), range);
+            add(block.get(), (b) -> {
+                return createSingleItemTableWithSilkTouch(b, dropItem.get(), range);
             });
         }
 
@@ -89,11 +89,11 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
 
         @Override
         protected void addTables() {
-            this.registerLootTable(TrapcraftEntityTypes.DUMMY, LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(Items.SHULKER_SHELL)).acceptCondition(RandomChanceWithLooting.builder(0.5F, 0.0625F))));
+            this.registerLootTable(TrapcraftEntityTypes.DUMMY, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(Items.SHULKER_SHELL)).when(RandomChanceWithLooting.randomChanceAndLootingBoost(0.5F, 0.0625F))));
         }
 
         protected void registerLootTable(Supplier<? extends EntityType<?>> type, final LootTable.Builder table) {
-           this.registerLootTable(type.get().getLootTable(), table);
+           this.add(type.get().getDefaultLootTable(), table);
         }
 
         @Override

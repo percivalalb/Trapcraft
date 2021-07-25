@@ -14,7 +14,7 @@ import trapcraft.block.tileentity.MagneticChestTileEntity;
 public class TileEntityMagneticChestRenderer extends ChestTileEntityRenderer<MagneticChestTileEntity> {
 
     public static final RenderMaterial CHEST_TRAPPED_MATERIAL = Util.make(() -> {
-        return new RenderMaterial(Atlases.CHEST_ATLAS, Constants.RES_BLOCK_MAGNETIC_CHEST);
+        return new RenderMaterial(Atlases.CHEST_SHEET, Constants.RES_BLOCK_MAGNETIC_CHEST);
     });
 
     public TileEntityMagneticChestRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {

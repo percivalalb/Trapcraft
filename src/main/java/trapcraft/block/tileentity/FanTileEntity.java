@@ -38,14 +38,14 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public void tick() {
 
-        if (!this.world.getBlockState(this.pos).get(FanBlock.POWERED))
+        if (!this.level.getBlockState(this.worldPosition).getValue(FanBlock.POWERED))
             return;
 
-        final Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
+        final Direction facing = this.level.getBlockState(this.worldPosition).getValue(FanBlock.FACING);
 
-        if (this.world.rand.nextInt(2) == 0)
-            spawnParticles(this.world, this.pos);
-        final List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getDirection());
+        if (this.level.random.nextInt(2) == 0)
+            spawnParticles(this.level, this.worldPosition);
+        final List<Entity> list = this.level.getEntitiesOfClass(Entity.class, this.getDirection());
 
         for (final Entity entity : list) {
 
@@ -63,7 +63,7 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
             }
 
             if (entity instanceof PlayerEntity) {
-                if (((PlayerEntity)entity).abilities.isFlying)
+                if (((PlayerEntity)entity).abilities.flying)
                     continue;
             }
 
@@ -78,21 +78,21 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
                 threshholdVelocity *= 0.5D;
             }
 
-            if (Math.abs(entity.getMotion().getCoordinate(facing.getAxis())) < threshholdVelocity)
-                entity.setMotion(entity.getMotion().add(facing.getXOffset() * velocity, facing.getYOffset() * velocity, facing.getZOffset() * velocity));
+            if (Math.abs(entity.getDeltaMovement().get(facing.getAxis())) < threshholdVelocity)
+                entity.setDeltaMovement(entity.getDeltaMovement().add(facing.getStepX() * velocity, facing.getStepY() * velocity, facing.getStepZ() * velocity));
 
         }
     }
 
     public boolean isPathClear(final Entity entity, final Direction facing) {
-        final int x = facing.getXOffset() * (MathHelper.floor(entity.getPosX()) - this.pos.getX());
-        final int y = facing.getYOffset() * (MathHelper.floor(entity.getPosY()) - this.pos.getY());
-        final int z = facing.getZOffset() * (MathHelper.floor(entity.getPosZ()) - this.pos.getZ());
+        final int x = facing.getStepX() * (MathHelper.floor(entity.getX()) - this.worldPosition.getX());
+        final int y = facing.getStepY() * (MathHelper.floor(entity.getY()) - this.worldPosition.getY());
+        final int z = facing.getStepZ() * (MathHelper.floor(entity.getZ()) - this.worldPosition.getZ());
         boolean flag = true;
 
         for (int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
 
-            if (Block.hasEnoughSolidSide(this.world, this.pos.offset(facing, l2), facing.getOpposite())) {
+            if (Block.canSupportCenter(this.level, this.worldPosition.relative(facing, l2), facing.getOpposite())) {
                 flag = false;
             }
         }
@@ -109,52 +109,52 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     public AxisAlignedBB getDirection() {
-        final Direction facing = this.world.getBlockState(this.pos).get(FanBlock.FACING);
+        final Direction facing = this.level.getBlockState(this.worldPosition).getValue(FanBlock.FACING);
 
-        BlockPos endPos = this.pos.offset(facing, MathHelper.floor(ConfigValues.FAN_RANGE + this.extraRange));
+        BlockPos endPos = this.worldPosition.relative(facing, MathHelper.floor(ConfigValues.FAN_RANGE + this.extraRange));
         if (facing == Direction.WEST)
-            endPos = endPos.add(0, 1, 1);
+            endPos = endPos.offset(0, 1, 1);
         else if (facing == Direction.NORTH)
-            endPos = endPos.add(1, 1, 0);
+            endPos = endPos.offset(1, 1, 0);
 
         if (facing == Direction.EAST)
-            endPos = endPos.add(1, 1, 1);
+            endPos = endPos.offset(1, 1, 1);
         else if (facing == Direction.SOUTH)
-            endPos = endPos.add(1, 1, 1);
+            endPos = endPos.offset(1, 1, 1);
 
         if (facing == Direction.UP)
-            endPos = endPos.add(1, 1, 1);
+            endPos = endPos.offset(1, 1, 1);
         else if (facing == Direction.DOWN)
-            endPos = endPos.add(1, 0, 1);
+            endPos = endPos.offset(1, 0, 1);
 
-        return new AxisAlignedBB(this.pos, endPos);
+        return new AxisAlignedBB(this.worldPosition, endPos);
     }
 
     public static void spawnParticles(final World world, final BlockPos pos) {
-        final double x = pos.getX() + world.rand.nextFloat();
-        final double y = pos.getY() + world.rand.nextFloat();
-        final double z = pos.getZ() + world.rand.nextFloat();
+        final double x = pos.getX() + world.random.nextFloat();
+        final double y = pos.getY() + world.random.nextFloat();
+        final double z = pos.getZ() + world.random.nextFloat();
 
-        final Direction facing = world.getBlockState(pos).get(FanBlock.FACING);
-        final double velocity = 0.2F + world.rand.nextFloat() * 0.4F;
+        final Direction facing = world.getBlockState(pos).getValue(FanBlock.FACING);
+        final double velocity = 0.2F + world.random.nextFloat() * 0.4F;
 
-        final double velX = facing.getXOffset() * velocity;
-        final double velY = facing.getYOffset() * velocity;
-        final double velZ = facing.getZOffset() * velocity;
+        final double velX = facing.getStepX() * velocity;
+        final double velY = facing.getStepY() * velocity;
+        final double velZ = facing.getStepZ() * velocity;
 
         world.addParticle(ParticleTypes.SMOKE, x, y, z, velX, velY, velZ);
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.speed = nbt.getFloat("speed");
         this.extraRange = nbt.getDouble("extraRange");
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putFloat("speed", this.speed);
         compound.putDouble("extraRange", this.extraRange);
 
@@ -165,20 +165,20 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public CompoundNBT getUpdateTag() {
         final CompoundNBT tag = new CompoundNBT();
-        return this.write(tag);
+        return this.save(tag);
     }
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getPos(), 0, this.write(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(getBlockPos(), 0, this.save(new CompoundNBT()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         super.onDataPacket(net, packet);
-        this.read(null, packet.getNbtCompound()); // TODO Pass blockstate
-        if (!this.world.isRemote)
-            this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+        this.load(null, packet.getTag()); // TODO Pass blockstate
+        if (!this.level.isClientSide)
+            this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         return;
     }
 

@@ -32,12 +32,12 @@ import net.minecraft.world.World;
 public class SpikesBlock extends Block implements IWaterLoggable {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 5D, 16.0D);
-    private DamageSource damageSource = new DamageSource("trapcraft.spikes").setDamageBypassesArmor();
+    protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 5D, 16.0D);
+    private DamageSource damageSource = new DamageSource("trapcraft.spikes").bypassArmor();
 
     public SpikesBlock() {
-        super(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 2.0F).sound(SoundType.METAL).tickRandomly());
-        this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, Boolean.FALSE));
+        super(Block.Properties.of(Material.METAL).noOcclusion().strength(2.0F, 2.0F).sound(SoundType.METAL).randomTicks());
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, Boolean.FALSE));
     }
 
     @Override
@@ -51,34 +51,34 @@ public class SpikesBlock extends Block implements IWaterLoggable {
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
         }
 
-        return facing == Direction.DOWN && !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return facing == Direction.DOWN && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        FluidState ifluidstate = context.getLevel().getFluidState(context.getClickedPos());
 
-        return this.getDefaultState().with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
+        return this.defaultBlockState().setValue(WATERLOGGED, ifluidstate.getType() == Fluids.WATER);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-        return Block.hasEnoughSolidSide(worldIn, pos.down(), Direction.UP);
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        return Block.canSupportCenter(worldIn, pos.below(), Direction.UP);
     }
 
     @Override
@@ -87,18 +87,18 @@ public class SpikesBlock extends Block implements IWaterLoggable {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof ItemEntity) {
             return;
         }
 
         if (entity.fallDistance >= 5F) {
-            entity.attackEntityFrom(damageSource, 20);
+            entity.hurt(damageSource, 20);
             return;
         }
         else {
-            final float damageTodo = (float)entity.getMotion().dotProduct(new Vector3d(1, 1, 1)) / 1.5F;
-            entity.attackEntityFrom(damageSource, 2F + damageTodo);
+            final float damageTodo = (float)entity.getDeltaMovement().dot(new Vector3d(1, 1, 1)) / 1.5F;
+            entity.hurt(damageSource, 2F + damageTodo);
             return;
         }
     }

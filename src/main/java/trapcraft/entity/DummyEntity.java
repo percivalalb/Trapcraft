@@ -28,7 +28,7 @@ import trapcraft.TrapcraftEntityTypes;
  **/
 public class DummyEntity extends LivingEntity {
 
-    private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>createKey(DummyEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> VARIANT = EntityDataManager.<Byte>defineId(DummyEntity.class, DataSerializers.BYTE);
 
     public DummyEntity(SpawnEntity packet, World world) {
         this(world);
@@ -43,72 +43,72 @@ public class DummyEntity extends LivingEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributeMap() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 20.0D).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F).createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 1.0D).createMutableAttribute(ForgeMod.NAMETAG_DISTANCE.get(), 4.0D);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(ForgeMod.NAMETAG_DISTANCE.get(), 4.0D);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(VARIANT, Byte.valueOf((byte)0));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, Byte.valueOf((byte)0));
     }
 
     @Override
-    protected void jump() {}
+    protected void jumpFromGround() {}
 
     @Override
-    public void livingTick() {
-        this.setMotion(0.0D, this.getMotion().getY(), 0.0D);
-        super.livingTick();
+    public void aiStep() {
+        this.setDeltaMovement(0.0D, this.getDeltaMovement().y(), 0.0D);
+        super.aiStep();
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putByte("variant", this.getVariant());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.setVariant(compound.getByte("variant"));
     }
 
     public void setVariant(final byte index) {
-        this.dataManager.set(VARIANT, index);
+        this.entityData.set(VARIANT, index);
     }
 
     public byte getVariant() {
-        return this.dataManager.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean getAlwaysRenderNameTagForRender() {
+    public boolean shouldShowName() {
        return false;
     }
 
     @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
+    public Iterable<ItemStack> getArmorSlots() {
         return Collections.emptyList();
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
 
     }
 
     @Override
-    public HandSide getPrimaryHand() {
+    public HandSide getMainArm() {
         return HandSide.RIGHT;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }
