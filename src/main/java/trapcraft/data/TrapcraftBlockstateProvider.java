@@ -96,7 +96,7 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
         modelOpen.element().from(2.4F, 0F, 6.4F).to(13.6F, 0.48F, 9.6F).cube("#base");
 
         this.getVariantBuilder(blockIn.get()).forAllStatesExcept(state -> {
-            return ConfiguredModel.builder().modelFile(state.get(BearTrapBlock.TRIGGERED) ? modelClosed : modelOpen).build();
+            return ConfiguredModel.builder().modelFile(state.getValue(BearTrapBlock.TRIGGERED) ? modelClosed : modelOpen).build();
         }, BearTrapBlock.WATERLOGGED);
     }
 
@@ -163,9 +163,9 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
                 extend(blockTexture(blockIn), "_top"));
 
         this.getVariantBuilder(blockIn.get()).forAllStatesExcept(state -> {
-            final Direction facing = state.get(FanBlock.FACING);
+            final Direction facing = state.getValue(FanBlock.FACING);
             int xRot = 0;
-            int yRot = ((int) facing.getHorizontalAngle()) + 180;
+            int yRot = ((int) facing.toYRot()) + 180;
             final boolean vertical = facing.getAxis().isVertical();
 
             if (vertical) {

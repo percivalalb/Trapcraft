@@ -20,7 +20,7 @@ import trapcraft.TrapcraftTileEntityTypes;
 
 public class BearTrapTileEntity extends TileEntity implements ITickableTileEntity {
 
-    private final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").setDamageBypassesArmor();
+    private final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").bypassArmor();
     @Nullable
     private MobEntity entityliving;
     private Goal doNothingGoal;
@@ -35,16 +35,16 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
     public void tick() {
         final MobEntity trapped = this.getTrappedEntity();
 
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             if (trapped != null) {
                 // Has escaped
-                if (!trapped.getBoundingBox().intersects(new AxisAlignedBB(this.pos)) || !trapped.isAlive()) {
+                if (!trapped.getBoundingBox().intersects(new AxisAlignedBB(this.worldPosition)) || !trapped.isAlive()) {
                     this.setTrappedEntity(null);
 
                 } else  {
                     if (this.nextDamageTick == 0) {
-                        trapped.attackEntityFrom(damageSource, 1);
-                        this.nextDamageTick = 15 + this.world.rand.nextInt(20);
+                        trapped.hurt(damageSource, 1);
+                        this.nextDamageTick = 15 + this.level.random.nextInt(20);
                     }
 
                     if (this.nextDamageTick > 0) {
@@ -59,13 +59,13 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
         private MobEntity trappedEntity;
         private BearTrapTileEntity trap;
         public DoNothingGoal(MobEntity trappedEntity, BearTrapTileEntity trap) {
-            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
             this.trappedEntity = trappedEntity;
             this.trap = trap;
         }
 
         @Override
-        public boolean shouldExecute() {
+        public boolean canUse() {
             return this.trap.isEntityTrapped(this.trappedEntity);
         }
      }
@@ -73,19 +73,19 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
-        if (nbt.hasUniqueId("trapped_entity")) {
-            this.id = nbt.getUniqueId("trapped_entity");
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
+        if (nbt.hasUUID("trapped_entity")) {
+            this.id = nbt.getUUID("trapped_entity");
         }
     }
 
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         if (this.entityliving != null && this.entityliving.isAlive()) {
-            compound.putUniqueId("trapped_entity", this.entityliving.getUniqueID());
+            compound.putUUID("trapped_entity", this.entityliving.getUUID());
         }
         return compound;
     }
@@ -103,7 +103,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
                 this.doNothingGoal = null;
                 this.nextDamageTick = 0;
             } else {
-                livingEntity.goalSelector.getRunningGoals().filter(PrioritizedGoal::isRunning).forEach(PrioritizedGoal::resetTask);
+                livingEntity.goalSelector.getRunningGoals().filter(PrioritizedGoal::isRunning).forEach(PrioritizedGoal::stop);
                 livingEntity.goalSelector.addGoal(0, this.doNothingGoal = new DoNothingGoal(livingEntity, this));
             }
 
@@ -113,8 +113,8 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
     }
 
     public MobEntity getTrappedEntity() {
-        if (this.id != null && this.world instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.id);
+        if (this.id != null && this.level instanceof ServerWorld) {
+            Entity entity = ((ServerWorld)this.level).getEntity(this.id);
             this.id = null;
             if (entity instanceof MobEntity)
                 this.setTrappedEntity((MobEntity)entity);

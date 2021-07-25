@@ -34,81 +34,81 @@ public class TrapcraftRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void saveRecipeAdvancement(DirectoryCache cache, JsonObject advancementJson, Path pathIn) {
+    protected void saveAdvancement(DirectoryCache cache, JsonObject advancementJson, Path pathIn) {
 
     }
 
     @Override
-    protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 
-        ShapedRecipeBuilder.shapedRecipe(TrapcraftBlocks.BEAR_TRAP.get(), 1)
-            .patternLine("XYX")
-            .patternLine("YYY")
-            .key('X', Items.IRON_INGOT)
-            .key('Y', Blocks.STONE_PRESSURE_PLATE)
-            .addCriterion("has_iron_ingot", this.hasItem(Items.IRON_INGOT))
-            .build(consumer);
+        ShapedRecipeBuilder.shaped(TrapcraftBlocks.BEAR_TRAP.get(), 1)
+            .pattern("XYX")
+            .pattern("YYY")
+            .define('X', Items.IRON_INGOT)
+            .define('Y', Blocks.STONE_PRESSURE_PLATE)
+            .unlockedBy("has_iron_ingot", this.has(Items.IRON_INGOT))
+            .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(TrapcraftBlocks.FAN.get(), 1)
-            .patternLine("XXX")
-            .patternLine("XYX")
-            .patternLine("XXX")
-            .key('X', Blocks.COBBLESTONE)
-            .key('Y', Items.IRON_INGOT)
-            .addCriterion("has_iron_ingot", this.hasItem(Items.IRON_INGOT))
-            .build(consumer);
+        ShapedRecipeBuilder.shaped(TrapcraftBlocks.FAN.get(), 1)
+            .pattern("XXX")
+            .pattern("XYX")
+            .pattern("XXX")
+            .define('X', Blocks.COBBLESTONE)
+            .define('Y', Items.IRON_INGOT)
+            .unlockedBy("has_iron_ingot", this.has(Items.IRON_INGOT))
+            .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(TrapcraftBlocks.GRASS_COVERING.get(), 1)
-            .patternLine("XXX")
-            .patternLine("YYY")
-            .key('X', Blocks.TALL_GRASS)
-            .key('Y', Items.STICK)
-            .addCriterion("has_tall_grass", this.hasItem(Blocks.TALL_GRASS))
-            .build(consumer);
+        ShapedRecipeBuilder.shaped(TrapcraftBlocks.GRASS_COVERING.get(), 1)
+            .pattern("XXX")
+            .pattern("YYY")
+            .define('X', Blocks.TALL_GRASS)
+            .define('Y', Items.STICK)
+            .unlockedBy("has_tall_grass", this.has(Blocks.TALL_GRASS))
+            .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(TrapcraftItems.IGNITER_RANGE.get(), 1)
-            .patternLine("ALA")
-            .patternLine("DRD")
-            .patternLine("DRD")
-            .key('A', Items.ARROW)
-            .key('R', Items.REDSTONE)
-            .key('L', Items.LEATHER)
-            .key('D', Items.LAPIS_LAZULI)
-            .addCriterion("has_netherrack", this.hasItem(Blocks.NETHERRACK))
-            .build(consumer);
+        ShapedRecipeBuilder.shaped(TrapcraftItems.IGNITER_RANGE.get(), 1)
+            .pattern("ALA")
+            .pattern("DRD")
+            .pattern("DRD")
+            .define('A', Items.ARROW)
+            .define('R', Items.REDSTONE)
+            .define('L', Items.LEATHER)
+            .define('D', Items.LAPIS_LAZULI)
+            .unlockedBy("has_netherrack", this.has(Blocks.NETHERRACK))
+            .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(TrapcraftBlocks.IGNITER.get(), 1)
-            .patternLine("NNN")
-            .patternLine("CRC")
-            .patternLine("CCC")
-            .key('N', Blocks.NETHERRACK)
-            .key('R', Items.REDSTONE)
-            .key('C', Blocks.COBBLESTONE)
-            .addCriterion("has_netherrack", this.hasItem(Blocks.NETHERRACK))
-            .build(consumer);
+        ShapedRecipeBuilder.shaped(TrapcraftBlocks.IGNITER.get(), 1)
+            .pattern("NNN")
+            .pattern("CRC")
+            .pattern("CCC")
+            .define('N', Blocks.NETHERRACK)
+            .define('R', Items.REDSTONE)
+            .define('C', Blocks.COBBLESTONE)
+            .unlockedBy("has_netherrack", this.has(Blocks.NETHERRACK))
+            .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(TrapcraftBlocks.MAGNETIC_CHEST.get(), 1)
-            .patternLine("PPP")
-            .patternLine("PRP")
-            .patternLine("PIP")
-            .key('P', ItemTags.PLANKS)
-            .key('R', Items.REDSTONE)
-            .key('I', Items.IRON_INGOT)
-            .addCriterion("has_redstone", this.hasItem(Items.REDSTONE))
-            .build(consumer);
+        ShapedRecipeBuilder.shaped(TrapcraftBlocks.MAGNETIC_CHEST.get(), 1)
+            .pattern("PPP")
+            .pattern("PRP")
+            .pattern("PIP")
+            .define('P', ItemTags.PLANKS)
+            .define('R', Items.REDSTONE)
+            .define('I', Items.IRON_INGOT)
+            .unlockedBy("has_redstone", this.has(Items.REDSTONE))
+            .save(consumer);
 
-        ShapelessRecipeBuilder.shapelessRecipe(Items.PLAYER_HEAD)
-            .addIngredient(Items.BLUE_DYE, 1)
-            .addIngredient(Blocks.BROWN_WOOL, 1)
-            .addCriterion("has_brown_wool", this.hasItem(Blocks.BROWN_WOOL))
-            .build(consumer, new ResourceLocation(Constants.MOD_ID, "player_head"));
+        ShapelessRecipeBuilder.shapeless(Items.PLAYER_HEAD)
+            .requires(Items.BLUE_DYE, 1)
+            .requires(Blocks.BROWN_WOOL, 1)
+            .unlockedBy("has_brown_wool", this.has(Blocks.BROWN_WOOL))
+            .save(consumer, new ResourceLocation(Constants.MOD_ID, "player_head"));
 
-        ShapedRecipeBuilder.shapedRecipe(TrapcraftBlocks.SPIKES.get(), 1)
-            .patternLine(" I ")
-            .patternLine(" I ")
-            .patternLine("III")
-            .key('I', Items.IRON_INGOT)
-            .addCriterion("has_iron_ingot", this.hasItem(Items.IRON_INGOT))
-            .build(consumer);
+        ShapedRecipeBuilder.shaped(TrapcraftBlocks.SPIKES.get(), 1)
+            .pattern(" I ")
+            .pattern(" I ")
+            .pattern("III")
+            .define('I', Items.IRON_INGOT)
+            .unlockedBy("has_iron_ingot", this.has(Items.IRON_INGOT))
+            .save(consumer);
     }
 }

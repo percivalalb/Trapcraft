@@ -41,16 +41,16 @@ public class IgniterBlock extends ContainerBlock {
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
     public IgniterBlock() {
-        super(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.5F, 2.0F).sound(SoundType.STONE));
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
+        super(Block.Properties.of(Material.STONE).strength(3.5F, 2.0F).sound(SoundType.STONE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.WEST));
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (worldIn.isRemote) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (worldIn.isClientSide) {
             return ActionResultType.SUCCESS;
         } else {
-            final IgniterTileEntity tileentityigniter = (IgniterTileEntity)worldIn.getTileEntity(pos);
+            final IgniterTileEntity tileentityigniter = (IgniterTileEntity)worldIn.getBlockEntity(pos);
 
             if (tileentityigniter != null) {
                 if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
@@ -70,23 +70,23 @@ public class IgniterBlock extends ContainerBlock {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (!worldIn.isRemote) {
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (!worldIn.isClientSide) {
             this.updateIgniterState(worldIn, pos);
         }
     }
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if (!worldIn.isRemote) {
+        if (!worldIn.isClientSide) {
             this.updateIgniterState(worldIn, pos);
         }
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (oldState.getBlock() != state.getBlock()) {
-            if (!worldIn.isRemote) {
+            if (!worldIn.isClientSide) {
                 this.updateIgniterState(worldIn, pos);
             }
         }
@@ -94,44 +94,44 @@ public class IgniterBlock extends ContainerBlock {
 
     @Override
        public BlockState getStateForPlacement(BlockItemUseContext context) {
-           return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
+           return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
        }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate(state.get(FACING)));
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     public void updateIgniterState(World world, BlockPos pos) {
-       final Direction facing = world.getBlockState(pos).get(FACING);
+       final Direction facing = world.getBlockState(pos).getValue(FACING);
 
        int distance = 1, oldDistance = 1;
-       TileEntity tileEntity = world.getTileEntity(pos);
+       TileEntity tileEntity = world.getBlockEntity(pos);
        if (tileEntity instanceof IgniterTileEntity) {
-           final IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
+           final IgniterTileEntity igniter = (IgniterTileEntity)world.getBlockEntity(pos);
            distance = igniter.getRangeUpgrades() + 1;
            oldDistance = igniter.lastUpgrades + 1;
        }
 
-       updateIgniterState(world, pos, world.isBlockPowered(pos), facing, distance, oldDistance);
+       updateIgniterState(world, pos, world.hasNeighborSignal(pos), facing, distance, oldDistance);
 
        if (tileEntity instanceof IgniterTileEntity) {
-           final IgniterTileEntity igniter = (IgniterTileEntity)world.getTileEntity(pos);
+           final IgniterTileEntity igniter = (IgniterTileEntity)world.getBlockEntity(pos);
            igniter.lastUpgrades = distance - 1;
        }
     }
@@ -139,16 +139,16 @@ public class IgniterBlock extends ContainerBlock {
     private void updateIgniterState(final World world, final BlockPos pos, final boolean powered, final Direction direction, final int newDistance, final int previousDistance) {
         // If distance has changed remove old fire
         if (newDistance != previousDistance) {
-             final BlockPos oldPos = pos.offset(direction, previousDistance);
+             final BlockPos oldPos = pos.relative(direction, previousDistance);
              removePossibleFire(world, oldPos);
         }
 
-        final BlockPos firePos = pos.offset(direction, newDistance);
+        final BlockPos firePos = pos.relative(direction, newDistance);
 
         if (powered) {
-            BlockState fire = Blocks.FIRE.getDefaultState();
-             if (!world.getBlockState(firePos).matchesBlock(Blocks.FIRE) && world.isAirBlock(firePos) && fire.isValidPosition(world, firePos)) {
-                world.setBlockState(firePos, fire);
+            BlockState fire = Blocks.FIRE.defaultBlockState();
+             if (!world.getBlockState(firePos).is(Blocks.FIRE) && world.isEmptyBlock(firePos) && fire.canSurvive(world, firePos)) {
+                world.setBlockAndUpdate(firePos, fire);
              }
         }
         else if (!powered) {
@@ -158,31 +158,31 @@ public class IgniterBlock extends ContainerBlock {
 
     public void removePossibleFire(final World world, final BlockPos pos) {
         if (world.getBlockState(pos).getBlock() == Blocks.FIRE) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
-            world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
+            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            world.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5F, SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F, true);
         }
     }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader world) {
+    public TileEntity newBlockEntity(IBlockReader world) {
         return new IgniterTileEntity();
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            final TileEntity tileentity = worldIn.getTileEntity(pos);
+            final TileEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof IgniterTileEntity) {
                 final int upgrades = ((IgniterTileEntity) tileentity).getRangeUpgrades() + 1;
-                updateIgniterState(worldIn, pos, false, state.get(FACING), upgrades, upgrades);
+                updateIgniterState(worldIn, pos, false, state.getValue(FACING), upgrades, upgrades);
 
-                InventoryHelper.dropInventoryItems(worldIn, pos, ((IgniterTileEntity)tileentity).inventory);
+                InventoryHelper.dropContents(worldIn, pos, ((IgniterTileEntity)tileentity).inventory);
 
-                worldIn.updateComparatorOutputLevel(pos, this);
+                worldIn.updateNeighbourForOutputSignal(pos, this);
             }
 
         }
 
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 }

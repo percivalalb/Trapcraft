@@ -31,70 +31,70 @@ public class FanBlock extends ContainerBlock {
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
     public FanBlock() {
-        super(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F, 2.0F).sound(SoundType.STONE));
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST).with(POWERED, false));
+        super(Block.Properties.of(Material.STONE).strength(2.0F, 2.0F).sound(SoundType.STONE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.WEST).setValue(POWERED, false));
     }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader world) {
+    public TileEntity newBlockEntity(IBlockReader world) {
         return new FanTileEntity();
     }
 
     @Override
        public BlockState getStateForPlacement(BlockItemUseContext context) {
-        final BlockPos blockpos = context.getPos();
-        final World world = context.getWorld();
-        boolean flag = world.isBlockPowered(blockpos) || world.isBlockPowered(blockpos.up());
-           return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite()).with(POWERED, flag);
+        final BlockPos blockpos = context.getClickedPos();
+        final World world = context.getLevel();
+        boolean flag = world.hasNeighborSignal(blockpos) || world.hasNeighborSignal(blockpos.above());
+           return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(POWERED, flag);
        }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate(state.get(FACING)));
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING, POWERED);
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (!worldIn.isRemote) {
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (!worldIn.isClientSide) {
             this.updateFanState(state, worldIn, pos);
         }
     }
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if (!worldIn.isRemote) {
+        if (!worldIn.isClientSide) {
             this.updateFanState(state, worldIn, pos);
         }
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (oldState.getBlock() != state.getBlock()) {
-            if (!worldIn.isRemote && worldIn.getTileEntity(pos) == null) {
+            if (!worldIn.isClientSide && worldIn.getBlockEntity(pos) == null) {
                 this.updateFanState(state, worldIn, pos);
             }
         }
     }
 
     private void updateFanState(BlockState state, World worldIn, BlockPos pos) {
-        final boolean flag = worldIn.isBlockPowered(pos);
-        if (flag != state.get(POWERED)) {
-            worldIn.setBlockState(pos, state.with(POWERED, flag), 2);
+        final boolean flag = worldIn.hasNeighborSignal(pos);
+        if (flag != state.getValue(POWERED)) {
+            worldIn.setBlock(pos, state.setValue(POWERED, flag), 2);
         }
 
     }

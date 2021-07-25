@@ -32,15 +32,15 @@ public class ActionHandler {
         final BlockPos tPos = event.getBlockSnapshot().getPos();
 
         if (state.getBlock() == Blocks.PLAYER_HEAD) {
-            final Block top = world.getBlockState(tPos.down()).getBlock();
-            final Block bottom = world.getBlockState(tPos.down(2)).getBlock();
+            final Block top = world.getBlockState(tPos.below()).getBlock();
+            final Block bottom = world.getBlockState(tPos.below(2)).getBlock();
             if (top == bottom && PLANKS.contains(top)) {
-                world.setBlockState(tPos, Blocks.AIR.getDefaultState());
-                world.setBlockState(tPos.down(), Blocks.AIR.getDefaultState());
-                world.setBlockState(tPos.down(2), Blocks.AIR.getDefaultState());
+                world.setBlockAndUpdate(tPos, Blocks.AIR.defaultBlockState());
+                world.setBlockAndUpdate(tPos.below(), Blocks.AIR.defaultBlockState());
+                world.setBlockAndUpdate(tPos.below(2), Blocks.AIR.defaultBlockState());
 
-                if (!world.isRemote) {
-                    final float rotation = event.getEntity().rotationYaw + 180F;
+                if (!world.isClientSide) {
+                    final float rotation = event.getEntity().yRot + 180F;
                     this.spawnDummy(world, tPos, rotation, (byte)PLANKS.indexOf(top));
                 }
                 event.setCanceled(true);
@@ -54,7 +54,7 @@ public class ActionHandler {
         if (entity instanceof MobEntity) {
             final MobEntity mob = (MobEntity)entity;
             mob.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, DummyEntity.class, 10, true, false, (dummy) -> {
-              return Math.abs(dummy.getPosY() - mob.getPosY()) <= 6.0D;
+              return Math.abs(dummy.getY() - mob.getY()) <= 6.0D;
            }));
         }
     }
@@ -62,7 +62,7 @@ public class ActionHandler {
     public void spawnDummy(final World world, final BlockPos tPos, final float rotation, final byte variant) {
         final DummyEntity entitydummy = new DummyEntity(world);
         entitydummy.setVariant(variant);
-        entitydummy.setLocationAndAngles(tPos.getX() + 0.5D, tPos.getY() - 1.95D, tPos.getZ() + 0.5D, MathHelper.wrapDegrees(rotation), 0.0F);
-        world.addEntity(entitydummy);
+        entitydummy.moveTo(tPos.getX() + 0.5D, tPos.getY() - 1.95D, tPos.getZ() + 0.5D, MathHelper.wrapDegrees(rotation), 0.0F);
+        world.addFreshEntity(entitydummy);
     }
 }

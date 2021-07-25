@@ -46,14 +46,14 @@ public class TrapcraftBlocks {
     }
 
     private static BlockItem makeMagneticChestItem(Supplier<Block> blockSupplier) {
-        return new BlockItem(blockSupplier.get(), new Item.Properties().group(ItemGroup.REDSTONE).setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
+        return new BlockItem(blockSupplier.get(), new Item.Properties().tab(ItemGroup.TAB_REDSTONE).setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
     }
 
     private static BlockItem makeBlockItem(Supplier<Block> blockSupplier) {
-        return makeBlockItem(blockSupplier, ItemGroup.REDSTONE);
+        return makeBlockItem(blockSupplier, ItemGroup.TAB_REDSTONE);
     }
 
     private static BlockItem makeBlockItem(Supplier<Block> block, final ItemGroup group) {
-        return new BlockItem(block.get(), new Item.Properties().group(group));
+        return new BlockItem(block.get(), new Item.Properties().tab(group));
     }
 }

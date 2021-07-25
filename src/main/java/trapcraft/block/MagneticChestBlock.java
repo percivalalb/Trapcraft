@@ -28,33 +28,33 @@ import trapcraft.block.tileentity.MagneticChestTileEntity;
 public class MagneticChestBlock extends ChestBlock {
 
     public MagneticChestBlock() {
-        super(Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F, 2.0F).sound(SoundType.WOOD), TrapcraftTileEntityTypes.MAGNETIC_CHEST::get);
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.WEST));
+        super(Block.Properties.of(Material.WOOD).strength(2.5F, 2.0F).sound(SoundType.WOOD), TrapcraftTileEntityTypes.MAGNETIC_CHEST::get);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.WEST));
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        final Direction direction = context.getPlacementHorizontalFacing().getOpposite();
-        final FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        final Direction direction = context.getHorizontalDirection().getOpposite();
+        final FluidState ifluidstate = context.getLevel().getFluidState(context.getClickedPos());
 
-        return this.getDefaultState().with(FACING, direction).with(TYPE, ChestType.SINGLE).with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
+        return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, ChestType.SINGLE).setValue(WATERLOGGED, ifluidstate.getType() == Fluids.WATER);
      }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new MagneticChestTileEntity();
     }
 
     @Override
-    protected Stat<ResourceLocation> getOpenStat() {
+    protected Stat<ResourceLocation> getOpenChestStat() {
         return Stats.CUSTOM.get(Stats.TRIGGER_TRAPPED_CHEST); //TODO
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if (!worldIn.isRemote && entityIn.isAlive()) {
+    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+        if (!worldIn.isClientSide && entityIn.isAlive()) {
             if (entityIn instanceof ItemEntity) {
-                MagneticChestTileEntity tileEntityMagneticChest = (MagneticChestTileEntity)worldIn.getTileEntity(pos);
+                MagneticChestTileEntity tileEntityMagneticChest = (MagneticChestTileEntity)worldIn.getBlockEntity(pos);
                 tileEntityMagneticChest.insertStackFromEntity((ItemEntity)entityIn);
             }
         }
