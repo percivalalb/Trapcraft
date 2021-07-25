@@ -7,11 +7,11 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
@@ -44,7 +44,7 @@ public class TrapcraftItemModelProvider extends ItemModelProvider {
         this.chest(MAGNETIC_CHEST, Blocks.OAK_PLANKS.delegate);
     }
 
-    private ResourceLocation itemTexture(Supplier<? extends IItemProvider> item) {
+    private ResourceLocation itemTexture(Supplier<? extends ItemLike> item) {
         return modLoc(ModelProvider.ITEM_FOLDER + "/" + name(item));
     }
 
@@ -53,7 +53,7 @@ public class TrapcraftItemModelProvider extends ItemModelProvider {
         return new ResourceLocation(base.getNamespace(), ModelProvider.BLOCK_FOLDER + "/" + base.getPath());
     }
 
-    private String name(Supplier<? extends IItemProvider> item) {
+    private String name(Supplier<? extends ItemLike> item) {
         return item.get().asItem().getRegistryName().getPath();
     }
 
@@ -65,23 +65,23 @@ public class TrapcraftItemModelProvider extends ItemModelProvider {
         return blockItem(block, "");
     }
 
-    private ItemModelBuilder generated(Supplier<? extends IItemProvider> item) {
+    private ItemModelBuilder generated(Supplier<? extends ItemLike> item) {
         return generated(item, itemTexture(item));
     }
 
-    private ItemModelBuilder generated(Supplier<? extends IItemProvider> item, String suffix) {
+    private ItemModelBuilder generated(Supplier<? extends ItemLike> item, String suffix) {
         return generated(item, extend(itemTexture(item), suffix));
     }
 
-    private ItemModelBuilder generated(Supplier<? extends IItemProvider> item, ResourceLocation texture) {
+    private ItemModelBuilder generated(Supplier<? extends ItemLike> item, ResourceLocation texture) {
         return getBuilder(name(item)).parent(new UncheckedModelFile(ModelProvider.ITEM_FOLDER + "/generated")).texture("layer0", texture);
     }
 
-    private ItemModelBuilder chest(Supplier<? extends IItemProvider> item, Supplier<? extends Block> particle) {
+    private ItemModelBuilder chest(Supplier<? extends ItemLike> item, Supplier<? extends Block> particle) {
         return chest(item, blockTexture(particle));
     }
 
-    private ItemModelBuilder chest(Supplier<? extends IItemProvider> item, ResourceLocation texture) {
+    private ItemModelBuilder chest(Supplier<? extends ItemLike> item, ResourceLocation texture) {
         return getBuilder(name(item)).parent(new UncheckedModelFile(ModelProvider.ITEM_FOLDER + "/chest")).texture("particle", texture);
     }
 

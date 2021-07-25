@@ -2,20 +2,20 @@ package trapcraft.block.tileentity;
 
 import java.util.List;
 
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import trapcraft.TrapcraftTileEntityTypes;
 
 /**
  * @author ProPercivalalb
  **/
-public class MagneticChestTileEntity extends ChestTileEntity implements ITickableTileEntity {
+public class MagneticChestTileEntity extends ChestBlockEntity implements TickableBlockEntity {
 
     public MagneticChestTileEntity() {
         super(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get());
@@ -28,7 +28,7 @@ public class MagneticChestTileEntity extends ChestTileEntity implements ITickabl
     }
 
     public void pullItemsIn() {
-        final List<ItemEntity> entities = this.level.getEntitiesOfClass(ItemEntity.class, new AxisAlignedBB(this.getBlockPos()).inflate(50), item -> item.distanceToSqr(this.getBlockPos().getX(),this.getBlockPos().getY(),this.getBlockPos().getZ()) < 10D);
+        final List<ItemEntity> entities = this.level.getEntitiesOfClass(ItemEntity.class, new AABB(this.getBlockPos()).inflate(50), item -> item.distanceToSqr(this.getBlockPos().getX(),this.getBlockPos().getY(),this.getBlockPos().getZ()) < 10D);
 
         for (final ItemEntity itemEntity : entities) {
             final double centreX = this.worldPosition.getX() + 0.5D;
@@ -40,10 +40,10 @@ public class MagneticChestTileEntity extends ChestTileEntity implements ITickabl
             final double speedMultiper = 0.05D;
             double d11 = itemEntity.getX() - centreX;
             double d12 = itemEntity.getZ() - centreZ;
-            final double horizDiffSq = MathHelper.sqrt(diffX * diffX + diffZ * diffZ);
+            final double horizDiffSq = Mth.sqrt(diffX * diffX + diffZ * diffZ);
             final double angle = Math.asin(diffX / horizDiffSq);
-            double d15 = Math.abs(MathHelper.sin((float)angle) * speedMultiper);
-            double d16 = Math.abs(MathHelper.cos((float)angle) * speedMultiper);
+            double d15 = Math.abs(Mth.sin((float)angle) * speedMultiper);
+            double d16 = Math.abs(Mth.cos((float)angle) * speedMultiper);
             d15 = diffX <= 0.0D ? -d15 : d15;
             d16 = diffZ <= 0.0D ? -d16 : d16;
             if (itemEntity.getDeltaMovement().dot(itemEntity.getDeltaMovement()) >= 0.2D)
@@ -107,7 +107,7 @@ public class MagneticChestTileEntity extends ChestTileEntity implements ITickabl
      }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.trapcraft.magnetic_chest");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("container.trapcraft.magnetic_chest");
     }
 }

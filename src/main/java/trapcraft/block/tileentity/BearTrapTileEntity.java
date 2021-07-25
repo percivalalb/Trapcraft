@@ -5,24 +5,24 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.PrioritizedGoal;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.server.level.ServerLevel;
 import trapcraft.TrapcraftTileEntityTypes;
 
-public class BearTrapTileEntity extends TileEntity implements ITickableTileEntity {
+public class BearTrapTileEntity extends BlockEntity implements TickableBlockEntity {
 
     private final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").bypassArmor();
     @Nullable
-    private MobEntity entityliving;
+    private Mob entityliving;
     private Goal doNothingGoal;
     private UUID id;
     private int nextDamageTick;
@@ -33,12 +33,12 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 
     @Override
     public void tick() {
-        final MobEntity trapped = this.getTrappedEntity();
+        final Mob trapped = this.getTrappedEntity();
 
         if (!this.level.isClientSide) {
             if (trapped != null) {
                 // Has escaped
-                if (!trapped.getBoundingBox().intersects(new AxisAlignedBB(this.worldPosition)) || !trapped.isAlive()) {
+                if (!trapped.getBoundingBox().intersects(new AABB(this.worldPosition)) || !trapped.isAlive()) {
                     this.setTrappedEntity(null);
 
                 } else  {
@@ -56,9 +56,9 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
     }
 
     class DoNothingGoal extends Goal {
-        private MobEntity trappedEntity;
+        private Mob trappedEntity;
         private BearTrapTileEntity trap;
-        public DoNothingGoal(MobEntity trappedEntity, BearTrapTileEntity trap) {
+        public DoNothingGoal(Mob trappedEntity, BearTrapTileEntity trap) {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
             this.trappedEntity = trappedEntity;
             this.trap = trap;
@@ -73,7 +73,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         if (nbt.hasUUID("trapped_entity")) {
             this.id = nbt.getUUID("trapped_entity");
@@ -82,7 +82,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
 
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         if (this.entityliving != null && this.entityliving.isAlive()) {
             compound.putUUID("trapped_entity", this.entityliving.getUUID());
@@ -90,7 +90,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
         return compound;
     }
 
-    public boolean setTrappedEntity(@Nullable MobEntity livingEntity) {
+    public boolean setTrappedEntity(@Nullable Mob livingEntity) {
         if (this.hasTrappedEntity() && livingEntity != null) {
             return false;
         } else {
@@ -103,7 +103,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
                 this.doNothingGoal = null;
                 this.nextDamageTick = 0;
             } else {
-                livingEntity.goalSelector.getRunningGoals().filter(PrioritizedGoal::isRunning).forEach(PrioritizedGoal::stop);
+                livingEntity.goalSelector.getRunningGoals().filter(WrappedGoal::isRunning).forEach(WrappedGoal::stop);
                 livingEntity.goalSelector.addGoal(0, this.doNothingGoal = new DoNothingGoal(livingEntity, this));
             }
 
@@ -112,12 +112,12 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
         }
     }
 
-    public MobEntity getTrappedEntity() {
-        if (this.id != null && this.level instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.level).getEntity(this.id);
+    public Mob getTrappedEntity() {
+        if (this.id != null && this.level instanceof ServerLevel) {
+            Entity entity = ((ServerLevel)this.level).getEntity(this.id);
             this.id = null;
-            if (entity instanceof MobEntity)
-                this.setTrappedEntity((MobEntity)entity);
+            if (entity instanceof Mob)
+                this.setTrappedEntity((Mob)entity);
         }
         return this.entityliving;
     }
@@ -126,7 +126,7 @@ public class BearTrapTileEntity extends TileEntity implements ITickableTileEntit
         return this.getTrappedEntity() != null;
     }
 
-    public boolean isEntityTrapped(final MobEntity trappedEntity) {
+    public boolean isEntityTrapped(final Mob trappedEntity) {
         return this.getTrappedEntity() == trappedEntity;
     }
 }

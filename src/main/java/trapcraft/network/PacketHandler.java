@@ -1,6 +1,6 @@
 package trapcraft.network;
 
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import trapcraft.TrapcraftMod;
 
 public final class PacketHandler

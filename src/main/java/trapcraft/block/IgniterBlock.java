@@ -1,42 +1,42 @@
 package trapcraft.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import trapcraft.block.tileentity.IgniterTileEntity;
 
 /**
  * @author ProPercivalalb
  **/
-public class IgniterBlock extends ContainerBlock {
+public class IgniterBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
@@ -46,45 +46,45 @@ public class IgniterBlock extends ContainerBlock {
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (worldIn.isClientSide) {
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
             final IgniterTileEntity tileentityigniter = (IgniterTileEntity)worldIn.getBlockEntity(pos);
 
             if (tileentityigniter != null) {
-                if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-                    final ServerPlayerEntity entityPlayerMP = (ServerPlayerEntity) player;
+                if (player instanceof ServerPlayer && !(player instanceof FakePlayer)) {
+                    final ServerPlayer entityPlayerMP = (ServerPlayer) player;
 
                     NetworkHooks.openGui(entityPlayerMP, tileentityigniter, pos);
                 }
             }
 
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
     }
 
     @Override
-    public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
-        this.updateIgniterState((World)world, pos);
+    public void onNeighborChange(BlockState state, LevelReader world, BlockPos pos, BlockPos neighbor) {
+        this.updateIgniterState((Level)world, pos);
     }
 
     @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         if (!worldIn.isClientSide) {
             this.updateIgniterState(worldIn, pos);
         }
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if (!worldIn.isClientSide) {
             this.updateIgniterState(worldIn, pos);
         }
     }
 
     @Override
-    public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (oldState.getBlock() != state.getBlock()) {
             if (!worldIn.isClientSide) {
                 this.updateIgniterState(worldIn, pos);
@@ -93,13 +93,13 @@ public class IgniterBlock extends ContainerBlock {
     }
 
     @Override
-       public BlockState getStateForPlacement(BlockItemUseContext context) {
+       public BlockState getStateForPlacement(BlockPlaceContext context) {
            return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
        }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -113,15 +113,15 @@ public class IgniterBlock extends ContainerBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
-    public void updateIgniterState(World world, BlockPos pos) {
+    public void updateIgniterState(Level world, BlockPos pos) {
        final Direction facing = world.getBlockState(pos).getValue(FACING);
 
        int distance = 1, oldDistance = 1;
-       TileEntity tileEntity = world.getBlockEntity(pos);
+       BlockEntity tileEntity = world.getBlockEntity(pos);
        if (tileEntity instanceof IgniterTileEntity) {
            final IgniterTileEntity igniter = (IgniterTileEntity)world.getBlockEntity(pos);
            distance = igniter.getRangeUpgrades() + 1;
@@ -136,7 +136,7 @@ public class IgniterBlock extends ContainerBlock {
        }
     }
 
-    private void updateIgniterState(final World world, final BlockPos pos, final boolean powered, final Direction direction, final int newDistance, final int previousDistance) {
+    private void updateIgniterState(final Level world, final BlockPos pos, final boolean powered, final Direction direction, final int newDistance, final int previousDistance) {
         // If distance has changed remove old fire
         if (newDistance != previousDistance) {
              final BlockPos oldPos = pos.relative(direction, previousDistance);
@@ -156,27 +156,27 @@ public class IgniterBlock extends ContainerBlock {
         }
      }
 
-    public void removePossibleFire(final World world, final BlockPos pos) {
+    public void removePossibleFire(final Level world, final BlockPos pos) {
         if (world.getBlockState(pos).getBlock() == Blocks.FIRE) {
             world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-            world.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5F, SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F, true);
+            world.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5F, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F, true);
         }
     }
 
     @Override
-    public TileEntity newBlockEntity(IBlockReader world) {
+    public BlockEntity newBlockEntity(BlockGetter world) {
         return new IgniterTileEntity();
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            final TileEntity tileentity = worldIn.getBlockEntity(pos);
+            final BlockEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof IgniterTileEntity) {
                 final int upgrades = ((IgniterTileEntity) tileentity).getRangeUpgrades() + 1;
                 updateIgniterState(worldIn, pos, false, state.getValue(FACING), upgrades, upgrades);
 
-                InventoryHelper.dropContents(worldIn, pos, ((IgniterTileEntity)tileentity).inventory);
+                Containers.dropContents(worldIn, pos, ((IgniterTileEntity)tileentity).inventory);
 
                 worldIn.updateNeighbourForOutputSignal(pos, this);
             }

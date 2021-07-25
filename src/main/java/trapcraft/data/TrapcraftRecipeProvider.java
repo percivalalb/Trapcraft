@@ -5,16 +5,16 @@ import java.util.function.Consumer;
 
 import com.google.gson.JsonObject;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Items;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftItems;
 import trapcraft.api.Constants;
@@ -34,12 +34,12 @@ public class TrapcraftRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void saveAdvancement(DirectoryCache cache, JsonObject advancementJson, Path pathIn) {
+    protected void saveAdvancement(HashCache cache, JsonObject advancementJson, Path pathIn) {
 
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 
         ShapedRecipeBuilder.shaped(TrapcraftBlocks.BEAR_TRAP.get(), 1)
             .pattern("XYX")

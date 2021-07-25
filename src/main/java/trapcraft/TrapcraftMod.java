@@ -3,33 +3,33 @@ package trapcraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.Atlases;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.GrassColors;
-import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.GrassColor;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.DistExecutor;
+import net.minecraftforge.fmllegacy.client.registry.ClientRegistry;
+import net.minecraftforge.fmllegacy.client.registry.RenderingRegistry;
+import net.minecraftforge.fmllegacy.common.Mod;
+import net.minecraftforge.fmllegacy.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fmllegacy.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fmllegacy.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.fmllegacy.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fmllegacy.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import trapcraft.api.Constants;
 import trapcraft.client.gui.IgniterScreen;
 import trapcraft.client.renders.DummyRenderer;
@@ -93,10 +93,10 @@ public final class TrapcraftMod {
     @OnlyIn(Dist.CLIENT)
     private void clientSetup(final FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(TrapcraftEntityTypes.DUMMY.get(), DummyRenderer::new);
-        ScreenManager.register(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
+        MenuScreens.register(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
         ClientRegistry.bindTileEntityRenderer(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), TileEntityMagneticChestRenderer::new);
 
-        RenderTypeLookup.setRenderLayer(TrapcraftBlocks.SPIKES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(TrapcraftBlocks.SPIKES.get(), RenderType.cutout());
         // Must be set here to avoid registry object missing error
         ItemStackTileEntityMagneticChestRenderer.setDummyTE();
     }
@@ -112,12 +112,12 @@ public final class TrapcraftMod {
     @OnlyIn(Dist.CLIENT)
     private void registerItemColors(final ColorHandlerEvent.Item event) {
         final ItemColors itemColors = event.getItemColors();
-        itemColors.register((stack, tintIndex) -> GrassColors.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
+        itemColors.register((stack, tintIndex) -> GrassColor.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
     }
 
     @OnlyIn(Dist.CLIENT)
     private void addTexturesToAtlas(final TextureStitchEvent.Pre event) {
-        if (event.getMap().location().equals(Atlases.CHEST_SHEET)) {
+        if (event.getMap().location().equals(Sheets.CHEST_SHEET)) {
             event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
         }
     }

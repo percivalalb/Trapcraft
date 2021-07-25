@@ -1,31 +1,31 @@
 package trapcraft.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import trapcraft.block.tileentity.FanTileEntity;
 
 /**
  * @author ProPercivalalb
  **/
-public class FanBlock extends ContainerBlock {
+public class FanBlock extends BaseEntityBlock {
 
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
@@ -36,21 +36,21 @@ public class FanBlock extends ContainerBlock {
     }
 
     @Override
-    public TileEntity newBlockEntity(IBlockReader world) {
+    public BlockEntity newBlockEntity(BlockGetter world) {
         return new FanTileEntity();
     }
 
     @Override
-       public BlockState getStateForPlacement(BlockItemUseContext context) {
+       public BlockState getStateForPlacement(BlockPlaceContext context) {
         final BlockPos blockpos = context.getClickedPos();
-        final World world = context.getLevel();
+        final Level world = context.getLevel();
         boolean flag = world.hasNeighborSignal(blockpos) || world.hasNeighborSignal(blockpos.above());
            return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(POWERED, flag);
        }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -64,26 +64,26 @@ public class FanBlock extends ContainerBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, POWERED);
     }
 
     @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         if (!worldIn.isClientSide) {
             this.updateFanState(state, worldIn, pos);
         }
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if (!worldIn.isClientSide) {
             this.updateFanState(state, worldIn, pos);
         }
     }
 
     @Override
-    public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (oldState.getBlock() != state.getBlock()) {
             if (!worldIn.isClientSide && worldIn.getBlockEntity(pos) == null) {
                 this.updateFanState(state, worldIn, pos);
@@ -91,7 +91,7 @@ public class FanBlock extends ContainerBlock {
         }
     }
 
-    private void updateFanState(BlockState state, World worldIn, BlockPos pos) {
+    private void updateFanState(BlockState state, Level worldIn, BlockPos pos) {
         final boolean flag = worldIn.hasNeighborSignal(pos);
         if (flag != state.getValue(POWERED)) {
             worldIn.setBlock(pos, state.setValue(POWERED, flag), 2);

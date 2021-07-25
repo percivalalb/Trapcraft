@@ -10,25 +10,25 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.data.loot.EntityLootTables;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Items;
-import net.minecraft.loot.ConstantRange;
-import net.minecraft.loot.IRandomRange;
-import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootParameterSet;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.RandomValueRange;
-import net.minecraft.loot.ValidationTracker;
-import net.minecraft.loot.conditions.RandomChanceWithLooting;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.EntityLoot;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.RandomIntGenerator;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.RandomValueBounds;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftEntityTypes;
 
@@ -47,17 +47,17 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
     }
 
     @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
         return ImmutableList.of(
-                Pair.of(Blocks::new, LootParameterSets.BLOCK),
-                Pair.of(Entities::new, LootParameterSets.ENTITY)
+                Pair.of(Blocks::new, LootContextParamSets.BLOCK),
+                Pair.of(Entities::new, LootContextParamSets.ENTITY)
                );
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker validationTracker) {}
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationTracker) {}
 
-    private static class Blocks extends BlockLootTables {
+    private static class Blocks extends BlockLoot {
 
         @Override
         protected void addTables() {
@@ -66,14 +66,14 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
             dropsSelf(TrapcraftBlocks.BEAR_TRAP);
             dropsSelf(TrapcraftBlocks.SPIKES);
             dropsSelf(TrapcraftBlocks.IGNITER);
-            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, Items.STICK.delegate, RandomValueRange.between(1.0F, 3.0F));
+            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, Items.STICK.delegate, RandomValueBounds.between(1.0F, 3.0F));
         }
 
         private void dropsSelf(Supplier<? extends Block> block) {
             dropSelf(block.get());
         }
 
-        private void droppingWithSilkTouchOrItemInRange(Supplier<? extends Block> block, Supplier<? extends IItemProvider> dropItem, IRandomRange range) {
+        private void droppingWithSilkTouchOrItemInRange(Supplier<? extends Block> block, Supplier<? extends ItemLike> dropItem, RandomIntGenerator range) {
             add(block.get(), (b) -> {
                 return createSingleItemTableWithSilkTouch(b, dropItem.get(), range);
             });
@@ -85,11 +85,11 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
         }
     }
 
-    private static class Entities extends EntityLootTables {
+    private static class Entities extends EntityLoot {
 
         @Override
         protected void addTables() {
-            this.registerLootTable(TrapcraftEntityTypes.DUMMY, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(Items.SHULKER_SHELL)).when(RandomChanceWithLooting.randomChanceAndLootingBoost(0.5F, 0.0625F))));
+            this.registerLootTable(TrapcraftEntityTypes.DUMMY, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantIntValue.exactly(1)).add(LootItem.lootTableItem(Items.SHULKER_SHELL)).when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.5F, 0.0625F))));
         }
 
         protected void registerLootTable(Supplier<? extends EntityType<?>> type, final LootTable.Builder table) {

@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.65"
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
@@ -21,11 +21,11 @@ version = project.output_version
 group = 'com.gitlab.percivalalb' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Trapcraft-1.16.5'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 repositories {
     maven {
-        url "http://dvs1.progwml6.com/files/maven"
+        url "https://dvs1.progwml6.com/files/maven"
         content {
             includeGroup "mezz.jei"
         }
@@ -101,8 +101,8 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
+//    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+//    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
 }
 
 task sourcesJar(type: Jar) {
@@ -159,7 +159,11 @@ curseforge {
         changelog = file("build/changelog.html")
         changelogType = 'html'
         releaseType = findProperty("curseforge_release_type") ?: 'alpha'
+        addGameVersion '1.17.1'
         addArtifact apiJar
+    }
+    options {
+        forgeGradleIntegration = false
     }
 }
 

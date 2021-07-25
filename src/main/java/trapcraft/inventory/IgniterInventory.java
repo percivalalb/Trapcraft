@@ -1,14 +1,14 @@
 package trapcraft.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
-public class IgniterInventory extends Inventory implements INamedContainerProvider {
+public class IgniterInventory extends SimpleContainer implements MenuProvider {
 
     public IgniterInventory(int slotCount) {
         super(slotCount);
@@ -20,12 +20,12 @@ public class IgniterInventory extends Inventory implements INamedContainerProvid
     }
 
     @Override
-    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
         return new IgniterContainer(windowId, playerInventory, this);
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("container.trapcraft.igniter");
+    public Component getDisplayName() {
+        return new TranslatableComponent("container.trapcraft.igniter");
     }
 }

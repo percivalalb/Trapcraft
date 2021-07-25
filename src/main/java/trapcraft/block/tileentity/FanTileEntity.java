@@ -2,31 +2,31 @@ package trapcraft.block.tileentity;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.FallingBlockEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.minecart.MinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.api.ConfigValues;
 import trapcraft.block.FanBlock;
 
 import javax.annotation.Nonnull;
 
-public class FanTileEntity extends TileEntity implements ITickableTileEntity
+public class FanTileEntity extends BlockEntity implements TickableBlockEntity
 {
     public float speed = 1.0F;
     public double extraRange = 0.0D;
@@ -62,12 +62,12 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
                 velocity *= 1.3D;
             }
 
-            if (entity instanceof PlayerEntity) {
-                if (((PlayerEntity)entity).abilities.flying)
+            if (entity instanceof Player) {
+                if (((Player)entity).abilities.flying)
                     continue;
             }
 
-            if (entity instanceof MinecartEntity)
+            if (entity instanceof Minecart)
                 velocity *= 0.5D;
 
             if ((entity instanceof FallingBlockEntity) && facing == Direction.UP)
@@ -85,9 +85,9 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     public boolean isPathClear(final Entity entity, final Direction facing) {
-        final int x = facing.getStepX() * (MathHelper.floor(entity.getX()) - this.worldPosition.getX());
-        final int y = facing.getStepY() * (MathHelper.floor(entity.getY()) - this.worldPosition.getY());
-        final int z = facing.getStepZ() * (MathHelper.floor(entity.getZ()) - this.worldPosition.getZ());
+        final int x = facing.getStepX() * (Mth.floor(entity.getX()) - this.worldPosition.getX());
+        final int y = facing.getStepY() * (Mth.floor(entity.getY()) - this.worldPosition.getY());
+        final int z = facing.getStepZ() * (Mth.floor(entity.getZ()) - this.worldPosition.getZ());
         boolean flag = true;
 
         for (int l2 = 1; l2 < Math.abs(x + y + z); l2++) {
@@ -108,10 +108,10 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         return String.valueOf(f);
     }
 
-    public AxisAlignedBB getDirection() {
+    public AABB getDirection() {
         final Direction facing = this.level.getBlockState(this.worldPosition).getValue(FanBlock.FACING);
 
-        BlockPos endPos = this.worldPosition.relative(facing, MathHelper.floor(ConfigValues.FAN_RANGE + this.extraRange));
+        BlockPos endPos = this.worldPosition.relative(facing, Mth.floor(ConfigValues.FAN_RANGE + this.extraRange));
         if (facing == Direction.WEST)
             endPos = endPos.offset(0, 1, 1);
         else if (facing == Direction.NORTH)
@@ -127,10 +127,10 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
         else if (facing == Direction.DOWN)
             endPos = endPos.offset(1, 0, 1);
 
-        return new AxisAlignedBB(this.worldPosition, endPos);
+        return new AABB(this.worldPosition, endPos);
     }
 
-    public static void spawnParticles(final World world, final BlockPos pos) {
+    public static void spawnParticles(final Level world, final BlockPos pos) {
         final double x = pos.getX() + world.random.nextFloat();
         final double y = pos.getY() + world.random.nextFloat();
         final double z = pos.getZ() + world.random.nextFloat();
@@ -146,14 +146,14 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.speed = nbt.getFloat("speed");
         this.extraRange = nbt.getDouble("extraRange");
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putFloat("speed", this.speed);
         compound.putDouble("extraRange", this.extraRange);
@@ -163,18 +163,18 @@ public class FanTileEntity extends TileEntity implements ITickableTileEntity
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        final CompoundNBT tag = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        final CompoundTag tag = new CompoundTag();
         return this.save(tag);
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getBlockPos(), 0, this.save(new CompoundNBT()));
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, this.save(new CompoundTag()));
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         super.onDataPacket(net, packet);
         this.load(null, packet.getTag()); // TODO Pass blockstate
         if (!this.level.isClientSide)

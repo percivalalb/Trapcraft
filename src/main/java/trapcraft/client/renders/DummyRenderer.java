@@ -1,19 +1,19 @@
 package trapcraft.client.renders;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
 import trapcraft.api.Constants;
 import trapcraft.entity.DummyEntity;
 
 /**
  * @author ProPercivalalb
  */
-public class DummyRenderer extends LivingRenderer<DummyEntity, BipedModel<DummyEntity>> {
+public class DummyRenderer extends LivingEntityRenderer<DummyEntity, HumanoidModel<DummyEntity>> {
 
-    public DummyRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new BipedModel<DummyEntity>(0.0F), 0.5F);
+    public DummyRenderer(EntityRenderDispatcher renderManagerIn) {
+        super(renderManagerIn, new HumanoidModel<DummyEntity>(0.0F), 0.5F);
     }
 
     @Override

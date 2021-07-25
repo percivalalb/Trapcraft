@@ -5,11 +5,11 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import trapcraft.api.Constants;
@@ -46,14 +46,14 @@ public class TrapcraftBlocks {
     }
 
     private static BlockItem makeMagneticChestItem(Supplier<Block> blockSupplier) {
-        return new BlockItem(blockSupplier.get(), new Item.Properties().tab(ItemGroup.TAB_REDSTONE).setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
+        return new BlockItem(blockSupplier.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
     }
 
     private static BlockItem makeBlockItem(Supplier<Block> blockSupplier) {
-        return makeBlockItem(blockSupplier, ItemGroup.TAB_REDSTONE);
+        return makeBlockItem(blockSupplier, CreativeModeTab.TAB_REDSTONE);
     }
 
-    private static BlockItem makeBlockItem(Supplier<Block> block, final ItemGroup group) {
+    private static BlockItem makeBlockItem(Supplier<Block> block, final CreativeModeTab group) {
         return new BlockItem(block.get(), new Item.Properties().tab(group));
     }
 }

@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,7 +27,7 @@ public class ActionHandler {
 
     @SubscribeEvent
     public void action(final EntityPlaceEvent event) {
-        final World world = (World) event.getBlockSnapshot().getWorld();
+        final Level world = (Level) event.getBlockSnapshot().getWorld();
         final BlockState state = event.getPlacedBlock();
         final BlockPos tPos = event.getBlockSnapshot().getPos();
 
@@ -51,18 +51,18 @@ public class ActionHandler {
     @SubscribeEvent
     public void onEntitySpawn(final EntityJoinWorldEvent event) {
         final Entity entity = event.getEntity();
-        if (entity instanceof MobEntity) {
-            final MobEntity mob = (MobEntity)entity;
+        if (entity instanceof Mob) {
+            final Mob mob = (Mob)entity;
             mob.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(mob, DummyEntity.class, 10, true, false, (dummy) -> {
               return Math.abs(dummy.getY() - mob.getY()) <= 6.0D;
            }));
         }
     }
 
-    public void spawnDummy(final World world, final BlockPos tPos, final float rotation, final byte variant) {
+    public void spawnDummy(final Level world, final BlockPos tPos, final float rotation, final byte variant) {
         final DummyEntity entitydummy = new DummyEntity(world);
         entitydummy.setVariant(variant);
-        entitydummy.moveTo(tPos.getX() + 0.5D, tPos.getY() - 1.95D, tPos.getZ() + 0.5D, MathHelper.wrapDegrees(rotation), 0.0F);
+        entitydummy.moveTo(tPos.getX() + 0.5D, tPos.getY() - 1.95D, tPos.getZ() + 0.5D, Mth.wrapDegrees(rotation), 0.0F);
         world.addFreshEntity(entitydummy);
     }
 }

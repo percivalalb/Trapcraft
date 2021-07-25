@@ -1,19 +1,19 @@
 package trapcraft.block.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerListener;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftItems;
 import trapcraft.TrapcraftTileEntityTypes;
@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 /**
  * @author ProPercivalalb
  **/
-public class IgniterTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventoryChangedListener {
+public class IgniterTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider, ContainerListener {
 
 
     public IgniterInventory inventory;
@@ -38,12 +38,12 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
-        final ListNBT nbttaglist = nbt.getList("Items", 10);
+        final ListTag nbttaglist = nbt.getList("Items", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            final CompoundNBT nbttagcompound1 = nbttaglist.getCompound(i);
+            final CompoundTag nbttagcompound1 = nbttaglist.getCompound(i);
             final byte b0 = nbttagcompound1.getByte("Slot");
 
             if (b0 >= 0 && b0 < this.inventory.getContainerSize()) {
@@ -55,13 +55,13 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
-        ListNBT nbttaglist = new ListNBT();
+        ListTag nbttaglist = new ListTag();
 
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
             if (this.inventory.getItem(i) != null) {
-                CompoundNBT nbttagcompound1 = new CompoundNBT();
+                CompoundTag nbttagcompound1 = new CompoundTag();
                 nbttagcompound1.putByte("Slot", (byte)i);
                 this.inventory.getItem(i).save(nbttagcompound1);
                 nbttaglist.add(nbttagcompound1);
@@ -94,7 +94,7 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public void containerChanged(IInventory invBasic) {
+    public void containerChanged(Container invBasic) {
         if (!this.level.isClientSide) {
             final int newUpgrades = this.getRangeUpgrades();
             if (newUpgrades != this.lastUpgrades) {
@@ -104,14 +104,14 @@ public class IgniterTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
         return new IgniterContainer(windowId, playerInventory, this.inventory);
     }
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("container.trapcraft.igniter");
+    public Component getDisplayName() {
+        return new TranslatableComponent("container.trapcraft.igniter");
     }
 
 }

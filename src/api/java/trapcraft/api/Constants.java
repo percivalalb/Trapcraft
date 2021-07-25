@@ -1,6 +1,6 @@
 package trapcraft.api;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * @author percivalalb

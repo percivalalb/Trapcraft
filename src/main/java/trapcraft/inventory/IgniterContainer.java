@@ -1,28 +1,28 @@
 package trapcraft.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import trapcraft.TrapcraftContainerTypes;
 import trapcraft.TrapcraftItems;
 
-public class IgniterContainer extends Container {
+public class IgniterContainer extends AbstractContainerMenu {
 
-    private IInventory igniter;
+    private Container igniter;
 
-    public IgniterContainer(int windowId, PlayerInventory playerInventory) {
-        this(windowId, playerInventory, new Inventory(6));
+    public IgniterContainer(int windowId, Inventory playerInventory) {
+        this(windowId, playerInventory, new SimpleContainer(6));
     }
 
 
-    public IgniterContainer(int windowId, PlayerInventory playerInventory, IInventory igniter) {
+    public IgniterContainer(int windowId, Inventory playerInventory, Container igniter) {
         super(TrapcraftContainerTypes.IGNITER.get(), windowId);
         this.igniter = igniter;
-        Container.checkContainerSize(igniter, 6);
+        AbstractContainerMenu.checkContainerSize(igniter, 6);
 
         int i;
         for (i = 0; i < 3; ++i) {
@@ -51,12 +51,12 @@ public class IgniterContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity entityplayer) {
+    public boolean stillValid(Player entityplayer) {
         return this.igniter.stillValid(entityplayer);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         final Slot slot = this.slots.get(index);
 
