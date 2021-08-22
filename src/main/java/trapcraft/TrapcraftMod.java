@@ -1,5 +1,16 @@
 package trapcraft;
 
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,15 +30,6 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fmllegacy.DistExecutor;
-import net.minecraftforge.fmllegacy.client.registry.ClientRegistry;
-import net.minecraftforge.fmllegacy.client.registry.RenderingRegistry;
-import net.minecraftforge.fmllegacy.common.Mod;
-import net.minecraftforge.fmllegacy.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fmllegacy.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fmllegacy.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.fmllegacy.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fmllegacy.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fmllegacy.network.NetworkRegistry;
 import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import trapcraft.api.Constants;
@@ -41,6 +43,7 @@ import trapcraft.data.TrapcraftItemModelProvider;
 import trapcraft.data.TrapcraftLootTableProvider;
 import trapcraft.data.TrapcraftRecipeProvider;
 import trapcraft.handler.ActionHandler;
+import trapcraft.handler.ModelHandler;
 import trapcraft.network.PacketHandler;
 
 @Mod(Constants.MOD_ID)
@@ -70,12 +73,14 @@ public final class TrapcraftMod {
         modEventBus.addListener(this::gatherData);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::interModProcess);
+        modEventBus.addListener(TrapcraftEntityTypes::addEntityAttributes);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             modEventBus.addListener(this::clientSetup);
             modEventBus.addListener(this::registerBlockColors);
             modEventBus.addListener(this::registerItemColors);
             modEventBus.addListener(this::addTexturesToAtlas);
+            modEventBus.register(new ModelHandler());
         });
 
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
@@ -87,18 +92,13 @@ public final class TrapcraftMod {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         PacketHandler.register();
-        TrapcraftEntityTypes.addEntityAttributes();
     }
 
     @OnlyIn(Dist.CLIENT)
     private void clientSetup(final FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(TrapcraftEntityTypes.DUMMY.get(), DummyRenderer::new);
         MenuScreens.register(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
-        ClientRegistry.bindTileEntityRenderer(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), TileEntityMagneticChestRenderer::new);
 
         ItemBlockRenderTypes.setRenderLayer(TrapcraftBlocks.SPIKES.get(), RenderType.cutout());
-        // Must be set here to avoid registry object missing error
-        ItemStackTileEntityMagneticChestRenderer.setDummyTE();
     }
 
     @OnlyIn(Dist.CLIENT)

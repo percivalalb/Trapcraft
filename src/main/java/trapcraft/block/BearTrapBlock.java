@@ -1,7 +1,13 @@
 package trapcraft.block;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.piston.PistonMovingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -30,7 +36,10 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
+import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.block.tileentity.BearTrapTileEntity;
+
+import javax.annotation.Nullable;
 
 public class BearTrapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
@@ -42,6 +51,17 @@ public class BearTrapBlock extends BaseEntityBlock implements SimpleWaterloggedB
         super(Block.Properties.of(Material.METAL).noOcclusion().strength(2.0F, 2.0F).sound(SoundType.METAL));
         this.registerDefaultState(this.stateDefinition.any().setValue(TRIGGERED, Boolean.valueOf(false)).setValue(WATERLOGGED, Boolean.valueOf(false)));
 
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
+        return new BearTrapTileEntity(pos, blockState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return createTickerHelper(blockEntityType, TrapcraftTileEntityTypes.BEAR_TRAP.get(), BearTrapTileEntity::tick);
     }
 
     @Override
@@ -72,10 +92,6 @@ public class BearTrapBlock extends BaseEntityBlock implements SimpleWaterloggedB
         return RenderShape.MODEL;
     }
 
-    @Override
-    public BlockEntity newBlockEntity(BlockGetter world) {
-        return new BearTrapTileEntity();
-    }
 
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {

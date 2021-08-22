@@ -20,6 +20,7 @@ import trapcraft.block.IgniterBlock;
 import trapcraft.block.MagneticChestBlock;
 import trapcraft.block.SpikesBlock;
 import trapcraft.client.renders.ItemStackTileEntityMagneticChestRenderer;
+import trapcraft.item.MagneticChestItem;
 
 public class TrapcraftBlocks {
 
@@ -46,7 +47,7 @@ public class TrapcraftBlocks {
     }
 
     private static BlockItem makeMagneticChestItem(Supplier<Block> blockSupplier) {
-        return new BlockItem(blockSupplier.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
+        return new MagneticChestItem(blockSupplier.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));// TODO .setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
     }
 
     private static BlockItem makeBlockItem(Supplier<Block> blockSupplier) {

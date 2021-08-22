@@ -40,7 +40,7 @@ public class ActionHandler {
                 world.setBlockAndUpdate(tPos.below(2), Blocks.AIR.defaultBlockState());
 
                 if (!world.isClientSide) {
-                    final float rotation = event.getEntity().yRot + 180F;
+                    final float rotation = event.getEntity().getYRot() + 180F;
                     this.spawnDummy(world, tPos, rotation, (byte)PLANKS.indexOf(top));
                 }
                 event.setCanceled(true);

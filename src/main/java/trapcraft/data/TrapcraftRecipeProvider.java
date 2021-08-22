@@ -39,7 +39,7 @@ public class TrapcraftRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 
         ShapedRecipeBuilder.shaped(TrapcraftBlocks.BEAR_TRAP.get(), 1)
             .pattern("XYX")

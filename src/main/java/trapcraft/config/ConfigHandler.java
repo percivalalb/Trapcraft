@@ -1,11 +1,11 @@
 package trapcraft.config;
 
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fmllegacy.ModLoadingContext;
-import net.minecraftforge.fmllegacy.config.ModConfig;
 import trapcraft.api.ConfigValues;
 
 public class ConfigHandler {
@@ -26,27 +26,27 @@ public class ConfigHandler {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, CONFIG_SERVER_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CONFIG_CLIENT_SPEC);
 
-        eventBus.addListener(ConfigHandler::loadConfig);
-        eventBus.addListener(ConfigHandler::reloadConfig);
+//        eventBus.addListener(ConfigHandler::loadConfig);
+//        eventBus.addListener(ConfigHandler::reloadConfig);
     }
 
-    public static void loadConfig(final ModConfig.Loading event) {
-        final ModConfig config = event.getConfig();
-        if (config.getSpec() == ConfigHandler.CONFIG_CLIENT_SPEC) {
-            ConfigHandler.refreshClient();
-        } else if (config.getSpec() == ConfigHandler.CONFIG_SERVER_SPEC) {
-            ConfigHandler.refreshServer();
-        }
-    }
-
-    public static void reloadConfig(final ModConfig.Reloading event) {
-        ModConfig config = event.getConfig();
-        if (config.getSpec() == ConfigHandler.CONFIG_CLIENT_SPEC) {
-            ConfigHandler.refreshClient();
-        } else if (config.getSpec() == ConfigHandler.CONFIG_SERVER_SPEC) {
-            ConfigHandler.refreshServer();
-        }
-    }
+//    public static void loadConfig(final ModConfig.Loading event) {
+//        final ModConfig config = event.getConfig();
+//        if (config.getSpec() == ConfigHandler.CONFIG_CLIENT_SPEC) {
+//            ConfigHandler.refreshClient();
+//        } else if (config.getSpec() == ConfigHandler.CONFIG_SERVER_SPEC) {
+//            ConfigHandler.refreshServer();
+//        }
+//    }
+//
+//    public static void reloadConfig(final ModConfig.Reloading event) {
+//        ModConfig config = event.getConfig();
+//        if (config.getSpec() == ConfigHandler.CONFIG_CLIENT_SPEC) {
+//            ConfigHandler.refreshClient();
+//        } else if (config.getSpec() == ConfigHandler.CONFIG_SERVER_SPEC) {
+//            ConfigHandler.refreshServer();
+//        }
+//    }
 
     public static void refreshServer() {
         ConfigValues.FAN_RANGE = SERVER.FAN_RANGE.get();

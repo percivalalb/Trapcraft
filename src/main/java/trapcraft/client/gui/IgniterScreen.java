@@ -4,8 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AnvilScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.network.chat.Component;
 import trapcraft.api.Constants;
 import trapcraft.inventory.IgniterContainer;
@@ -32,8 +33,9 @@ public class IgniterScreen extends AbstractContainerScreen<IgniterContainer> {
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(Constants.RES_GUI_IGNITER);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, Constants.RES_GUI_IGNITER);
+        this.minecraft.getTextureManager().bindForSetup(Constants.RES_GUI_IGNITER);
         final int k = (this.width - this.imageWidth) / 2;
         final int l = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, k, l, 0, 0, this.imageWidth, this.imageHeight);

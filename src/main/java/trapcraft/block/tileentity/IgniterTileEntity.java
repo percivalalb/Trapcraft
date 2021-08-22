@@ -1,5 +1,8 @@
 package trapcraft.block.tileentity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,7 +13,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -26,20 +28,20 @@ import javax.annotation.Nonnull;
 /**
  * @author ProPercivalalb
  **/
-public class IgniterTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider, ContainerListener {
+public class IgniterTileEntity extends BlockEntity implements MenuProvider, ContainerListener {
 
 
     public IgniterInventory inventory;
     public int lastUpgrades;
 
-    public IgniterTileEntity() {
-        super(TrapcraftTileEntityTypes.IGNITER.get());
+    public IgniterTileEntity(BlockPos p_155229_, BlockState p_155230_) {
+        super(TrapcraftTileEntityTypes.IGNITER.get(), p_155229_, p_155230_);
         this.inventory = new IgniterInventory(6);
     }
 
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         final ListTag nbttaglist = nbt.getList("Items", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -86,10 +88,9 @@ public class IgniterTileEntity extends BlockEntity implements TickableBlockEntit
         return Math.min(upgrades, 100);
     }
 
-    @Override
-    public void tick() {
-        if (!this.level.isClientSide) {
-            ((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(this.level, this.worldPosition);
+    public static void tick(Level var1, BlockPos var2, BlockState var3, BlockEntity var4) {
+        if (!var1.isClientSide) {
+            ((IgniterBlock)TrapcraftBlocks.IGNITER.get()).updateIgniterState(var1, var2);
         }
     }
 

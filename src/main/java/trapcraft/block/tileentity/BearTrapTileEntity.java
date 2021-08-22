@@ -5,50 +5,55 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.server.level.ServerLevel;
 import trapcraft.TrapcraftTileEntityTypes;
 
-public class BearTrapTileEntity extends BlockEntity implements TickableBlockEntity {
+public class BearTrapTileEntity extends BlockEntity {
 
-    private final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").bypassArmor();
+    private static final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").bypassArmor();
     @Nullable
     private Mob entityliving;
     private Goal doNothingGoal;
     private UUID id;
     private int nextDamageTick;
 
-    public BearTrapTileEntity() {
-        super(TrapcraftTileEntityTypes.BEAR_TRAP.get());
+    public BearTrapTileEntity(BlockPos p_155229_, BlockState p_155230_) {
+        super(TrapcraftTileEntityTypes.BEAR_TRAP.get(), p_155229_, p_155230_);
     }
 
-    @Override
-    public void tick() {
-        final Mob trapped = this.getTrappedEntity();
+    public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
+        if (!(blockEntity instanceof BearTrapTileEntity e)) {
+            return;
+        }
 
-        if (!this.level.isClientSide) {
+        final Mob trapped = e.getTrappedEntity();
+
+        if (!level.isClientSide) {
             if (trapped != null) {
                 // Has escaped
-                if (!trapped.getBoundingBox().intersects(new AABB(this.worldPosition)) || !trapped.isAlive()) {
-                    this.setTrappedEntity(null);
+                if (!trapped.getBoundingBox().intersects(new AABB(blockPos)) || !trapped.isAlive()) {
+                    e.setTrappedEntity(null);
 
                 } else  {
-                    if (this.nextDamageTick == 0) {
+                    if (e.nextDamageTick == 0) {
                         trapped.hurt(damageSource, 1);
-                        this.nextDamageTick = 15 + this.level.random.nextInt(20);
+                        e.nextDamageTick = 15 + level.random.nextInt(20);
                     }
 
-                    if (this.nextDamageTick > 0) {
-                        this.nextDamageTick--;
+                    if (e.nextDamageTick > 0) {
+                        e.nextDamageTick--;
                     }
                 }
             }
@@ -73,8 +78,8 @@ public class BearTrapTileEntity extends BlockEntity implements TickableBlockEnti
 
 
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         if (nbt.hasUUID("trapped_entity")) {
             this.id = nbt.getUUID("trapped_entity");
         }

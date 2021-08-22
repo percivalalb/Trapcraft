@@ -2,7 +2,7 @@ package trapcraft;
 
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -15,7 +15,7 @@ public class TrapcraftEntityTypes {
 
     public static final RegistryObject<EntityType<DummyEntity>> DUMMY = ENTITIES.register("dummy", () -> EntityType.Builder.<DummyEntity>of(DummyEntity::new, MobCategory.AMBIENT).setCustomClientFactory(DummyEntity::new).build("dummy"));
 
-    public static void addEntityAttributes() {
-        DefaultAttributes.put(DUMMY.get(), DummyEntity.createAttributeMap().build());
+    public static void addEntityAttributes(EntityAttributeCreationEvent e) {
+        e.put(DUMMY.get(), DummyEntity.createAttributeMap().build());
     }
 }

@@ -2,6 +2,8 @@ package trapcraft.block;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -26,12 +28,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.block.tileentity.IgniterTileEntity;
+
+import javax.annotation.Nullable;
 
 /**
  * @author ProPercivalalb
@@ -164,8 +168,14 @@ public class IgniterBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockGetter world) {
-        return new IgniterTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
+        return new IgniterTileEntity(pos, blockState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return createTickerHelper(blockEntityType, TrapcraftTileEntityTypes.IGNITER.get(), IgniterTileEntity::tick);
     }
 
     @Override

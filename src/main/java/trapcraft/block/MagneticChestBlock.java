@@ -1,6 +1,8 @@
 package trapcraft.block;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -20,7 +22,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import trapcraft.TrapcraftTileEntityTypes;
+import trapcraft.block.tileentity.BearTrapTileEntity;
 import trapcraft.block.tileentity.MagneticChestTileEntity;
+
+import javax.annotation.Nullable;
 
 /**
  * @author ProPercivalalb
@@ -41,8 +46,14 @@ public class MagneticChestBlock extends ChestBlock {
      }
 
     @Override
-    public BlockEntity newBlockEntity(BlockGetter worldIn) {
-        return new MagneticChestTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
+        return new MagneticChestTileEntity(pos, blockState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+        return createTickerHelper(entityType, TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), level.isClientSide? MagneticChestTileEntity::clientTick : MagneticChestTileEntity::tick);
     }
 
     @Override

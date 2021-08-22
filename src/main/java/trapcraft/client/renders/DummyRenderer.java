@@ -1,19 +1,31 @@
 package trapcraft.client.renders;
 
+import net.minecraft.client.model.PiglinModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 import trapcraft.api.Constants;
 import trapcraft.entity.DummyEntity;
+import trapcraft.handler.ModelHandler;
 
 /**
  * @author ProPercivalalb
  */
 public class DummyRenderer extends LivingEntityRenderer<DummyEntity, HumanoidModel<DummyEntity>> {
 
-    public DummyRenderer(EntityRenderDispatcher renderManagerIn) {
-        super(renderManagerIn, new HumanoidModel<DummyEntity>(0.0F), 0.5F);
+    public DummyRenderer(EntityRendererProvider.Context renderManagerIn) {
+        super(renderManagerIn, createModel(renderManagerIn.getModelSet(), ModelHandler.DUMMY), 0.5F); // TODO
+    }
+
+    private static HumanoidModel<DummyEntity> createModel(EntityModelSet p_174350_, ModelLayerLocation p_174351_) {
+        HumanoidModel<DummyEntity> piglinmodel = new HumanoidModel<>(p_174350_.bakeLayer(p_174351_));
+
+        return piglinmodel;
     }
 
     @Override

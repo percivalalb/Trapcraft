@@ -3,6 +3,7 @@ package trapcraft.block.tileentity;
 import java.util.List;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -13,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
@@ -26,36 +26,38 @@ import trapcraft.block.FanBlock;
 
 import javax.annotation.Nonnull;
 
-public class FanTileEntity extends BlockEntity implements TickableBlockEntity
+public class FanTileEntity extends BlockEntity
 {
     public float speed = 1.0F;
     public double extraRange = 0.0D;
 
-    public FanTileEntity() {
-          super(TrapcraftTileEntityTypes.FAN.get());
+    public FanTileEntity(BlockPos p_155229_, BlockState p_155230_) {
+          super(TrapcraftTileEntityTypes.FAN.get(), p_155229_, p_155230_);
       }
 
-    @Override
-    public void tick() {
 
-        if (!this.level.getBlockState(this.worldPosition).getValue(FanBlock.POWERED))
+    public static void tick(Level level, BlockPos worldPosition, BlockState var3, BlockEntity var4) {
+        if (!(var4 instanceof FanTileEntity e)) {
+            return;
+        }
+        if (!level.getBlockState(worldPosition).getValue(FanBlock.POWERED))
             return;
 
-        final Direction facing = this.level.getBlockState(this.worldPosition).getValue(FanBlock.FACING);
+        final Direction facing = level.getBlockState(worldPosition).getValue(FanBlock.FACING);
 
-        if (this.level.random.nextInt(2) == 0)
-            spawnParticles(this.level, this.worldPosition);
-        final List<Entity> list = this.level.getEntitiesOfClass(Entity.class, this.getDirection());
+        if (level.random.nextInt(2) == 0)
+            spawnParticles(level, worldPosition);
+        final List<Entity> list = level.getEntitiesOfClass(Entity.class, e.getDirection());
 
         for (final Entity entity : list) {
 
-            if (!this.isPathClear(entity, facing))
+            if (!e.isPathClear(entity, facing))
                 continue;
 
 
             double velocity = ConfigValues.FAN_ACCELERATION; // Affects acceleration
             double threshholdVelocity = ConfigValues.FAN_MAX_SPEED; // Affects max speed
-            velocity *= this.speed;
+            velocity *= e.speed;
 
             if (entity instanceof ItemEntity) {
                 threshholdVelocity *= 1.8D;
@@ -63,7 +65,7 @@ public class FanTileEntity extends BlockEntity implements TickableBlockEntity
             }
 
             if (entity instanceof Player) {
-                if (((Player)entity).abilities.flying)
+                if (((Player) entity).getAbilities().flying)
                     continue;
             }
 
@@ -146,8 +148,8 @@ public class FanTileEntity extends BlockEntity implements TickableBlockEntity
     }
 
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.speed = nbt.getFloat("speed");
         this.extraRange = nbt.getDouble("extraRange");
     }
@@ -176,7 +178,7 @@ public class FanTileEntity extends BlockEntity implements TickableBlockEntity
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         super.onDataPacket(net, packet);
-        this.load(null, packet.getTag()); // TODO Pass blockstate
+        this.load(packet.getTag());
         if (!this.level.isClientSide)
             this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         return;

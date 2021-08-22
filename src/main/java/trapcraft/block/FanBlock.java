@@ -2,6 +2,8 @@ package trapcraft.block;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -20,7 +22,11 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import trapcraft.TrapcraftTileEntityTypes;
+import trapcraft.block.tileentity.BearTrapTileEntity;
 import trapcraft.block.tileentity.FanTileEntity;
+
+import javax.annotation.Nullable;
 
 /**
  * @author ProPercivalalb
@@ -36,8 +42,14 @@ public class FanBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockGetter world) {
-        return new FanTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
+        return new FanTileEntity(pos, blockState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return createTickerHelper(blockEntityType, TrapcraftTileEntityTypes.FAN.get(), FanTileEntity::tick);
     }
 
     @Override
