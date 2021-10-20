@@ -14,7 +14,7 @@ logoFile="tc_logo.png"
     authors="ProPercivalalb, Stewiecraft"
     description='''
     Addeds new blocks to create traps with, (Fan, Bear Trap, Igniter, Magnetic Chest and Grass Coverings), also a dummy. Plus upgrade your traps with special upgrades!
-    '''gl
+    '''
 
 [[dependencies.jei]]
     modId="forge" #mandatory
