@@ -21,8 +21,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import trapcraft.TrapcraftTileEntityTypes;
-import trapcraft.api.ConfigValues;
 import trapcraft.block.FanBlock;
+import trapcraft.config.ConfigHandler;
 
 import javax.annotation.Nonnull;
 
@@ -57,8 +57,8 @@ public class FanTileEntity extends BlockEntity  {
                 continue;
             }
 
-            double velocity = ConfigValues.FAN_ACCELERATION; // Affects acceleration
-            double threshholdVelocity = ConfigValues.FAN_MAX_SPEED; // Affects max speed
+            double velocity = ConfigHandler.SERVER.FAN_ACCELERATION.get(); // Affects acceleration
+            double threshholdVelocity = ConfigHandler.SERVER.FAN_MAX_SPEED.get(); // Affects max speed
             velocity *= blockEntity.speed;
 
 
@@ -110,7 +110,7 @@ public class FanTileEntity extends BlockEntity  {
     }
 
     public AABB getDirection(final Direction facing) {
-        BlockPos endPos = this.worldPosition.relative(facing, Mth.floor(ConfigValues.FAN_RANGE + this.extraRange));
+        BlockPos endPos = this.worldPosition.relative(facing, Mth.floor(ConfigHandler.SERVER.FAN_RANGE.get() + this.extraRange));
         if (facing == Direction.WEST)
             endPos = endPos.offset(0, 1, 1);
         else if (facing == Direction.NORTH)
