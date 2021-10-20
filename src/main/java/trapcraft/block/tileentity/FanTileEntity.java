@@ -26,63 +26,62 @@ import trapcraft.block.FanBlock;
 
 import javax.annotation.Nonnull;
 
-public class FanTileEntity extends BlockEntity
-{
+public class FanTileEntity extends BlockEntity  {
+
     public float speed = 1.0F;
     public double extraRange = 0.0D;
 
-    public FanTileEntity(BlockPos p_155229_, BlockState p_155230_) {
-          super(TrapcraftTileEntityTypes.FAN.get(), p_155229_, p_155230_);
-      }
+    public FanTileEntity(BlockPos pos, BlockState blockState) {
+        super(TrapcraftTileEntityTypes.FAN.get(), pos, blockState);
+    }
 
-
-    public static void tick(Level level, BlockPos worldPosition, BlockState var3, BlockEntity var4) {
-        if (!(var4 instanceof FanTileEntity e)) {
+    public static void tick(Level level, BlockPos worldPosition, BlockState blockState, FanTileEntity blockEntity) {
+        if (!blockState.getValue(FanBlock.POWERED)) {
             return;
         }
-        if (!level.getBlockState(worldPosition).getValue(FanBlock.POWERED))
-            return;
 
-        final Direction facing = level.getBlockState(worldPosition).getValue(FanBlock.FACING);
+        final Direction facing = blockState.getValue(FanBlock.FACING);
 
-        if (level.random.nextInt(2) == 0)
+        if (level.random.nextInt(2) == 0) {
             spawnParticles(level, worldPosition);
-        final List<Entity> list = level.getEntitiesOfClass(Entity.class, e.getDirection());
+        }
+
+        final List<Entity> list = level.getEntitiesOfClass(Entity.class, blockEntity.getDirection(facing));
 
         for (final Entity entity : list) {
-
-            if (!e.isPathClear(entity, facing))
+            if (entity instanceof Player p && p.getAbilities().flying) {
                 continue;
+            }
 
+            if (!blockEntity.isPathClear(entity, facing)) {
+                continue;
+            }
 
             double velocity = ConfigValues.FAN_ACCELERATION; // Affects acceleration
             double threshholdVelocity = ConfigValues.FAN_MAX_SPEED; // Affects max speed
-            velocity *= e.speed;
+            velocity *= blockEntity.speed;
+
 
             if (entity instanceof ItemEntity) {
                 threshholdVelocity *= 1.8D;
                 velocity *= 1.3D;
             }
 
-            if (entity instanceof Player) {
-                if (((Player) entity).getAbilities().flying)
-                    continue;
+            if (entity instanceof Minecart) {
+                velocity *= 0.5D;
             }
 
-            if (entity instanceof Minecart)
-                velocity *= 0.5D;
-
-            if ((entity instanceof FallingBlockEntity) && facing == Direction.UP)
+            if ((entity instanceof FallingBlockEntity) && facing == Direction.UP) {
                 velocity = 0.0D;
-
+            }
 
             if (facing == Direction.UP) {
                 threshholdVelocity *= 0.5D;
             }
 
-            if (Math.abs(entity.getDeltaMovement().get(facing.getAxis())) < threshholdVelocity)
+            if (Math.abs(entity.getDeltaMovement().get(facing.getAxis())) < threshholdVelocity) {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(facing.getStepX() * velocity, facing.getStepY() * velocity, facing.getStepZ() * velocity));
-
+            }
         }
     }
 
@@ -110,9 +109,7 @@ public class FanTileEntity extends BlockEntity
         return String.valueOf(f);
     }
 
-    public AABB getDirection() {
-        final Direction facing = this.level.getBlockState(this.worldPosition).getValue(FanBlock.FACING);
-
+    public AABB getDirection(final Direction facing) {
         BlockPos endPos = this.worldPosition.relative(facing, Mth.floor(ConfigValues.FAN_RANGE + this.extraRange));
         if (facing == Direction.WEST)
             endPos = endPos.offset(0, 1, 1);
