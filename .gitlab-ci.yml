@@ -9,16 +9,17 @@ variables:
   GIT_DEPTH: 0 # clone all
 
 before_script:
-  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
-
-cache:
-  paths:
-    - .gradle
-    - build
 
 build:
   stage: build
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+      - .gradle/
+      - build/
+    policy: pull
   script:
     - ./gradlew build
   artifacts:
@@ -31,6 +32,10 @@ build:
 publish:
   stage: publish
   cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+      - .gradle/
+      - build/
     policy: pull
   script:
     - './gradlew curseforge'
