@@ -12,14 +12,15 @@ before_script:
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
 
+cache: &global_cache
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - .gradle/
+    - build/
+  policy: pull-push
+
 build:
   stage: build
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    paths:
-      - .gradle/
-      - build/
-    policy: pull
   script:
     - ./gradlew build
   artifacts:
@@ -32,10 +33,7 @@ build:
 publish:
   stage: publish
   cache:
-    key: "$CI_COMMIT_REF_NAME"
-    paths:
-      - .gradle/
-      - build/
+    <<: *global_cache
     policy: pull
   script:
     - './gradlew curseforge'
