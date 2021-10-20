@@ -19,16 +19,14 @@ apply plugin: 'se.bjurr.gitchangelog.git-changelog-gradle-plugin'
 
 version = project.output_version
 group = 'com.gitlab.percivalalb' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'Trapcraft-1.17.1'
+archivesBaseName = "Trapcraft-${project.target_mc_version}"
 
 sourceSets {
     api
     main {
         compileClasspath += sourceSets.api.output
         runtimeClasspath += sourceSets.api.output
-        resources {
-            srcDir 'src/generated/resources'
-        }
+        resources.srcDirs += 'src/generated/resources'
     }
     test {
         compileClasspath += sourceSets.api.output
@@ -97,10 +95,14 @@ minecraft {
 
 def replaceResources = tasks.register('replaceResources', Copy) {
     it.outputs.upToDateWhen { false }
-    //Copy it into the build dir
     it.from(sourceSets.main.resources) {
         include "META-INF/mods.toml"
-        expand 'version': version, 'mc_version': minecraft_version_range, 'forge_version': forge_version_range, "loader_version": loader_version_range
+        expand([
+            'version': project.version,
+            'minecraft_version_range': project.minecraft_version_range,
+            'forge_version_range': project.forge_version_range,
+            'fml_version_range': project.fml_version_range,
+        ])
     }
     it.into "$buildDir/resources/main/"
 }
@@ -143,9 +145,9 @@ jar {
         attributes([
             "Specification-Title": "trapcraft",
             "Specification-Vendor": "percivalalb",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Version": project.version, // We are version 1 of ourselves
             "Implementation-Title": project.name,
-            "Implementation-Version": "${archiveVersion}",
+            "Implementation-Version": project.version,
             "Implementation-Vendor" :"percivalalb",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
             "Automatic-Module-Name": "trapcraft"
@@ -153,8 +155,7 @@ jar {
     }
 }
 
-import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
-task makeChangelog(type: GitChangelogTask) {
+task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
     file = new File("build/changelog.html")
     untaggedName = "Current release ${project.version}"
     fromCommit = '3a162ee7d39b89d2ba182f0f8f9f3e744e893c92'
@@ -169,8 +170,13 @@ curseforge {
         id = project.curseforge_project_id
         changelog = file("build/changelog.html")
         changelogType = 'html'
-        releaseType = findProperty("curseforge_release_type") ?: 'alpha'
-        addGameVersion '1.17.1'
+        releaseType = findProperty("curseforge_release_type") ?: 'beta'
+        addGameVersion project.target_mc_version
+        for (String v : project.additional_mc_versions.split(',')) {
+            if (v) {
+                addGameVersion v
+            }
+        }
         addArtifact apiJar
     }
     options {
@@ -182,29 +188,4 @@ curseforge {
 // task is generated lazily
 afterEvaluate {
     tasks.named("curseforge${project.curseforge_project_id}").get().dependsOn.add(makeChangelog)
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-            artifact sourcesJar
-            artifact apiJar
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
-}
-
-if (project.hasProperty('UPDATE_MAPPINGS')) {
-    extractRangeMap {
-        sources sourceSets.api.java.srcDirs
-    }
-    applyRangeMap {
-        sources sourceSets.api.java.srcDirs
-    }
-    sourceSets.api.java.srcDirs.each { extractMappedNew.addTarget it }
 }

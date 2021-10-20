@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="${fml_version_range}"
 license="GNU GPLv3"
 issueTrackerURL="https://github.com/percivalalb/Trapcraft/issues"
 displayURL="https://minecraft.curseforge.com/projects/trapcraft/"
@@ -8,24 +8,24 @@ logoFile="tc_logo.png"
 [[mods]] #mandatory
     modId="trapcraft"
     version="${version}"
-    updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/1.16.x/version.json"
+    updateJSONURL="https://raw.githubusercontent.com/percivalalb/Trapcraft/1.17.x/version.json"
     displayName="Trapcraft"
     credits="Authored By ProPercivalalb"
     authors="ProPercivalalb, Stewiecraft"
     description='''
     Addeds new blocks to create traps with, (Fan, Bear Trap, Igniter, Magnetic Chest and Grass Coverings), also a dummy. Plus upgrade your traps with special upgrades!
-    '''
+    '''gl
 
 [[dependencies.jei]]
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="${forge_version}" #mandatory
+    versionRange="${forge_version_range}" #mandatory
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.jei]]
     modId="minecraft" #mandatory
     mandatory=true #mandatory
-    versionRange="${mc_version}" #mandatory
+    versionRange="${minecraft_version_range}" #mandatory
     ordering="NONE"
     side="BOTH"
