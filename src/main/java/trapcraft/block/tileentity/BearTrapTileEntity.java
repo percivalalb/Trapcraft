@@ -33,27 +33,23 @@ public class BearTrapTileEntity extends BlockEntity {
         super(TrapcraftTileEntityTypes.BEAR_TRAP.get(), p_155229_, p_155230_);
     }
 
-    public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
-        if (!(blockEntity instanceof BearTrapTileEntity e)) {
-            return;
-        }
-
-        final Mob trapped = e.getTrappedEntity();
+    public static void tick(Level level, BlockPos blockPos, BlockState blockState, BearTrapTileEntity blockEntity) {
+        final Mob trapped = blockEntity.getTrappedEntity();
 
         if (!level.isClientSide) {
             if (trapped != null) {
                 // Has escaped
                 if (!trapped.getBoundingBox().intersects(new AABB(blockPos)) || !trapped.isAlive()) {
-                    e.setTrappedEntity(null);
+                    blockEntity.setTrappedEntity(null);
 
                 } else  {
-                    if (e.nextDamageTick == 0) {
+                    if (blockEntity.nextDamageTick == 0) {
                         trapped.hurt(damageSource, 1);
-                        e.nextDamageTick = 15 + level.random.nextInt(20);
+                        blockEntity.nextDamageTick = 15 + level.random.nextInt(20);
                     }
 
-                    if (e.nextDamageTick > 0) {
-                        e.nextDamageTick--;
+                    if (blockEntity.nextDamageTick > 0) {
+                        blockEntity.nextDamageTick--;
                     }
                 }
             }

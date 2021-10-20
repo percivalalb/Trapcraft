@@ -53,7 +53,7 @@ public class MagneticChestBlock extends ChestBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return createTickerHelper(entityType, TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), level.isClientSide? MagneticChestTileEntity::clientTick : MagneticChestTileEntity::tick);
+        return createTickerHelper(entityType, TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), level.isClientSide ? MagneticChestTileEntity::clientTick : MagneticChestTileEntity::tick);
     }
 
     @Override

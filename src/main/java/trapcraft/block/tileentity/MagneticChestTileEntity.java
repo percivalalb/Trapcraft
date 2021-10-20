@@ -22,22 +22,16 @@ import trapcraft.TrapcraftTileEntityTypes;
  **/
 public class MagneticChestTileEntity extends ChestBlockEntity {
 
-    public MagneticChestTileEntity(BlockPos p_155229_, BlockState p_155230_) {
-        super(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), p_155229_, p_155230_);
+    public MagneticChestTileEntity(BlockPos pos, BlockState initialBlockState) {
+        super(TrapcraftTileEntityTypes.MAGNETIC_CHEST.get(), pos, initialBlockState);
     }
 
-    public static void clientTick(Level level, BlockPos pos, BlockState state, BlockEntity entity) {
-        ChestBlockEntity.lidAnimateTick(level, pos, state, (MagneticChestTileEntity) entity);
+    public static void clientTick(Level level, BlockPos pos, BlockState state, MagneticChestTileEntity entity) {
+        ChestBlockEntity.lidAnimateTick(level, pos, state, entity);
         MagneticChestTileEntity.tick(level, pos, state, entity);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity entity) {
-        if (!(entity instanceof MagneticChestTileEntity chest)) {
-            return;
-        }
-        if (level.isClientSide) {
-            ChestBlockEntity.lidAnimateTick(level, pos, state, chest);
-        }
+    public static void tick(Level level, BlockPos pos, BlockState blockState, MagneticChestTileEntity blockEntity) {
         final List<ItemEntity> entities = level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(50), item -> item.distanceToSqr(pos.getX(),pos.getY(),pos.getZ()) < 10D);
 
         for (final ItemEntity itemEntity : entities) {
@@ -56,14 +50,13 @@ public class MagneticChestTileEntity extends ChestBlockEntity {
             double d16 = Math.abs(Mth.cos((float)angle) * speedMultiper);
             d15 = diffX <= 0.0D ? -d15 : d15;
             d16 = diffZ <= 0.0D ? -d16 : d16;
-            if (itemEntity.getDeltaMovement().dot(itemEntity.getDeltaMovement()) >= 0.2D)
+            if (itemEntity.getDeltaMovement().dot(itemEntity.getDeltaMovement()) >= 0.2D) {
                 continue;
+            }
 
             itemEntity.setDeltaMovement(d15, diffY >= 0.7 ? speedMultiper * 2 : itemEntity.getDeltaMovement().y(), d16);
         }
     }
-
-
 
     public boolean insertStackFromEntity(final ItemEntity entityItem) {
         boolean succesful = false;

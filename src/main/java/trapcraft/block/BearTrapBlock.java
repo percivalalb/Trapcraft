@@ -50,7 +50,6 @@ public class BearTrapBlock extends BaseEntityBlock implements SimpleWaterloggedB
     public BearTrapBlock() {
         super(Block.Properties.of(Material.METAL).noOcclusion().strength(2.0F, 2.0F).sound(SoundType.METAL));
         this.registerDefaultState(this.stateDefinition.any().setValue(TRIGGERED, Boolean.valueOf(false)).setValue(WATERLOGGED, Boolean.valueOf(false)));
-
     }
 
     @Override
