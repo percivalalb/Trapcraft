@@ -65,12 +65,17 @@ public class BearTrapBlock extends BaseEntityBlock implements SimpleWaterloggedB
 
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (!worldIn.isClientSide) {
-            BearTrapTileEntity bearTrap = (BearTrapTileEntity)worldIn.getBlockEntity(pos);
-            if (state.getValue(TRIGGERED) && !bearTrap.hasTrappedEntity()) {
-                worldIn.setBlock(pos, state.setValue(TRIGGERED, false), 3);
+        BearTrapTileEntity bearTrap = (BearTrapTileEntity) worldIn.getBlockEntity(pos);
+        if (state.getValue(TRIGGERED)) {
+            if (worldIn.isClientSide) {
                 return InteractionResult.SUCCESS;
             }
+
+            if (!bearTrap.hasTrappedEntity()) {
+                worldIn.setBlock(pos, state.setValue(TRIGGERED, false), 3);
+            }
+
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;
