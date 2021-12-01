@@ -57,8 +57,8 @@ public class IgniterTileEntity extends BlockEntity implements MenuProvider, Cont
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         ListTag nbttaglist = new ListTag();
 
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
@@ -71,8 +71,6 @@ public class IgniterTileEntity extends BlockEntity implements MenuProvider, Cont
         }
 
         compound.put("Items", nbttaglist);
-
-        return compound;
     }
 
 

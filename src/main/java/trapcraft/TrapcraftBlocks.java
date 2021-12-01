@@ -3,13 +3,13 @@ package trapcraft;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import trapcraft.api.Constants;
@@ -19,7 +19,6 @@ import trapcraft.block.GrassCoveringBlock;
 import trapcraft.block.IgniterBlock;
 import trapcraft.block.MagneticChestBlock;
 import trapcraft.block.SpikesBlock;
-import trapcraft.client.renders.ItemStackTileEntityMagneticChestRenderer;
 import trapcraft.item.MagneticChestItem;
 
 public class TrapcraftBlocks {

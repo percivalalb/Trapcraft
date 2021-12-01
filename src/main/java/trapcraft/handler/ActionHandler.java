@@ -27,7 +27,7 @@ public class ActionHandler {
 
     @SubscribeEvent
     public void action(final EntityPlaceEvent event) {
-        final Level world = (Level) event.getBlockSnapshot().getWorld();
+        final Level world = (Level) event.getBlockSnapshot().getLevel();
         final BlockState state = event.getPlacedBlock();
         final BlockPos tPos = event.getBlockSnapshot().getPos();
 

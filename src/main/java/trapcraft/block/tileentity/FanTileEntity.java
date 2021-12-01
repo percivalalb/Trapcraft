@@ -152,32 +152,31 @@ public class FanTileEntity extends BlockEntity  {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putFloat("speed", this.speed);
         compound.putDouble("extraRange", this.extraRange);
-
-        return compound;
     }
 
     @Nonnull
     @Override
     public CompoundTag getUpdateTag() {
         final CompoundTag tag = new CompoundTag();
-        return this.save(tag);
+        this.saveAdditional(tag);
+        return tag;
     }
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, this.save(new CompoundTag()));
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         super.onDataPacket(net, packet);
-        this.load(packet.getTag());
-        if (!this.level.isClientSide)
+        if (!this.level.isClientSide) {
             this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
+        }
         return;
     }
 

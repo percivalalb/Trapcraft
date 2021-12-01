@@ -83,12 +83,11 @@ public class BearTrapTileEntity extends BlockEntity {
 
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         if (this.entityliving != null && this.entityliving.isAlive()) {
             compound.putUUID("trapped_entity", this.entityliving.getUUID());
         }
-        return compound;
     }
 
     public boolean setTrappedEntity(@Nullable Mob livingEntity) {

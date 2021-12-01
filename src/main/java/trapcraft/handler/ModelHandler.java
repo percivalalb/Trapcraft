@@ -48,7 +48,7 @@ public class ModelHandler {
 
     @SubscribeEvent
     public void onStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().location().equals(Sheets.CHEST_SHEET)) {
+        if (!event.getAtlas().location().equals(Sheets.CHEST_SHEET)) {
             return;
         }
 

@@ -19,8 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages.SpawnEntity;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
 import trapcraft.TrapcraftEntityTypes;
 
 /**
@@ -30,7 +30,7 @@ public class DummyEntity extends LivingEntity {
 
     private static final EntityDataAccessor<Byte> VARIANT = SynchedEntityData.<Byte>defineId(DummyEntity.class, EntityDataSerializers.BYTE);
 
-    public DummyEntity(SpawnEntity packet, Level world) {
+    public DummyEntity(PlayMessages.SpawnEntity packet, Level world) {
         this(world);
     }
 

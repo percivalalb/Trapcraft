@@ -1,9 +1,5 @@
 package trapcraft;
 
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -30,13 +26,10 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import trapcraft.api.Constants;
 import trapcraft.client.gui.IgniterScreen;
-import trapcraft.client.renders.DummyRenderer;
-import trapcraft.client.renders.ItemStackTileEntityMagneticChestRenderer;
-import trapcraft.client.renders.TileEntityMagneticChestRenderer;
 import trapcraft.config.ConfigHandler;
 import trapcraft.data.TrapcraftBlockstateProvider;
 import trapcraft.data.TrapcraftItemModelProvider;
@@ -117,7 +110,7 @@ public final class TrapcraftMod {
 
     @OnlyIn(Dist.CLIENT)
     private void addTexturesToAtlas(final TextureStitchEvent.Pre event) {
-        if (event.getMap().location().equals(Sheets.CHEST_SHEET)) {
+        if (event.getAtlas().location().equals(Sheets.CHEST_SHEET)) {
             event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
         }
     }
