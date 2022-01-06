@@ -43,7 +43,7 @@ public class FanTileEntity extends BlockEntity  {
         final Direction facing = blockState.getValue(FanBlock.FACING);
 
         if (level.random.nextInt(2) == 0) {
-            spawnParticles(level, worldPosition);
+            spawnParticles(level, blockState, worldPosition);
         }
 
         final List<Entity> list = level.getEntitiesOfClass(Entity.class, blockEntity.getDirection(facing));
@@ -129,12 +129,12 @@ public class FanTileEntity extends BlockEntity  {
         return new AABB(this.worldPosition, endPos);
     }
 
-    public static void spawnParticles(final Level world, final BlockPos pos) {
+    public static void spawnParticles(final Level world, final BlockState blockState, final BlockPos pos) {
         final double x = pos.getX() + world.random.nextFloat();
         final double y = pos.getY() + world.random.nextFloat();
         final double z = pos.getZ() + world.random.nextFloat();
 
-        final Direction facing = world.getBlockState(pos).getValue(FanBlock.FACING);
+        final Direction facing = blockState.getValue(FanBlock.FACING);
         final double velocity = 0.2F + world.random.nextFloat() * 0.4F;
 
         final double velX = facing.getStepX() * velocity;
