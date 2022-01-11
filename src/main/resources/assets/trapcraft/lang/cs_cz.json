@@ -1,0 +1,20 @@
+{
+    "container.trapcraft.magnetic_chest": "Magnetická truhla",
+    "container.trapcraft.igniter": "Zapalovač",
+
+    "block.trapcraft.fan": "Ventilátor",
+    "block.trapcraft.magnetic_chest": "Magnetická truhla",
+    "block.trapcraft.grass_covering": "Krytina z trávy",
+    "block.trapcraft.bear_trap": "Medvědí past",
+    "block.trapcraft.spikes": "Hroty",
+    "block.trapcraft.igniter": "Zapalovač",
+
+    "item.trapcraft.igniter_range": "Vylepšení dosahu Zapalovače",
+
+    "entity.trapcraft.dummy": "Figurína",
+
+    "death.attack.trapcraft.spikes" : "%s byl probodnut nastraženými hroty",
+    "death.attack.trapcraft.spikes.player" : "%s lapil %s do svých nastražených hrotů",
+    "death.attack.trapcraft.bear_trap" : "%s šlápnul do nastražené medvědí pasti",
+    "death.attack.trapcraft.bear_trap.player" : "%s lapil %s do své nastražené medvědí pasti"
+}
