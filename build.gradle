@@ -52,7 +52,8 @@ sourceSets {
 }
 
 configurations {
-    apiCompile.extendsFrom(compile)
+    apiImplementation.extendsFrom(implementation)
+    apiRuntimeOnly.extendsFrom(runtimeOnly)
 }
 
 minecraft {
@@ -106,12 +107,14 @@ dependencies {
 }
 
 task sourcesJar(type: Jar) {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
     archiveClassifier = "sources"
     from sourceSets.main.allJava
     from sourceSets.api.allJava
 }
 
 task apiJar(type: Jar) {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
     archiveClassifier = "api"
     from sourceSets.api.output
     from sourceSets.api.allJava
