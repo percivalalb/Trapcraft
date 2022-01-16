@@ -1,12 +1,11 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         gradlePluginPortal()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.65"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.71.5"
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
@@ -26,7 +25,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 repositories {
     maven {
-        url "http://dvs1.progwml6.com/files/maven"
+        url "https://dvs1.progwml6.com/files/maven"
         content {
             includeGroup "mezz.jei"
         }
