@@ -39,7 +39,7 @@ publish:
     <<: *global_cache
     policy: pull
   script:
-    - gradlew curseforge
+    - gradle curseforge
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^\d\.\d{1,3}(?:\.(?:\d{1,3}|x))?$/'
       when: always
