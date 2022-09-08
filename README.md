@@ -1,4 +1,4 @@
-Trapcraft [![Curseforge](http://cf.way2muchnoise.eu/full_trapcraft_downloads.svg)](https://minecraft.curseforge.com/projects/trapcraft) [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_trapcraft_all.svg)](https://minecraft.curseforge.com/projects/trapcraft)
+Trapcraft [![Curseforge](http://cf.way2muchnoise.eu/full_271272_downloads.svg)](https://minecraft.curseforge.com/projects/trapcraft) [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_271272_all.svg)](https://minecraft.curseforge.com/projects/trapcraft)
 ===========
 
 **Trapcraft** is a **Minecraft mod** made for **Minecraft Forge**
@@ -23,5 +23,5 @@ Thanks to Stewiecraft for creating the original mod back and letting me continue
 
 ### License
 Trapcraft
- - 2013 - 2021
+ - 2013 - 2022
  - [![License](https://img.shields.io/badge/License-GNU-blue.svg?style=flat-square)](https://opensource.org/licenses/GPL-3.0)
