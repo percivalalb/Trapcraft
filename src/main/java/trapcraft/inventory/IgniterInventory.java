@@ -6,7 +6,6 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class IgniterInventory extends SimpleContainer implements MenuProvider {
 
@@ -26,6 +25,6 @@ public class IgniterInventory extends SimpleContainer implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("container.trapcraft.igniter");
+        return Component.translatable("container.trapcraft.igniter");
     }
 }

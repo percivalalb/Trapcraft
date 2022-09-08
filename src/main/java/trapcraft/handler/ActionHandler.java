@@ -13,8 +13,8 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import trapcraft.entity.DummyEntity;
 
@@ -49,7 +49,7 @@ public class ActionHandler {
     }
 
     @SubscribeEvent
-    public void onEntitySpawn(final EntityJoinWorldEvent event) {
+    public void onEntitySpawn(final EntityJoinLevelEvent event) {
         final Entity entity = event.getEntity();
         if (entity instanceof Mob) {
             final Mob mob = (Mob)entity;

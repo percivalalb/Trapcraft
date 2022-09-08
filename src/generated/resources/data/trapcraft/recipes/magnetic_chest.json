@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "PPP",
-    "PRP",
-    "PIP"
-  ],
   "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
     "P": {
       "tag": "minecraft:planks"
     },
     "R": {
       "item": "minecraft:redstone"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
     }
   },
+  "pattern": [
+    "PPP",
+    "PRP",
+    "PIP"
+  ],
   "result": {
     "item": "trapcraft:magnetic_chest"
   }

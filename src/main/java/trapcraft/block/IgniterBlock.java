@@ -60,7 +60,7 @@ public class IgniterBlock extends BaseEntityBlock {
                 if (player instanceof ServerPlayer && !(player instanceof FakePlayer)) {
                     final ServerPlayer entityPlayerMP = (ServerPlayer) player;
 
-                    NetworkHooks.openGui(entityPlayerMP, tileentityigniter, pos);
+                    NetworkHooks.openScreen(entityPlayerMP, tileentityigniter, pos);
                 }
             }
 

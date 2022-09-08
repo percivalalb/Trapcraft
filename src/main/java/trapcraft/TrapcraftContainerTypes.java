@@ -9,7 +9,7 @@ import trapcraft.inventory.IgniterContainer;
 
 public class TrapcraftContainerTypes {
 
-    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Constants.MOD_ID);
 
     public static final RegistryObject<MenuType<IgniterContainer>> IGNITER = CONTAINERS.register("igniter", () -> new MenuType<IgniterContainer>(IgniterContainer::new));
 }

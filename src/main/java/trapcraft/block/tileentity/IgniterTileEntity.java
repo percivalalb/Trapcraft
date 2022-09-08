@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.TrapcraftItems;
 import trapcraft.TrapcraftTileEntityTypes;
@@ -110,7 +109,7 @@ public class IgniterTileEntity extends BlockEntity implements MenuProvider, Cont
     @Nonnull
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("container.trapcraft.igniter");
+        return Component.translatable("container.trapcraft.igniter");
     }
 
 }

@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "NNN",
-    "CRC",
-    "CCC"
-  ],
   "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
     "N": {
       "item": "minecraft:netherrack"
     },
     "R": {
       "item": "minecraft:redstone"
-    },
-    "C": {
-      "item": "minecraft:cobblestone"
     }
   },
+  "pattern": [
+    "NNN",
+    "CRC",
+    "CCC"
+  ],
   "result": {
     "item": "trapcraft:igniter"
   }

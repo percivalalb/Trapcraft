@@ -1,9 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "YYY"
-  ],
   "key": {
     "X": {
       "item": "minecraft:tall_grass"
@@ -12,6 +8,10 @@
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "XXX",
+    "YYY"
+  ],
   "result": {
     "item": "trapcraft:grass_covering"
   }

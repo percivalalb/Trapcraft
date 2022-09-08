@@ -6,14 +6,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.data.DataGenerator;
@@ -22,7 +20,7 @@ import net.minecraft.world.level.GrassColor;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -90,12 +88,10 @@ public final class TrapcraftMod {
     @OnlyIn(Dist.CLIENT)
     private void clientSetup(final FMLClientSetupEvent event) {
         MenuScreens.register(TrapcraftContainerTypes.IGNITER.get(), IgniterScreen::new);
-
-        ItemBlockRenderTypes.setRenderLayer(TrapcraftBlocks.SPIKES.get(), RenderType.cutout());
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void registerBlockColors(final ColorHandlerEvent.Block event) {
+    private void registerBlockColors(final RegisterColorHandlersEvent.Block event) {
         final BlockColors blockColors = event.getBlockColors();
         blockColors.register((state, blockAccess, pos, tintIndex) -> {
             return blockAccess != null && pos != null ? BiomeColors.getAverageGrassColor(blockAccess, pos) : -1;
@@ -103,7 +99,7 @@ public final class TrapcraftMod {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void registerItemColors(final ColorHandlerEvent.Item event) {
+    private void registerItemColors(final RegisterColorHandlersEvent.Item event) {
         final ItemColors itemColors = event.getItemColors();
         itemColors.register((stack, tintIndex) -> GrassColor.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
     }
@@ -124,13 +120,13 @@ public final class TrapcraftMod {
 
         if (event.includeClient()) {
             final TrapcraftBlockstateProvider blockstates = new TrapcraftBlockstateProvider(gen, event.getExistingFileHelper());
-            gen.addProvider(blockstates);
-            gen.addProvider(new TrapcraftItemModelProvider(gen, blockstates.getExistingHelper()));
+            gen.addProvider(true, blockstates);
+            gen.addProvider(true, new TrapcraftItemModelProvider(gen, blockstates.getExistingHelper()));
         }
 
         if (event.includeServer()) {
-            gen.addProvider(new TrapcraftRecipeProvider(gen));
-            gen.addProvider(new TrapcraftLootTableProvider(gen));
+            gen.addProvider(true, new TrapcraftRecipeProvider(gen));
+            gen.addProvider(true, new TrapcraftLootTableProvider(gen));
         }
     }
 }

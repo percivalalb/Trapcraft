@@ -19,7 +19,7 @@ import net.minecraftforge.client.model.generators.ModelBuilder.FaceRotation;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.ForgeRegistries;
 import trapcraft.api.Constants;
 import trapcraft.block.BearTrapBlock;
 import trapcraft.block.FanBlock;
@@ -48,7 +48,7 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
         registerOrientable(IGNITER);
 
         registerGrassCovering(GRASS_COVERING);
-        registerParticleOnly(MAGNETIC_CHEST, Blocks.OAK_PLANKS.delegate);
+        registerParticleOnly(MAGNETIC_CHEST, () -> Blocks.OAK_PLANKS);
         registerCross(SPIKES);
         registerBearTrap(BEAR_TRAP);
     }
@@ -104,11 +104,11 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
         BlockModelBuilder model = this.models()
                 .getBuilder(name(blockIn))
                 .parent(this.models().getExistingFile(mcLoc(ModelProvider.BLOCK_FOLDER + "/block")))
-                .texture("top", extend(blockTexture(Blocks.GRASS_BLOCK.delegate), "_top"))
-                .texture("side", extend(blockTexture(Blocks.GRASS_BLOCK.delegate), "_top"))
-                .texture("overlay", extend(blockTexture(Blocks.GRASS_BLOCK.delegate), "_top"))
-                .texture("particle", blockTexture(Blocks.DIRT.delegate))
-                .texture("bottom", blockTexture(Blocks.DIRT.delegate));
+                .texture("top", extend(blockTexture(Blocks.GRASS_BLOCK), "_top"))
+                .texture("side", extend(blockTexture(Blocks.GRASS_BLOCK), "_top"))
+                .texture("overlay", extend(blockTexture(Blocks.GRASS_BLOCK), "_top"))
+                .texture("particle", blockTexture(Blocks.DIRT))
+                .texture("bottom", blockTexture(Blocks.DIRT));
 
         model.element()
           .from(0, 15, 0)
@@ -187,16 +187,16 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
     }
 
     private void registerCross(Supplier<? extends Block> block) {
-        final ModelFile model = this.models().cross(name(block), blockTexture(block));
+        final ModelFile model = this.models().cross(name(block), blockTexture(block)).renderType("cutout");
         this.simpleBlock(block.get(), model);
     }
 
-    private String name(Supplier<? extends IForgeRegistryEntry<?>> forgeEntry) {
-        return forgeEntry.get().getRegistryName().getPath();
+    private String name(Supplier<? extends Block> forgeEntry) {
+        return ForgeRegistries.BLOCKS.getKey(forgeEntry.get()).getPath();
     }
 
     private ResourceLocation blockTexture(Supplier<? extends Block> block) {
-        final ResourceLocation base = block.get().getRegistryName();
+        final ResourceLocation base = ForgeRegistries.BLOCKS.getKey(block.get());
         return this.prepend(base, ModelProvider.BLOCK_FOLDER + "/");
     }
 
@@ -204,8 +204,8 @@ public class TrapcraftBlockstateProvider extends BlockStateProvider {
         return new ResourceLocation(rl.getNamespace(), prefix + rl.getPath());
     }
 
-    private String extend(Supplier<? extends IForgeRegistryEntry<?>> forgeEntry, String suffix) {
-        return extend(forgeEntry.get().getRegistryName(), suffix).getPath();
+    private String extend(Supplier<? extends Block> forgeEntry, String suffix) {
+        return extend(ForgeRegistries.BLOCKS.getKey(forgeEntry.get()), suffix).getPath();
     }
 
     private ResourceLocation extend(final ResourceLocation rl, final String suffix) {

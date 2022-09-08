@@ -7,6 +7,8 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
@@ -17,6 +19,7 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import trapcraft.api.Constants;
 
 public class TrapcraftItemModelProvider extends ItemModelProvider {
@@ -41,7 +44,7 @@ public class TrapcraftItemModelProvider extends ItemModelProvider {
         this.blockItem(IGNITER);
         this.blockItem(BEAR_TRAP, "_open");
         this.blockItem(GRASS_COVERING);
-        this.chest(MAGNETIC_CHEST, Blocks.OAK_PLANKS.delegate);
+        this.chest(MAGNETIC_CHEST, () -> Blocks.OAK_PLANKS);
     }
 
     private ResourceLocation itemTexture(Supplier<? extends ItemLike> item) {
@@ -49,12 +52,12 @@ public class TrapcraftItemModelProvider extends ItemModelProvider {
     }
 
     private ResourceLocation blockTexture(Supplier<? extends Block> block) {
-        ResourceLocation base = block.get().getRegistryName();
+        ResourceLocation base = ForgeRegistries.BLOCKS.getKey(block.get());
         return new ResourceLocation(base.getNamespace(), ModelProvider.BLOCK_FOLDER + "/" + base.getPath());
     }
 
     private String name(Supplier<? extends ItemLike> item) {
-        return item.get().asItem().getRegistryName().getPath();
+        return ForgeRegistries.ITEMS.getKey(item.get().asItem()).getPath();
     }
 
     private ItemModelBuilder blockSprite(Supplier<? extends Block> block) {

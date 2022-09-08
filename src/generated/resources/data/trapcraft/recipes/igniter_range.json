@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:arrow"
+    },
+    "D": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
   "pattern": [
     "ALA",
     "DRD",
     "DRD"
   ],
-  "key": {
-    "A": {
-      "item": "minecraft:arrow"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "D": {
-      "item": "minecraft:lapis_lazuli"
-    }
-  },
   "result": {
     "item": "trapcraft:igniter_range"
   }

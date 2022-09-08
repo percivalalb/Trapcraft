@@ -1,9 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XYX",
-    "YYY"
-  ],
   "key": {
     "X": {
       "item": "minecraft:iron_ingot"
@@ -12,6 +8,10 @@
       "item": "minecraft:stone_pressure_plate"
     }
   },
+  "pattern": [
+    "XYX",
+    "YYY"
+  ],
   "result": {
     "item": "trapcraft:bear_trap"
   }

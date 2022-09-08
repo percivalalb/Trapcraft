@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class TrapcraftTileEntityTypes {
 
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Constants.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<MagneticChestTileEntity>> MAGNETIC_CHEST = TILE_ENTITIES.register("magnetic_chest", () -> new BlockEntityType<>(MagneticChestTileEntity::new, Set.of(TrapcraftBlocks.MAGNETIC_CHEST.get()), null));
     public static final RegistryObject<BlockEntityType<FanTileEntity>> FAN = TILE_ENTITIES.register("fan", () -> new BlockEntityType<>(FanTileEntity::new, Set.of(TrapcraftBlocks.FAN.get()), null));

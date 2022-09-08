@@ -65,7 +65,7 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
             dropsSelf(TrapcraftBlocks.BEAR_TRAP);
             dropsSelf(TrapcraftBlocks.SPIKES);
             dropsSelf(TrapcraftBlocks.IGNITER);
-            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, Items.STICK.delegate, UniformGenerator.between(1.0F, 3.0F));
+            droppingWithSilkTouchOrItemInRange(TrapcraftBlocks.GRASS_COVERING, () -> Items.STICK, UniformGenerator.between(1.0F, 3.0F));
         }
 
         private void dropsSelf(Supplier<? extends Block> block) {

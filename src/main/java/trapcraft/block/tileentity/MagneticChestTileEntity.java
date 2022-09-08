@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.util.Mth;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import trapcraft.TrapcraftTileEntityTypes;
 
 /**
@@ -112,6 +111,6 @@ public class MagneticChestTileEntity extends ChestBlockEntity {
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("container.trapcraft.magnetic_chest");
+        return Component.translatable("container.trapcraft.magnetic_chest");
     }
 }

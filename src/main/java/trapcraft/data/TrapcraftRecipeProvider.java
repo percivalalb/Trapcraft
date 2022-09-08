@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import com.google.gson.JsonObject;
 
+import net.minecraft.data.CachedOutput;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.HashCache;
@@ -34,7 +35,7 @@ public class TrapcraftRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void saveAdvancement(HashCache cache, JsonObject advancementJson, Path pathIn) {
+    protected void saveAdvancement(CachedOutput cache, JsonObject advancementJson, Path pathIn) {
 
     }
 

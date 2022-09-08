@@ -1,13 +1,36 @@
 {
   "parent": "minecraft:block/block",
-  "textures": {
-    "side": "trapcraft:block/igniter_side",
-    "top": "trapcraft:block/igniter_top",
-    "bottom": "trapcraft:block/igniter_bottom",
-    "particle": "trapcraft:block/igniter_side"
-  },
   "elements": [
     {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "rotation": 180,
+          "texture": "#side"
+        },
+        "east": {
+          "cullface": "east",
+          "rotation": 90,
+          "texture": "#side"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#top"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#bottom"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#side"
+        },
+        "west": {
+          "cullface": "west",
+          "rotation": 270,
+          "texture": "#side"
+        }
+      },
       "from": [
         0,
         0,
@@ -17,36 +40,13 @@
         16,
         16,
         16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#side",
-          "cullface": "down",
-          "rotation": 180
-        },
-        "up": {
-          "texture": "#side",
-          "cullface": "up"
-        },
-        "north": {
-          "texture": "#top",
-          "cullface": "north"
-        },
-        "south": {
-          "texture": "#bottom",
-          "cullface": "south"
-        },
-        "west": {
-          "texture": "#side",
-          "cullface": "west",
-          "rotation": 270
-        },
-        "east": {
-          "texture": "#side",
-          "cullface": "east",
-          "rotation": 90
-        }
-      }
+      ]
     }
-  ]
+  ],
+  "textures": {
+    "bottom": "trapcraft:block/igniter_bottom",
+    "particle": "trapcraft:block/igniter_side",
+    "side": "trapcraft:block/igniter_side",
+    "top": "trapcraft:block/igniter_top"
+  }
 }
