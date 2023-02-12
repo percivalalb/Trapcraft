@@ -1,9 +1,9 @@
 package trapcraft;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import trapcraft.api.Constants;
 import trapcraft.block.tileentity.BearTrapTileEntity;
 import trapcraft.block.tileentity.FanTileEntity;

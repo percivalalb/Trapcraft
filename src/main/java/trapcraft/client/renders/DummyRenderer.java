@@ -1,14 +1,11 @@
 package trapcraft.client.renders;
 
-import net.minecraft.client.model.PiglinModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Mob;
 import trapcraft.api.Constants;
 import trapcraft.entity.DummyEntity;
 import trapcraft.handler.ModelHandler;

@@ -1,9 +1,9 @@
 package trapcraft;
 
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import trapcraft.api.Constants;
 import trapcraft.inventory.IgniterContainer;
 
