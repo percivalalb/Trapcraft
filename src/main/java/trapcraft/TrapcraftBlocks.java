@@ -1,25 +1,18 @@
 package trapcraft;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.tuple.Pair;
-
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
 import trapcraft.api.Constants;
-import trapcraft.block.BearTrapBlock;
-import trapcraft.block.FanBlock;
-import trapcraft.block.GrassCoveringBlock;
-import trapcraft.block.IgniterBlock;
-import trapcraft.block.MagneticChestBlock;
-import trapcraft.block.SpikesBlock;
+import trapcraft.block.*;
 import trapcraft.item.MagneticChestItem;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class TrapcraftBlocks {
 
@@ -46,14 +39,10 @@ public class TrapcraftBlocks {
     }
 
     private static BlockItem makeMagneticChestItem(Supplier<Block> blockSupplier) {
-        return new MagneticChestItem(blockSupplier.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));// TODO .setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
+        return new MagneticChestItem(blockSupplier.get(), new Item.Properties());// TODO .setISTER(() -> ItemStackTileEntityMagneticChestRenderer::new));
     }
 
-    private static BlockItem makeBlockItem(Supplier<Block> blockSupplier) {
-        return makeBlockItem(blockSupplier, CreativeModeTab.TAB_REDSTONE);
-    }
-
-    private static BlockItem makeBlockItem(Supplier<Block> block, final CreativeModeTab group) {
-        return new BlockItem(block.get(), new Item.Properties().tab(group));
+    private static BlockItem makeBlockItem(Supplier<Block> block) {
+        return new BlockItem(block.get(), new Item.Properties());
     }
 }

@@ -1,20 +1,11 @@
 package trapcraft.handler;
 
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import trapcraft.TrapcraftEntityTypes;
@@ -46,12 +37,4 @@ public class ModelHandler {
 
     }
 
-    @SubscribeEvent
-    public void onStitch(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(Sheets.CHEST_SHEET)) {
-            return;
-        }
-
-        event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
-    }
 }

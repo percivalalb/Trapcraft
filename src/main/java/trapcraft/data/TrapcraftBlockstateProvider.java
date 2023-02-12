@@ -1,23 +1,14 @@
 package trapcraft.data;
 
-import static trapcraft.TrapcraftBlocks.*;
-
-import java.util.Arrays;
-import java.util.function.Supplier;
-
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.client.model.generators.ModelBuilder.FaceRotation;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import trapcraft.api.Constants;
@@ -25,11 +16,15 @@ import trapcraft.block.BearTrapBlock;
 import trapcraft.block.FanBlock;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.function.Supplier;
+
+import static trapcraft.TrapcraftBlocks.*;
 
 public class TrapcraftBlockstateProvider extends BlockStateProvider {
 
-    public TrapcraftBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, Constants.MOD_ID, exFileHelper);
+    public TrapcraftBlockstateProvider(PackOutput packOutput, ExistingFileHelper exFileHelper) {
+        super(packOutput, Constants.MOD_ID, exFileHelper);
     }
 
     public ExistingFileHelper getExistingHelper() {

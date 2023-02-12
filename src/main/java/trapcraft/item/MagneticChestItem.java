@@ -9,8 +9,6 @@ import trapcraft.client.renders.ItemStackTileEntityMagneticChestRenderer;
 
 import java.util.function.Consumer;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class MagneticChestItem extends BlockItem {
 
     public MagneticChestItem(Block block, Properties properties) {

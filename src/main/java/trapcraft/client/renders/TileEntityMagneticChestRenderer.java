@@ -2,13 +2,10 @@ package trapcraft.client.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
-import java.util.Calendar;
-
 import net.minecraft.Util;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -26,7 +23,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractChestBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -34,8 +30,6 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import trapcraft.TrapcraftBlocks;
 import trapcraft.api.Constants;
 import trapcraft.handler.ModelHandler;
@@ -82,7 +76,7 @@ public class TileEntityMagneticChestRenderer<T extends BlockEntity & LidBlockEnt
             p_112365_.pushPose();
             float f = blockstate.getValue(ChestBlock.FACING).toYRot();
             p_112365_.translate(0.5D, 0.5D, 0.5D);
-            p_112365_.mulPose(Vector3f.YP.rotationDegrees(-f));
+            p_112365_.mulPose(Axis.YP.rotationDegrees(-f));
             p_112365_.translate(-0.5D, -0.5D, -0.5D);
             DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> neighborcombineresult;
             if (flag) {
