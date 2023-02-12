@@ -19,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class IgniterRangeItem extends Item {
 
     public IgniterRangeItem() {
-        super(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(8));
+        super(new Item.Properties().stacksTo(8));
     }
 
     @Override

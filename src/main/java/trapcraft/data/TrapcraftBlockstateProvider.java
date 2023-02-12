@@ -5,6 +5,7 @@ import static trapcraft.TrapcraftBlocks.*;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.DataGenerator;
@@ -28,8 +29,8 @@ import javax.annotation.Nonnull;
 
 public class TrapcraftBlockstateProvider extends BlockStateProvider {
 
-    public TrapcraftBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, Constants.MOD_ID, exFileHelper);
+    public TrapcraftBlockstateProvider(PackOutput packOutput, ExistingFileHelper exFileHelper) {
+        super(packOutput, Constants.MOD_ID, exFileHelper);
     }
 
     public ExistingFileHelper getExistingHelper() {

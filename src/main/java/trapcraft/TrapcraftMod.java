@@ -1,5 +1,9 @@
 package trapcraft;
 
+import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -64,13 +68,13 @@ public final class TrapcraftMod {
         modEventBus.addListener(this::gatherData);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::interModProcess);
+        modEventBus.addListener(this::creativeModeTabBuildEvent);
         modEventBus.addListener(TrapcraftEntityTypes::addEntityAttributes);
 
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             modEventBus.addListener(this::clientSetup);
             modEventBus.addListener(this::registerBlockColors);
             modEventBus.addListener(this::registerItemColors);
-            modEventBus.addListener(this::addTexturesToAtlas);
             modEventBus.register(new ModelHandler());
         });
 
@@ -92,41 +96,48 @@ public final class TrapcraftMod {
 
     @OnlyIn(Dist.CLIENT)
     private void registerBlockColors(final RegisterColorHandlersEvent.Block event) {
-        final BlockColors blockColors = event.getBlockColors();
-        blockColors.register((state, blockAccess, pos, tintIndex) -> {
+        event.register((state, blockAccess, pos, tintIndex) -> {
             return blockAccess != null && pos != null ? BiomeColors.getAverageGrassColor(blockAccess, pos) : -1;
         }, TrapcraftBlocks.GRASS_COVERING.get());
     }
 
     @OnlyIn(Dist.CLIENT)
     private void registerItemColors(final RegisterColorHandlersEvent.Item event) {
-        final ItemColors itemColors = event.getItemColors();
-        itemColors.register((stack, tintIndex) -> GrassColor.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void addTexturesToAtlas(final TextureStitchEvent.Pre event) {
-        if (event.getAtlas().location().equals(Sheets.CHEST_SHEET)) {
-            event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
-        }
+        event.register((stack, tintIndex) -> GrassColor.get(0.5D, 1.0D), TrapcraftBlocks.GRASS_COVERING.get());
     }
 
     private void interModProcess(final InterModProcessEvent event) {
 
     }
 
+    public void creativeModeTabBuildEvent(final CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == CreativeModeTabs.REDSTONE_BLOCKS) {
+            // Adds items in the order of definition in TrapcraftItems. This matches order
+            // from previous version of MC prior to 1.19.3.
+            for (var item : TrapcraftItems.ITEMS.getEntries()) {
+                event.accept(item);
+            }
+
+            // Add the block items.
+            for (var blockItem : TrapcraftBlocks.ITEMS.getEntries()) {
+                event.accept(blockItem);
+            }
+        }
+    }
+
     private void gatherData(final GatherDataEvent event) {
         final DataGenerator gen = event.getGenerator();
+        final PackOutput packOutput = gen.getPackOutput();
 
         if (event.includeClient()) {
-            final TrapcraftBlockstateProvider blockstates = new TrapcraftBlockstateProvider(gen, event.getExistingFileHelper());
+            final TrapcraftBlockstateProvider blockstates = new TrapcraftBlockstateProvider(packOutput, event.getExistingFileHelper());
             gen.addProvider(true, blockstates);
-            gen.addProvider(true, new TrapcraftItemModelProvider(gen, blockstates.getExistingHelper()));
+            gen.addProvider(true, new TrapcraftItemModelProvider(packOutput, blockstates.getExistingHelper()));
         }
 
         if (event.includeServer()) {
-            gen.addProvider(true, new TrapcraftRecipeProvider(gen));
-            gen.addProvider(true, new TrapcraftLootTableProvider(gen));
+            gen.addProvider(true, new TrapcraftRecipeProvider(packOutput));
+            gen.addProvider(true, new TrapcraftLootTableProvider(packOutput));
         }
     }
 }

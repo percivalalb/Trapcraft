@@ -2,7 +2,7 @@ package trapcraft.client.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import java.util.Calendar;
@@ -82,7 +82,7 @@ public class TileEntityMagneticChestRenderer<T extends BlockEntity & LidBlockEnt
             p_112365_.pushPose();
             float f = blockstate.getValue(ChestBlock.FACING).toYRot();
             p_112365_.translate(0.5D, 0.5D, 0.5D);
-            p_112365_.mulPose(Vector3f.YP.rotationDegrees(-f));
+            p_112365_.mulPose(Axis.YP.rotationDegrees(-f));
             p_112365_.translate(-0.5D, -0.5D, -0.5D);
             DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> neighborcombineresult;
             if (flag) {

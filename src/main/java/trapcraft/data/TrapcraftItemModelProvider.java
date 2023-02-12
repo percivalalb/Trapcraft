@@ -1,19 +1,10 @@
 package trapcraft.data;
 
-import static trapcraft.TrapcraftBlocks.*;
-import static trapcraft.TrapcraftItems.*;
-
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
@@ -22,12 +13,17 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import trapcraft.api.Constants;
 
+import javax.annotation.Nonnull;
+import java.util.function.Supplier;
+
+import static trapcraft.TrapcraftBlocks.*;
+import static trapcraft.TrapcraftItems.IGNITER_RANGE;
+
 public class TrapcraftItemModelProvider extends ItemModelProvider {
 
-    public TrapcraftItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, Constants.MOD_ID, existingFileHelper);
+    public TrapcraftItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, Constants.MOD_ID, existingFileHelper);
     }
-
     @Nonnull
     @Override
     public String getName() {

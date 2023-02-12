@@ -46,12 +46,4 @@ public class ModelHandler {
 
     }
 
-    @SubscribeEvent
-    public void onStitch(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(Sheets.CHEST_SHEET)) {
-            return;
-        }
-
-        event.addSprite(Constants.RES_BLOCK_MAGNETIC_CHEST);
-    }
 }

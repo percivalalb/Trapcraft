@@ -1,22 +1,27 @@
 package trapcraft.data;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.EntityLootSubProvider;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.data.loot.EntityLoot;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -35,31 +40,21 @@ import javax.annotation.Nonnull;
 
 public class TrapcraftLootTableProvider extends LootTableProvider {
 
-    public TrapcraftLootTableProvider(DataGenerator dataGeneratorIn) {
-        super(dataGeneratorIn);
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return "Trapcraft LootTables";
-    }
-
-    @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
-        return ImmutableList.of(
-                Pair.of(Blocks::new, LootContextParamSets.BLOCK),
-                Pair.of(Entities::new, LootContextParamSets.ENTITY)
-               );
+    public TrapcraftLootTableProvider(PackOutput packOutput) {
+        super(packOutput, BuiltInLootTables.all(), List.of(new LootTableProvider.SubProviderEntry(Blocks::new, LootContextParamSets.BLOCK), new LootTableProvider.SubProviderEntry(Entities::new, LootContextParamSets.ENTITY)));
     }
 
     @Override
     protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationTracker) {}
 
-    private static class Blocks extends BlockLoot {
+    private static class Blocks extends BlockLootSubProvider {
+
+        protected Blocks() {
+            super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
+        }
 
         @Override
-        protected void addTables() {
+        protected void generate() {
             dropsSelf(TrapcraftBlocks.FAN);
             dropsSelf(TrapcraftBlocks.MAGNETIC_CHEST);
             dropsSelf(TrapcraftBlocks.BEAR_TRAP);
@@ -84,20 +79,21 @@ public class TrapcraftLootTableProvider extends LootTableProvider {
         }
     }
 
-    private static class Entities extends EntityLoot {
+    private static class Entities extends EntityLootSubProvider {
 
-        @Override
-        protected void addTables() {
-            this.registerLootTable(TrapcraftEntityTypes.DUMMY, LootTable.lootTable().withPool(LootPool.lootPool().add(LootItem.lootTableItem(Items.SHULKER_SHELL)).when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.5F, 0.0625F))));
-        }
-
-        protected void registerLootTable(Supplier<? extends EntityType<?>> type, final LootTable.Builder table) {
-           this.add(type.get().getDefaultLootTable(), table);
+        protected Entities() {
+            super(FeatureFlags.REGISTRY.allFlags());
         }
 
         @Override
-        protected Iterable<EntityType<?>> getKnownEntities() {
-            return TrapcraftEntityTypes.ENTITIES.getEntries().stream().map(Supplier::get).collect(Collectors.toList());
+        public void generate() {
+            this.add(TrapcraftEntityTypes.DUMMY.get(), LootTable.lootTable().withPool(LootPool.lootPool().add(LootItem.lootTableItem(Items.SHULKER_SHELL)).when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.5F, 0.0625F))));
+        }
+
+
+        @Override
+        protected Stream<EntityType<?>> getKnownEntityTypes() {
+            return TrapcraftEntityTypes.ENTITIES.getEntries().stream().map(Supplier::get);
         }
     }
 }
