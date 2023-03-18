@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import trapcraft.TrapcraftBlocks;
@@ -25,7 +26,7 @@ public class ItemStackTileEntityMagneticChestRenderer extends BlockEntityWithout
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType p_239207_2_, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
         if (stack.getItem() == TrapcraftBlocks.MAGNETIC_CHEST_ITEM.get()) {
            this.blockEntityRenderDispatcher.renderItem(chestBasic, matrixStack, buffer, combinedLight, combinedOverlay);
         }

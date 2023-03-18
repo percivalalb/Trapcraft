@@ -33,7 +33,6 @@ public class SpikesBlock extends Block implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 5D, 16.0D);
-    private DamageSource damageSource = new DamageSource("trapcraft.spikes").bypassArmor();
 
     public SpikesBlock() {
         super(Block.Properties.of(Material.METAL).noOcclusion().strength(2.0F, 2.0F).sound(SoundType.METAL).randomTicks());
@@ -93,12 +92,12 @@ public class SpikesBlock extends Block implements SimpleWaterloggedBlock {
         }
 
         if (entity.fallDistance >= 5F) {
-            entity.hurt(damageSource, 20);
+            entity.hurt(world.damageSources().cactus(), 20);
             return;
         }
         else {
             final float damageTodo = (float)entity.getDeltaMovement().dot(new Vec3(1, 1, 1)) / 1.5F;
-            entity.hurt(damageSource, 2F + damageTodo);
+            entity.hurt(world.damageSources().cactus(), 2F + damageTodo);
             return;
         }
     }
