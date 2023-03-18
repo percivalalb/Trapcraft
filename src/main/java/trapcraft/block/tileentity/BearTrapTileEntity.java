@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -20,7 +22,6 @@ import java.util.UUID;
 
 public class BearTrapTileEntity extends BlockEntity {
 
-    private static final DamageSource damageSource = new DamageSource("trapcraft.bear_trap").bypassArmor();
     @Nullable
     private Mob entityliving;
     private Goal doNothingGoal;
@@ -42,7 +43,7 @@ public class BearTrapTileEntity extends BlockEntity {
 
                 } else  {
                     if (blockEntity.nextDamageTick == 0) {
-                        trapped.hurt(damageSource, 1);
+                        trapped.hurt(level.damageSources().thorns(null), 1);
                         blockEntity.nextDamageTick = 15 + level.random.nextInt(20);
                     }
 
