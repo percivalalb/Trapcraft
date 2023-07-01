@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.block.tileentity.FanTileEntity;
 
@@ -29,7 +29,7 @@ public class FanBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
     public FanBlock() {
-        super(Block.Properties.of(Material.STONE).strength(2.0F, 2.0F).sound(SoundType.STONE));
+        super(Block.Properties.of().mapColor(MapColor.STONE).strength(2.0F, 2.0F).sound(SoundType.STONE));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.WEST).setValue(POWERED, false));
     }
 

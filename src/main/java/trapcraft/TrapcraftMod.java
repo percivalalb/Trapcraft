@@ -9,10 +9,12 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.GrassColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.CreativeModeTabSearchRegistry;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.common.CreativeModeTabRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -104,8 +106,8 @@ public final class TrapcraftMod {
 
     }
 
-    public void creativeModeTabBuildEvent(final CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == CreativeModeTabs.REDSTONE_BLOCKS) {
+    public void creativeModeTabBuildEvent(final BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
             // Adds items in the order of definition in TrapcraftItems. This matches order
             // from previous version of MC prior to 1.19.3.
             for (var item : TrapcraftItems.ITEMS.getEntries()) {

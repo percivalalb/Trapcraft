@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -25,7 +25,7 @@ public class GrassCoveringBlock extends Block {
     protected static final VoxelShape SHAPE = Block.box(0.0D, 15.0D, 0.0D, 16.0D, 16D, 16.0D);
 
     public GrassCoveringBlock() {
-        super(Block.Properties.of(Material.GRASS).strength(0.2F, 1F).sound(SoundType.GRAVEL).randomTicks());
+        super(Block.Properties.of().mapColor(MapColor.GRASS).strength(0.2F, 1F).sound(SoundType.GRAVEL).randomTicks());
     }
 
     @Override

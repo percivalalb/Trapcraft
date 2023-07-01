@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import trapcraft.TrapcraftTileEntityTypes;
 import trapcraft.block.tileentity.MagneticChestTileEntity;
 
@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 public class MagneticChestBlock extends ChestBlock {
 
     public MagneticChestBlock() {
-        super(Block.Properties.of(Material.WOOD).strength(2.5F, 2.0F).sound(SoundType.WOOD), TrapcraftTileEntityTypes.MAGNETIC_CHEST::get);
+        super(Block.Properties.of().mapColor(MapColor.WOOD).strength(2.5F, 2.0F).sound(SoundType.WOOD), TrapcraftTileEntityTypes.MAGNETIC_CHEST::get);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.WEST));
     }
 

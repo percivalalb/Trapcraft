@@ -86,7 +86,7 @@ public class MagneticChestTileEntity extends ChestBlockEntity {
                 return ItemStack.EMPTY;
             }
 
-            if (ItemStack.isSame(itemstack1, itemstack)) {
+            if (ItemStack.isSameItemSameTags(itemstack1, itemstack)) {
                 final int j = Math.min(this.getMaxStackSize(), itemstack1.getMaxStackSize());
                 final int k = Math.min(itemstack.getCount(), j - itemstack1.getCount());
                 if (k > 0) {
