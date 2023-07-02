@@ -38,19 +38,6 @@ configurations {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-repositories {
-    maven {
-        name = "Progwml6 maven"
-        url "https://dvs1.progwml6.com/files/maven"
-        content { includeGroup "mezz.jei" }
-    }
-    maven {
-        name = "ModMaven"
-        url "https://modmaven.dev"
-        content { includeGroup "mezz.jei" }
-    }
-}
-
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 

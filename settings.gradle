@@ -1,6 +1,19 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven { url = 'https://maven.minecraftforge.net/' }
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+        maven {
+            name = "Jared's maven"
+            url = "https://maven.blamejared.com/"
+            content { includeGroup "mezz.jei" }
+        }
+        maven {
+            name = "ModMaven"
+            url "https://modmaven.dev"
+            content { includeGroup "mezz.jei" }
+        }
     }
 }
